@@ -1,0 +1,25 @@
+\documentclass[a4paper,english, 10pt, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+%opening
+\title{Source code for project 2\\ FYS4150}
+\author{Fredrik E Pettersen}
+
+\begin{document}
+
+\maketitle
+
+\section*{.cpp - file}
+\lstinputlisting{jacobi.cpp}
+\section*{.h - file}
+\lstinputlisting{jacobi.h}
+\section*{script}
+\lstinputlisting{proj2_script.m}
+\end{document}
