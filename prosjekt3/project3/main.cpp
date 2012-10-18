@@ -72,26 +72,29 @@ void gauleg(double x1, double x2, vec &x, vec &w, int n)
    }
 } // End_ function gauleg()
 double f(double x1,double x2,double y1,double y2, double z1, double z2){
-    double factor = 1.0/(fabs(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2))));
-    return factor*exp(-2*(x1+x2+y1+y2+z1+z2));
+    double denom = (fabs(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2))));
+    double fexp = -4*(sqrt(x1*x1+y1*y1+z1*z1)+sqrt(x2*x2+y2*y2+z2*z2));
+    double func =  exp(fexp)/denom;
+    return (denom>1e-12)?func:0;
 }
 int main(int argc, char** argv){
-    int n = 3;//atoi(argv[1]);
+    int n = 20;//atoi(argv[1]);
     vec x1(n),x2(n),y1(n),y2(n),z1(n),z2(n),w1(n),w2(n),w3(n),w4(n),w5(n),w6(n);
     x1.zeros();x2.zeros();y1.zeros();y2.zeros();z1.zeros();z2.zeros();
     w1.zeros();w2.zeros();w3.zeros();w4.zeros();w5.zeros();w6.zeros();
     
-    double lambda = 1.0;
+    double lambda = 3.0;
     gauleg(-lambda,lambda,x1,w1,n);
     gauleg(-lambda,lambda,x2,w2,n);
     gauleg(-lambda,lambda,y1,w3,n);
     gauleg(-lambda,lambda,y2,w4,n);
     gauleg(-lambda,lambda,z1,w5,n);
     gauleg(-lambda,lambda,z2,w6,n);
-    w2.print("w2:");
+    //w2.print("w2:");
     double sum = 0.0;
-    int counter=0;
+    u_long counter=0;
     
+    #pragma omp parallel for
     for (int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             for(int k=0;k<n;k++){
@@ -99,7 +102,7 @@ int main(int argc, char** argv){
                     for(int m=0;m<n;m++){
                         for(int p=0;p<n;p++){
                             sum+=w1(i)*w2(j)*w3(k)*w4(l)*w5(m)*w6(p)*f(x1(i),x2(j),y1(k),y2(l),z1(m),z2(p));
-                            cout<<"f(x,y,z) = "<<f(x1(i),x2(j),y1(k),y2(l),z1(m),z2(p))<<endl;
+                            //cout<<"f(x,y,z) = "<<f(x1(i),x2(j),y1(k),y2(l),z1(m),z2(p))<<endl;
                             counter++;
                         }
                     }
