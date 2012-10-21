@@ -9,7 +9,7 @@
 
 #define PI 3.14159
 int main(int argc, char** argv){
-    int n =50;//atoi(argv[1]);
+    int n =atoi(argv[1]);//atoi(argv[1]);
 #if 1
     vec x1(n),x2(n),y1(n),y2(n),z1(n),z2(n),w1(n),w2(n),w3(n),w4(n),w5(n),w6(n);
     x1.zeros();x2.zeros();y1.zeros();y2.zeros();z1.zeros();z2.zeros();
@@ -108,6 +108,32 @@ int main(int argc, char** argv){
     cout<<"sum = "<<sum<<" in "<<diff<<" ms, steps: "<<counter<<" out of "<<n6<<endl;
     cout<<"correct sum  = "<<((5*PI*PI)/(16*16))<<endl;
 #endif
+    //------------Monte Carlo--------------
+    
+    long idum = -1;
+    int N = 1e4;
+    double crude_mc , x1,x2,y1,y2,z1,z2 , sum_sigma , fx,variance;
+    crude_mc=sum_sigma = 0;
+    for(int i=0;i<N;i++){
+        x1 = -lambda +2*lambda*ran0(&idum);
+        x2 = -lambda +2*lambda*ran0(&idum);
+        y1 = -lambda +2*lambda*ran0(&idum);
+        y2 = -lambda +2*lambda*ran0(&idum);
+        z1 = -lambda +2*lambda*ran0(&idum);
+        z2 = -lambda +2*lambda*ran0(&idum);
+        fx = f(x1,x2,y1,y2,z1,z2);
+        crude_mc += fx;
+        sum_sigma += fx*fx;
+    }
+    /*
+    Random * rnd = new Random(-1);
+    rnd->nextDouble();
+    */
+    crude_mc /= (double) N;
+    sum_sigma /= (double) N;
+    variance = sum_sigma - crude_mc*crude_mc;
+    cout<<"Monte Carlo simulation with N = "<<N<<" gives "<<crude_mc<<endl;
+    cout<<"The variance is "<<variance<<" and standard deviation "<<sqrt(variance)<<endl;
     return 0;
 }        
 

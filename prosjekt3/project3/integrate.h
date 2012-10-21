@@ -27,6 +27,7 @@ double gammln( double xx);
 double timediff(double time1, double time2);
 double f_sub(double r1,double r2,double theta1,double theta2,double phi1,double phi2);
 void gauss_laguerre(vec &x, vec &w, int n, double alpha);
+double ran0(long *idum);
 #endif	/* INTEGRATE_H */
 
 
@@ -156,3 +157,29 @@ double gammln( double xx)
 	for (j=0;j<=5;j++) ser += cof[j]/++y;
 	return -tmp+log(2.5066282746310005*ser/x);
 }
+#define IA 16807
+#define IM 2147483647
+#define AM (1.0/IM)
+#define IQ 127773
+#define IR 2836
+#define MASK 123459876
+
+double ran0(long *idum)
+{
+   long     k;
+   double   ans;
+
+   *idum ^= MASK;
+   k = (*idum)/IQ;
+   *idum = IA*(*idum - k*IQ) - IR*k;
+   if(*idum < 0) *idum += IM;
+   ans=AM*(*idum);
+   *idum ^= MASK;
+   return ans;
+}
+#undef IA
+#undef IM
+#undef AM
+#undef IQ
+#undef IR
+#undef MASK
