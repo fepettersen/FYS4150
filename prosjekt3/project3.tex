@@ -1,0 +1,76 @@
+\documentclass[a4paper,english, 10pt, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+%opening
+\title{Project 3, FYS4150}
+\author{Fredrik E Pettersen\\ fredriep@student.matnat.uio.no}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section*{About the problem}
+The task of this project is to compute, with increasing degree of cleverness, the six dimensional integral used to determine the 
+ground state correlation energy between two electrons in a helium atom. We will start off with ``brute force'' Gauss Legendre 
+quadrature, proceed to Gauss Laguerre quadrature, and finish off with Monte Carlo integration. We assume that the wave function 
+of each electron can be modelled like the single-particle wave function of an electron in the hydrogen atom. The single-particle 
+wave function for an electron i in the 1s state is given in terms of a dimensionless variable (we ommit normalization of the wave 
+functions)
+$$
+\mathbf{r}_i = x_i\mathbf{e}_x + y_i\mathbf{e}_y + z_i\mathbf{e}_z
+$$
+as
+\begin{align*}
+ \psi_{l,s}(\mathbf{r}_i) = e^{-\alpha r_i}
+\end{align*}
+where $\alpha$ is a parameter and 
+$$
+r_i = \sqrt{x_i^2 + y_i^2 + z_i^2}
+$$
+In this project we will fix $\alpha = 2$ which should correspond to the charge of the Helium atom $Z = 2$.
+The ansatz for the two-electron wave function is then given by the product of two one-electron wave funtions.
+$$
+\Psi(\mathbf{r}_1,\mathbf{r_2}) = \psi(\mathbf{r}_1)\psi(\mathbf{r_2}) = e^{-2\alpha(r_1+r_2)}
+$$
+The integral we need to solve is the quantum mechanical expectation value of the
+correlation energy between two electrons which repel each other via the classical Coulomb
+interaction, namely
+
+\section*{The algorithm}
+\section*{Source code}
+\section*{Analytic solution}
+\section*{Results}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+N & $\epsilon_r$ LU decomposition& CPU time LU decomposition &$\epsilon_r$& CPU time tridiagonal decomposition \\
+\hline
+5 & -12.5 & - & -0.7 & - \\
+10 & ? & - & -1.2 & - \\
+100 & -1.3 & - & -3.0 & - \\
+500 & -1.9 & - & -4.4 & - \\
+1000 & -2.2 & 30 & -4.8 & - \\
+10000 & -3.2 & 3160 & -5.0 & - \\
+$10^5$ & x & out of memory & -5.1 & - \\
+$10^6$ & x & out of memory & -5.07 & 20 \\
+$10^7$ & x & out of memory & x & 250 \\
+$10^8$ & x & out of memory & x & 2380 \\
+$1.5*10^8$ & x & out of memory & x & 3480 \\
+\hline
+\end{tabular} \\ \\
+\section*{Stability and precision}
+\section*{Final comments}
+
+\end{document}
