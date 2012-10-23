@@ -5,7 +5,7 @@
  * Created on 19. oktober 2012, 11:20
  */
 #include <cstdlib>
-
+#include <omp.h>
 /*Integration program. Solves a 6 dimensional integral by Gauss-Legendre quadrature
   and by Monte Carlo integration*/
 #include <armadillo>
