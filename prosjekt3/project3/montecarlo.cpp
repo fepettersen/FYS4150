@@ -12,13 +12,9 @@
 int main(int argc, char** argv) {
     double lambda = atof(argv[2]);
  
-    //idum1 = ;
-    //cout<<"time: "<<idum1<<endl;
     int N = atoi(argv[1]);
     double crude_mc,variance;
     crude_mc=0;
-    //sum_sigma = 0;
-    //int k = 4;
     double g_sigma = 0;
     int num_cores = 0;
  #if 1
@@ -44,26 +40,24 @@ int main(int argc, char** argv) {
         fx = r1*r1*r2*r2*f_sub(r1,r2,theta1,theta2,phi1,phi2)*exp(-4*(r1+r2));
         l_sum += fx;
         sum_sigma += fx*fx;
-        
-        //cout<<" f(x) "<<fx<<endl;
     }
-        //cout<<"l_sum "<<l_sum<<endl;
 #pragma omp critical
     {crude_mc += l_sum; g_sigma += sum_sigma;num_cores = omp_get_num_threads();}
     }
     double stop = clock();
     double diff = timediff(start,stop)*0.25;
-    //cout<<"sum = "<<crude_mc<<endl;
- 
+    /*
+    double var = ((pow(PI,4)*lambda*lambda*4)/N)*(g_sigma-((pow(PI,4)*lambda*lambda*4)/N)*crude_mc*crude_mc);
+    cout<<"test: "<<var<<" sdv: "<<sqrt(var)<<" comparisson: "<<var/sqrt(N)<<endl;*/
     crude_mc /= ((double) N);
-    crude_mc *= lambda*lambda*4*pow(PI,4);
     g_sigma /= ((double) N);
-    g_sigma *= (lambda*lambda*4*pow(PI,4));     //*(lambda*lambda*4*pow(PI,4))
     variance = g_sigma - crude_mc*crude_mc;
+    crude_mc *= lambda*lambda*4*pow(PI,4);
     cout<<"Monte Carlo simulation with N = "<<N<<" gives "<<crude_mc<<endl;
     cout<<"The variance is "<<variance<<" and standard deviation "<<sqrt(variance)<<endl;
     cout<<"This took "<<diff<<" ms on "<<num_cores<<" cores"<<endl;
 #else
+    double start = clock();
 #pragma omp parallel 
     {
         double l_sum = 0;
@@ -76,28 +70,33 @@ int main(int argc, char** argv) {
 #pragma omp for
     
     for(int i=0;i<N;i++){
-        r1 = -log(1-ran0(&idum1));
-        r2 = -log(1-ran0(&idum2));
+        r1 = -0.25*log(1-ran0(&idum1));
+        r2 = -0.25*log(1-ran0(&idum2));
         theta1 = PI*ran0(&idum3);
         theta2 = PI*ran0(&idum4);
         phi1 = 2*PI*ran0(&idum5);
         phi2 = 2*PI*ran0(&idum6);
-        //cout<<"x1 = "<<x1<<"  y2 = "<<y2<<"  z1 = "<<z1<<endl;
-        fx = r1*r1*r2*r2*f_sub(r1,r2,theta1,theta2,phi1,phi2)*exp(-4*(r1+r2));
+        fx = 4*r1*r1*r2*r2*f_sub(r1,r2,theta1,theta2,phi1,phi2);  ///exp(-(r1+r2))
         l_sum += fx;
         sum_sigma += fx*fx;
     }
 #pragma omp critical
-        {}
+        {
+        crude_mc +=l_sum; 
+        g_sigma += sum_sigma; 
+        num_cores = omp_get_num_threads();
+        }
     }
-    cout<<"sum = "<<crude_mc<<" sum_sigma = "<<g_sigma<<endl;
-    crude_mc = crude_mc/((double) N);
-    crude_mc *= 4*pow(PI,4)*lambda*lambda;
-    g_sigma = g_sigma*pow((2*lambda),6)/((double) N);
-    cout<<"sum_sigma = "<<g_sigma<<endl;
+    double stop = clock();
+    double diff = timediff(start,stop)*0.25;
+    crude_mc /= ((double) N);
+    g_sigma /= ((double) N);
     variance = g_sigma - crude_mc*crude_mc;
-    cout<<"Monte Carlo simulation with N = "<<N<<" gives "<<crude_mc<<endl;
+    crude_mc *= (1.0/16.0)*pow(PI,4);
+    cout<<"Monte Carlo simulation with (importance sampling) N = "<<N<<" gives "<<crude_mc<<endl;
+    cout<<"correct result: "<<5*PI*PI/(16*16)<<endl;
     cout<<"The variance is "<<variance<<" and standard deviation "<<sqrt(variance)<<endl;
+    cout<<"This took "<<diff<<" ms on "<<num_cores<<" cores"<<endl;
 #endif
     return 0;
 }
