@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  19 OCT 2012 12:12
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  25 OCT 2012 18:04
 entering extended mode
  %&-line parsing enabled.
 **project3.tex
@@ -496,50 +496,309 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 19.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-)
-Overfull \hbox (13.5419pt too wide) in paragraph at lines 53--70
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 90--107
+
+ []
+
+
+Overfull \hbox (42.7123pt too wide) in paragraph at lines 123--123
 [] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 53--70
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 53--70
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 153--156
 
  []
 
-[1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./project3.aux) ) 
-Here is how much of TeX's memory you used:
- 4339 strings out of 495061
- 53861 string characters out of 1182622
- 118941 words of memory out of 3000000
- 7461 multiletter control sequences out of 15000+50000
- 16290 words of font info for 50 fonts, out of 3000000 for 9000
- 28 hyphenation exceptions out of 8191
- 32i,8n,32p,225b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
- </h
-ome/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/fredr
-ik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/fredrik/.texmf
--var/fonts/pk/ljfour/jknappen/ec/ecbx0900.600pk> </home/fredrik/.texmf-var/font
-s/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfo
-ur/jknappen/ec/ecrm1728.600pk></usr/share/texmf-texlive/fonts/type1/public/amsf
-onts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmb
-x7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
-r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/tex
-mf-texlive/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/f
-onts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pf
-b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on project3.pdf (2 pages, 142854 bytes).
-PDF statistics:
- 203 PDF objects out of 1000 (max. 8388607)
- 0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+Underfull \hbox (badness 10000) in paragraph at lines 153--156
 
+ []
+
+! Undefined control sequence.
+<argument> ...\ =\frac {1}{r_1r_2}[(r_1+r_2)-\lef 
+                                                  |r_1-r_2\right |] = \begin...
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Extra \right.
+<argument> ...r_2}[(r_1+r_2)-\lef |r_1-r_2\right |
+                                                  ] = \begin {cases} \frac {...
+l.200 \end{align*}
+                  
+I'm ignoring a \right that had no matching \left.
+
+! Incomplete \iftrue; all text was ignored after line 200.
+<inserted text> 
+                \fi 
+l.200 \end{align*}
+                  
+A forbidden control sequence occurred in skipped text.
+This kind of error happens when you say `\if...' and forget
+the matching `\fi'. I've inserted a `\fi'; this might work.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.200 \end{align*}
+                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing \right. inserted.
+<inserted text> 
+                \right .
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Undefined control sequence.
+\@classz ...acol \fi \edef \@preamble {\@preamble 
+                                                  \ifcase \@chnum \hfil $\re...
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\@classz ...\ifcase \@chnum \hfil $\relax \@sharp 
+                                                  $\hfil \or $\relax \@sharp...
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra \or.
+<argument> ...char \ifcase \@chclass \@classz \or 
+                                                  \@classi \or \@classii \or...
+l.200 \end{align*}
+                  
+I'm ignoring this; it doesn't match any \if.
+
+! Undefined control sequence.
+\@classi ->\ifcase \@lastchclass \@acol 
+                                        \@arrayrule \or \@addtopreamble {\hs...
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra \or.
+<argument> ...\@chclass \@classz \or \@classi \or 
+                                                  \@classii \or \@classiii \...
+l.200 \end{align*}
+                  
+I'm ignoring this; it doesn't match any \if.
+
+! Extra \or.
+<argument> ...assz \or \@classi \or \@classii \or 
+                                                  \@classiii \or \@classiv \...
+l.200 \end{align*}
+                  
+I'm ignoring this; it doesn't match any \if.
+
+! Undefined control sequence.
+\@acolampacol ->\@acol 
+                       \@addamp \@acol 
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\@acolampacol ->\@acol \@addamp \@acol 
+                                       
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra \or.
+<argument> ...si \or \@classii \or \@classiii \or 
+                                                  \@classiv \or \@classv \fi...
+l.200 \end{align*}
+                  
+I'm ignoring this; it doesn't match any \if.
+
+! Undefined control sequence.
+<argument> ...lassii \or \@classiii \or \@classiv 
+                                                  \or \@classv \fi \@lastchc...
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra \or.
+<argument> ...ii \or \@classiii \or \@classiv \or 
+                                                  \@classv \fi \@lastchclass...
+l.200 \end{align*}
+                  
+I'm ignoring this; it doesn't match any \if.
+
+! Undefined control sequence.
+\@addtopreamble #1->\edef \@preamble {\@preamble 
+                                                 #1}
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<argument> \@nextchar 
+                      
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Incomplete \iffalse; all text was ignored after line 200.
+<inserted text> 
+                \fi 
+l.200 \end{align*}
+                  
+A forbidden control sequence occurred in skipped text.
+This kind of error happens when you say `\if...' and forget
+the matching `\fi'. I've inserted a `\fi'; this might work.
+
+Runaway definition?
+->\vtop \bgroup \hsize \relax \let 
+! Forbidden control sequence found while scanning definition of \@preamble.
+<inserted text> 
+                }
+l.200 \end{align*}
+                  
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.200 \end{align*}
+                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.200 \end{align*}
+                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Undefined control sequence.
+\@array ...e \@preamerr \z@ \@@par \fi \@preamble 
+                                                  
+l.200 \end{align*}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.200 \end{align*}
+                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+\frac  #1#2->{\begingroup #1\endgroup \@@over #2}
+                                                 
+l.200 \end{align*}
+                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! 

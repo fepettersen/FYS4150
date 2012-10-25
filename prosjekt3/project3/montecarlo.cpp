@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
     crude_mc=0;
     double g_sigma = 0;
     int num_cores = 0;
- #if 1
+ #if 0
     double start = clock();
 #pragma omp parallel 
     {

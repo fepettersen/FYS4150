@@ -188,10 +188,22 @@ I_{r_2} = \int\frac{e^{-4r_2/a}}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}d\math
 \int\frac{r_2^2sin(\theta_2)e^{-4r_2/a}}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}dr_2d\theta_2d\phi_2
 $$
 The integral over $\phi_2$ is trivial and ammounts to $2\pi$. The $\theta_2$ integral is
-$$
+\begin{align*}
 \int\limits_0^\pi\frac{sin(\theta_2)d\theta_2}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}} 
-= \frac{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}{r_1r_2}\Bigg|_0^\pi
-$$
+= \frac{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}{r_1r_2}\Bigg|_0^\pi\\
+=\frac{1}{r_1r_2}\left(\sqrt{r_1^2 + r_2^2 +2r_1r_2}-\sqrt{r_1^2+r_2^2 -r_1r_2}\right)\\
+=\frac{1}{r_1r_2}[(r_1+r_2)-\left|r_1-r_2\right|] = 
+\begin{cases}
+\frac{2}{r_1} \text{, if  } r_2<r_1 \\
+\frac{2}{r_2} \text{, if  } r_1<r_2
+\end{cases}
+\end{align*}
+Which means that
+\begin{align*}
+I_2 = 4\pi\left(\frac{1}{r_1}\int\limits_0^{r_1}e^{-4r_2/a}r_2^2dr_2 + \int\limits_{r_1}^\infty e^{-4r_2/a}r_2dr_2\right) = \\
+\frac{\pi a^3}{8r_1}\left[1-\left(a+\frac{2r_1}{a}\right)e^{-4r_1/a}\right]
+\end{align*}
+And we can now do the integral over $r_1$
 \section*{Results}
 
 \begin{figure}[H]
@@ -219,3 +231,4 @@ N &Gauss Legendre &Gauss Laguerre & Correct result \\
 \section*{Final comments}
 \section*{Source code}
 \end{document}
+

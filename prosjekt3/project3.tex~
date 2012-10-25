@@ -43,31 +43,186 @@ $$
 In this project we will fix $\alpha = 2$ which should correspond to the charge of the Helium atom $Z = 2$.
 The ansatz for the two-electron wave function is then given by the product of two one-electron wave funtions.
 $$
-\psi_{l,s}(\mathbf{r}_1,\mathbf{r_2}) = \psi_{l,s}(\mathbf{r}_1)\psi_{l,s}(\mathbf{r_2}) = e^{-2\alpha(r_1+r_2)}
+\Psi(\mathbf{r}_1,\mathbf{r_2}) = \psi(\mathbf{r}_1)\psi(\mathbf{r_2}) = e^{-2\alpha(r_1+r_2)}
+$$
+The integral we need to solve is the quantum mechanical expectation value of the
+correlation energy between two electrons which repel each other via the classical Coulomb
+interaction, namely
+$$
+\langle\frac{1}{\left|\mathbf{r}_1-\mathbf{r}_2\right|}\rangle = \int^\infty_{-\infty}\int^\infty_{-\infty}
+\frac{ e^{-\alpha r_i}}{\left|\mathbf{r}_1-\mathbf{r}_2\right|}d\mathbf{r}_1d\mathbf{r}_2
 $$
 
 \section*{The algorithm}
-\section*{Source code}
+The principle algorithms of this project is Gaussian quadrature and Monte Carlo integration. 
+What we are actually doing when we integrate a function by the use of the rectangle, trapezodial or Simpsons rule is to 
+approximate the integrand with a Taylor polynomial of degree 0,1 and 2 respectively between the integration points. An obvious 
+step forward from here is to approximate the entire function with a Taylor polynomial of degree N-1 for N integration points, 
+but then we realize that Taylor polynomials are a bit crude. A larger step forward can be obtained by approximating the 
+integrand with an orthogonal polynomial, such as Legendre polynomials.  
+We begin with the approximation
+\begin{align*}
+I = \int\limits^b_a f(x)dx = \int\limits_a^b W(x)g(x)dx \simeq \sum\limits_{i=1}^N w_i g(x_i)
+\end{align*}
+Where $w_i$ are the integration weights.
+This is called a Gaussian quadrature formula if it integrates exactly all polynomials $p \in P_{2N-1}$. That is:
+$$
+\int\limits_a^bW(x)p(x)dx = \sum\limits_{i=1}^Nw_ip(x_i)
+$$
+Let us now approximate $g(x) \simeq P_{2N-1}(x)$ where $P_{2N-1}(x) = \mathcal{L}_N(x)P_{N-1}(x)+Q_{N-1}(x)$. 
+$\mathcal{L}_{N}(x)$ is an orthogonal polynomial e.g. a Lagendre polynomial. We remember that orthogonal polynomials have the 
+property
+$$
+\int\limits_a^b\mathcal{L}_i(x)\mathcal{L}_j(x)dx = A\delta_{i,j}
+$$
+where $x\in[a,b]$ is determined by the specific polynomial (e.g $x\in[-1,1]$ for Legendre) and A is some orthogonality relation 
+also determined by the specific polynomial ($A = \frac{2}{2i+1}$ for Legende). This means that we have the following
+$$
+\int\limits_a^bf(x)dx \simeq \int\limits_a^bP_{2N-1}(x)dx =\underbrace{\int\limits_a^b\mathcal{L}_N(x)P_{N-1}(x)}_{=0} + 
+\int\limits_a^bQ_{N-1}(x)
+$$
+When we now extrapolate this to our numerics the integrals take the form of sums. To ensure that the term 
+$\int\limits_a^b\mathcal{L}_N(x)P_{N-1}(x) = 0$ we evaluate our sums in the points $\mathcal{L}_N(x_i) = 0$. That is
+$$
+\int\limits_a^bf(x)dx \simeq \sum\limits_{i=1}^{N-1}P_{2N-1}(x_i)w_i = \sum\limits_{i=1}^{N-1}Q_{N-1}(x_i)w_i
+$$
+
+The most general way to do the Gaussian Quadrature is to use Legendre polynomials. What we end up having to do in order to 
+evaluate our integral is to choose some number of integration points, and then calculate the integration points and weights. 
+That is we need to calculate the zeros of a Legendre polynomial of degree N. We will also need to make a mapping from the 
+original limits of our integral to the limits of Legendre polynomials, $x\in [-1,1]$. This is done by the function ``gauleg'' 
+found in the resources for the course. What this function is first of all to make a mapping from the limits one gives as 
+input to the Legendre limits of -1 and 1. \\
+   xm = 0.5 * (x2 + x1);\\
+   xl = 0.5 * (x2 - x1);\\
+After constructing the Legendre polynomial of degree i evaluated at some point x (from the recurrance relation),
+the function runs Newtons method to find its zeros starting out with an appriximation\\
+  pp = n * (z * p1 - p2)/(z * z - 1.0);\\
+  z1 = z;\\
+  z  = z1 - p1/pp;\\
+and stores this in the vector x after scaling it according to the limits xm and xl. The roots of a Legendre polynomial are 
+symmetric, so we actually find two roots for every iteration in ``gauleg''. The integration weights are also calculated through\\
+w(i-1) = 2.0 * xl/((1.0 - z * z) * pp * pp);\\
+theese are of course also symmetric.\\
+
+Having done the general ``brute force'' gaussian quadrature and gotten very unsatisfying results we notice that the approach of 
+first cutting the integral off at $\pm \lambda$ and then mapping theese limits to $\pm 1$ for all the variables 
+$x_1,y_1,z_1,x_2,y_2,z_2$ is a rather clumsy one. If we rewrite the integrand into spherical coordinates we can use the Gauss 
+Laguerre quadrature for the radial part instead, seeing as this looks like a typical Gauss Laguerre case:
+$$
+x^{\alpha}e^{-x}
+$$
+The transformation is
+\begin{align*}
+\iint \frac{e^{-4(r_1+r_2)}}{\left|\mathbf{r}_1-\mathbf{r}_2\right|}d\mathbf{r}_1\mathbf{r}_2 = 
+\idotsint \frac{e^{-4(\sqrt{x_1^2 + y_1^2 + z_1^2}+\sqrt{x_2^2 + y_2^2 + z_2^2})}}{\sqrt{(x_1-x_2)^2+(y_1-y_2)^2+(z_1-z_2)^2}}
+dx_1dx_2dy_1dy_2dz_1dz_2\\
+ = \idotsint\frac{r_1^2r_2^2\sin(\theta_1)\sin(\theta_2)e^{-4(r_1+r_2)}dr_1dr_2d\phi_1d\phi_2d\theta_1d\theta_2}
+ {\sqrt{(r_1cos(\phi_1)sin(\theta_1)-r_2cos(\phi_2)sin(\theta_2))^2
+ +(r_1sin(\phi_1)sin(\theta_1)-r_2sin(\phi_2)sin(\theta_2))^2+(r_1cos(\theta_1)-r_2cos(\theta_2))^2}}
+\end{align*}
+We now look only at the denominator without the square root
+\begin{align*}
+r_1^2(cos^2(\phi_1)sin^2(\theta_1)+sin^2(\phi_1)sin^2(\theta_1)+cos^2(\theta_1)) + \\
+r_2^2(cos^2(\phi_2)sin^2(\theta_2)+sin^2(\phi_2)sin^2(\theta_2)+cos^2(\theta_2)) -\\
+2r_1r_2(cos(\phi_1)cos(\phi_2)sin(\theta_1)sin(\theta_2) + sin(\phi_1)sin(\phi_2)sin(\theta_1)sin(\theta_2) + cos(\theta_1)cos(\theta_2)\\
+= r_1^2 + r_2^2 -2r_1r_2(cos(\theta_1)cos(\theta_2)+sin(\theta_1)sin(\theta_2)cos(\phi_1 - \phi_2))\\
+= r_1^2 + r_2^2 -r_1r_2(cos(\theta_1+\theta_2)(1-cos(\phi_1 - \phi_2))+cos(\theta_1-\theta_2)(1+cos(\phi_1 - \phi_2)))
+\end{align*}
+So in the end we are left with
+\begin{align*}
+\int\limits_0^{\infty}\int\limits_0^{\infty}\int\limits_0^{2\pi}\int\limits_0^{2\pi}\int\limits_0^{\pi}\int\limits_0^{\pi}
+\frac{r_1^2r_2^2\sin(\theta_1)\sin(\theta_2)e^{-4(r_1+r_2)}dr_1dr_2d\phi_1d\phi_2d\theta_1d\theta_2}
+{\sqrt{r_1^2 + r_2^2 -r_1r_2(cos(\theta_1+\theta_2)(1-cos(\phi_1 - \phi_2))+cos(\theta_1-\theta_2)(1+cos(\phi_1 - \phi_2)))}}
+\end{align*}
+I need to remark that I use this denominator only because I thought I could simplify the expression more than it allready was in 
+the project text, and had allready implemented the change before I relised I was wrong. I did not however bother changing it back 
+seeing as it was correct, and the chance of introducing typos was rather large.\\
+Now, when we intruduce this expression to the Gauss Laguerre quadrature both the $r_1^2r_2^2$ terms and the exponential will be 
+baked into the wheight function if we do another small substitution $\rho_1 = 4r_1, \rho_2 = 4r_2$. This substitution will only 
+introduce a factor $\frac{1}{1024}$ from inserting $r_i = \frac{\rho_i}{4}$ for all $r_i$ 
+$$
+\frac{\frac{\rho_1^2\rho_2^2}{4^24^2}sin(\theta_1)sin(\theta_2)e^{-(\rho_1+\rho_2)}\frac{d\rho_1d\rho_2}{4^2}}
+{\sqrt{\frac{\rho_1^2}{4^2}+\frac{\rho_2^2}{4^2}-\frac{2\rho_1\rho_2}{4^2}cos(\beta)}} = 
+\frac{\frac{1}{4^6}}{\frac{1}{4}}\frac{\rho_1^2\rho_2^2sin(\theta_1)sin(\theta_2)e^{-(\rho_1+\rho_2)}d\rho_1d\rho_2}
+{\sqrt{\rho_1^2+\rho_2^2-2\rho_1\rho_2cos(\beta)}}
+$$
+This clearly results in 
+$$
+\frac{4}{4^6} = \frac{1}{1024}
+$$
+Finally we have an expression to send through our six nested for-loops. The Integration points and wheights are now determined 
+by the Gauss Laguerre and Gauss Legendre for the radial and angular parts respectively.\\ \\
+
+We do the Monte Carlo simulations in two different ways. The first is a brute force approach where we draw random points for the 
+variables $r_1, r_2, \theta_1 , \theta_2 , \phi_1$ and $\phi_2$ in their respective intervals. We then evaluate 
+$f(r_1, r_2, \theta_1 , \theta_2 , \phi_1, \phi_2)$ and calculate the mean of $f$ in the area $r_1,r_2 \in [0,\lambda]$, 
+$\theta_1,\theta_2 \in [0,\pi]$, $\phi_1,\phi2 \in [0,2\pi]$ and multiply the mean of $f$ with the ``volume'' $V = 4\pi^4\lambda^2$
+The reason we evaluate $f$ in spherical coordinates is that we only have to make cutoffs for the upper limits of $r_1$ and $r_2$, 
+that is we limit ourselves to $r_1,r_2 \in [0,\lambda]$ when $r_1,r_2 \in [0,\infty)$ is correct. Had we evaluated $f$ in cartesian 
+coordinates we would have had to make similar cutoffs for all the variables in both ends.\\
+To get a measure of how good the appriximation is we calculate the variance and standard deviation of the result (we neglect the 
+covaraiance because it is a heavy computation and because it is assumed to be small).
+
+Next we think a little about what the function $f$ looks like, and realize that we can do importance sampling if we draw numbers 
+from the exponential distribution. The integrand is then changed into
+$$
+\frac{r_1^2r_2^2\sin(\theta_1)\sin(\theta_2)}{\sqrt{r_1^2 + r_2^2 -2r_1r_2\cos(\beta)}}
+$$
+
 \section*{Analytic solution}
+It is possible to find a closed form solution to the relevant integral, and put shortly it is$\frac{5\pi^2}{16^2}$.\\
+With some help from David J Griffiths we can find this value ourselves to verify that it is correct.
+We start out with
+$$
+\int\frac{e^{-4(r_1+r_2)/a}}{\left|\mathbf{r}_1 - \mathbf{r}_2\right|}d\mathbf{r}_1d\mathbf{r}_2
+$$
+where $a=1$ in our case. We will now fix $\mathbf{r}_1$ so we can do the $\mathbf{r}_2$ integral first. We also orient the 
+$\mathbf{r}_2$ coordinate system such that the polar axis lies along $\mathbf{r}_1$. This gives us
+$$
+\left|\mathbf{r}_1 - \mathbf{r}_2\right| = \sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}
+$$
+which inserted gives
+$$
+I_{r_2} = \int\frac{e^{-4r_2/a}}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}d\mathbf{r}_2 = 
+\int\frac{r_2^2sin(\theta_2)e^{-4r_2/a}}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}dr_2d\theta_2d\phi_2
+$$
+The integral over $\phi_2$ is trivial and ammounts to $2\pi$. The $\theta_2$ integral is
+\begin{align*}
+\int\limits_0^\pi\frac{sin(\theta_2)d\theta_2}{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}} 
+= \frac{\sqrt{r_1^2+r_2^2 -2r_1r_2cos(\theta_2)}}{r_1r_2}\Bigg|_0^\pi\\
+=\frac{1}{r_1r_2}\left(\sqrt{r_1^2 + r_2^2 +2r_1r_2}-\sqrt{r_1^2+r_2^2 -r_1r_2}\right)\\
+=\frac{1}{r_1r_2}[(r_1+r_2)-\lef|r_1-r_2\right|] = 
+\begin{cases}
+\frac{2}{r_1} \text{, if  } r_2<r_1 \\
+\frac{2}{r_2} \text{, if  } r_1<r_2
+\end{cases}
+
+\end{align*}
 \section*{Results}
-\begin{tabular}{|c|c|c|c|c|}
+
+\begin{figure}[H]
+\centering 
+\begin{tabular}{|c|c|c|c|}
 \hline
-N & $\epsilon_r$ LU decomposition& CPU time LU decomposition &$\epsilon_r$& CPU time tridiagonal decomposition \\
+N &Gauss Legendre &Gauss Laguerre & Correct result \\
 \hline
-5 & -12.5 & - & -0.7 & - \\
-10 & ? & - & -1.2 & - \\
-100 & -1.3 & - & -3.0 & - \\
-500 & -1.9 & - & -4.4 & - \\
-1000 & -2.2 & 30 & -4.8 & - \\
-10000 & -3.2 & 3160 & -5.0 & - \\
-$10^5$ & x & out of memory & -5.1 & - \\
-$10^6$ & x & out of memory & -5.07 & 20 \\
-$10^7$ & x & out of memory & x & 250 \\
-$10^8$ & x & out of memory & x & 2380 \\
-$1.5*10^8$ & x & out of memory & x & 3480 \\
+10 & 0.0719797 & 0.186457 &0.192765  \\
+15 & 0.239088 & 0.189759 & 0.192765  \\
+20 & 0.156139 & 0.191081 & 0.192765  \\
+25 & 0.195817 & 0.19174 &0.192765  \\
+30 & 0.177283 &0.192113& 0.192765  \\
+35 & 0.189923 & 0.192343& 0.192765  \\
+40 & 0.184417 & 0.192493 &0.192765 \\
+45 & 0.189586 &0.192595 &0.192765  \\
+50 & 0.18756  & 0.192667 &0.192765 \\
 \hline
-\end{tabular} \\ \\
+\end{tabular}
+\caption{Results of Gaussian quadrature for increasing N}
+\end{figure}
+
+
 \section*{Stability and precision}
 \section*{Final comments}
-
+\section*{Source code}
 \end{document}

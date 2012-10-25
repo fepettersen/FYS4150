@@ -10,7 +10,7 @@
 #define PI 3.14159
 int main(int argc, char** argv){
     int n =atoi(argv[1]);//atoi(argv[1]);
-#if 1
+#if 0
     vec x1(n),x2(n),y1(n),y2(n),z1(n),z2(n),w1(n),w2(n),w3(n),w4(n),w5(n),w6(n);
     x1.zeros();x2.zeros();y1.zeros();y2.zeros();z1.zeros();z2.zeros();
     w1.zeros();w2.zeros();w3.zeros();w4.zeros();w5.zeros();w6.zeros();
