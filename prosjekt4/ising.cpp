@@ -19,35 +19,42 @@ int main(int argc, char** argv) {
     crude_mc=0;
     double g_sigma = 0;
     int num_cores = 0;
-    spinmatrix = init(0,n);
+    mat  A = zeros<mat>(5,6);
+    mat spinmatrix = zeros<mat>(n+2,n+2);
     double start = clock();
     double max_temp = 4.0;
     double temp_step = 0.5;
+    vec averages = zeros<vec>(5);
 
 #pragma omp parallel 
     {
         double l_sum = 0;
-        double r1,r2,theta1,theta2,phi1,phi2;
         double fx = 0;
         double sum_sigma = 0;
         double E,M;
 #pragma omp for
-    for(int temp = 1; temp < max_temp; temp += temp_step){
+    for(double temp = 1; temp < max_temp; temp += temp_step){
         /*Loop over temperatures*/
+        cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
         E = M = 0;
-        spinmatrix = init();
+        spinmatrix = init(1,n);
         for(int j = 0; j<N;j++){
-            update_ghosts(&spinmatrix,n);
             /*Loop over Monte Carlo cycles*/
-             metropolis(n,spinmatrix,&E,&M);
+            update_ghosts(spinmatrix,n);
+            metropolis(n,spinmatrix, E, M, temp);
+            averages(0)+=E; averages(1)+=E*E; averages(2)+=fabs(M);
+            averages(3) +=M;    averages(4) +=M*M;
        }
-      
+       variance = averages(1)/((double)N) -(averages(0)/((double)N))*(averages(0)/((double)N));
+       crude_mc = averages(4)/((double)N) -(averages(3)/((double)N))*(averages(3)/((double)N));
+      cout<<"average energy "<<averages(0)/((double)N)<<" variance_E "<<variance/N;
+      cout<<" average magnetization "<<averages(3)/((double)N)<<" variance_M "<<crude_mc/N<<endl;
     }
 #pragma omp critical
     {
         crude_mc += l_sum; 
         g_sigma += sum_sigma;
-        num_cores = omp_get_num_threads();
+        //num_cores = omp_get_num_threads();
     }
     }
 
@@ -55,6 +62,7 @@ int main(int argc, char** argv) {
     double diff = timediff(start,stop)*0.25;
 
     /*Print some results to terminal*/
+    /*
     crude_mc /= ((double) N);
     g_sigma /= ((double) N);
     variance = g_sigma - crude_mc*crude_mc;
@@ -62,6 +70,6 @@ int main(int argc, char** argv) {
     cout<<"Monte Carlo simulation with N = "<<N<<" gives "<<crude_mc<<endl;
     cout<<"The variance is "<<variance<<" and standard deviation "<<sqrt(variance)<<endl;
     cout<<"This took "<<diff<<" ms on "<<num_cores<<" cores"<<endl;
-
+*/
     return 0;
 }
