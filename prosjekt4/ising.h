@@ -25,7 +25,7 @@ mat init(int high,int n);
 double timediff(double time1, double time2);
 //double f_sub(double r1,double r2,double theta1,double theta2,double phi1,double phi2);
 double ran0(long *idum);
-void metropolis(int n,mat spinmatrix,double &E,double &M, double temp);
+void metropolis(int n,mat spinmatrix,double &E,double &M, vec w);
 void update_ghosts(mat &spinmatrix, int n);
 #endif	/* INTEGRATE_H */
 
@@ -59,52 +59,46 @@ void update_ghosts(mat &spinmatrix, int n){
 	}
 	return ;
 }
-void metropolis(int n,mat spinmatrix,double &E,double &M, double temp){
+void metropolis(int n,mat spinmatrix,double &E,double &M, vec w){
 	long idum = time(0);
 	int a,b,energy,s,dE;
 	double r;
-	for (int x = 1;x<=n;x++){
-		for(int y=1;y<=n;y++){
-			//cout<<"hei, y  ="<<y<<endl;
+	for (int x = 1; x <= n; x++){
+		for(int y=1; y <= n; y++){
 			a = int (1 + n*ran0(&idum));
 			b = int (1 + n*ran0(&idum));
-			//cout<<"a = "<<a<<" b = "<<b<<endl;
 			s = spinmatrix(a,b);
-			energy = spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1);
-			spinmatrix(a,b) *= -1;
+			energy = spinmatrix(a,b)*(spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1));
+			//spinmatrix(a,b) *= -1;
 			dE = 2*energy;
+			//cout<<"  dE = "<<dE<<"  dksnf  "<<w(dE/4 + 2);
+			/*
 			if(dE>0){
 				r = ran0(&idum);
-				if(r>exp(-dE/temp)){
+				if(r > w(dE%4 + 2)){
 					spinmatrix(a,b)*=-1;
+					cout<<"hei"<<endl;
 				}
 			}
-			E += dE;
-			M += spinmatrix(x,y);
+			*/
+			if(ran0(&idum) <= w(dE/4 + 2)){
+				cout<<"hei"<<endl;
+				spinmatrix(a,b) *= -1;
+				E += (double) dE;
+				M += (double) 2*spinmatrix(a,b);
+			}
+			
+			//spinmatrix.print("...");
+			update_ghosts(spinmatrix,n);
 		}
 	}
 }
-/*
-double f(double x1,int high,double y1,double y2, double z1, double z2){
-	double denom = (fabs(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2))));
-	double fexp = -4*(sqrt(x1*x1+y1*y1+z1*z1)+sqrt(x2*x2+y2*y2+z2*z2));
-	double func =  exp(fexp)/denom;
-	return (denom>1e-12)?func:0;
-}
-*/
+
 double timediff(double time1, double time2){
 	// This function returns the elapsed time in milliseconds
 	return ((time2 - time1)*1000)/CLOCKS_PER_SEC;
 }
-/*
-double f_sub(double r1,double r2,double theta1,double theta2,double phi1,double phi2){
-	double denom = (r1*r1 + r2*r2 -\
-r1*r2*(cos(theta1+theta2)*(1-cos(phi1-phi2))+cos(theta1-theta2)*(1+cos(phi1-phi2))));
-	//double pow = -1*(r1+r2);
-	double kapow = sin(theta1)*sin(theta2)/sqrt(denom);
-	return (denom>1e-12)?kapow:0;
-}
-*/
+
 #define IA 16807
 #define IM 2147483647
 #define AM (1.0/IM)

@@ -14,46 +14,50 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 10000;
+    int N = 10;
     double crude_mc,variance;
     crude_mc=0;
     double g_sigma = 0;
     int num_cores = 0;
-    mat  A = zeros<mat>(5,6);
     mat spinmatrix = zeros<mat>(n+2,n+2);
     double start = clock();
-    double max_temp = 4.0;
+    double max_temp = 1.5;
     double temp_step = 0.5;
     vec averages = zeros<vec>(5);
 
 #pragma omp parallel 
     {
-        double l_sum = 0;
-        double fx = 0;
-        double sum_sigma = 0;
+        //double l_sum = 0;
+        //double fx = 0;
+        //double sum_sigma = 0;
         double E,M;
+        vec w = zeros<vec>(5);
 #pragma omp for
-    for(double temp = 1; temp < max_temp; temp += temp_step){
+    for(double temp = 1; temp <= max_temp; temp += temp_step){
         /*Loop over temperatures*/
         cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
+        for (int p=0;p<5;p++){
+            w(p) = exp(-(4*p-8)/temp);
+        }
+        w.print("w:");
         E = M = 0;
         spinmatrix = init(1,n);
+        update_ghosts(spinmatrix,n);
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
-            update_ghosts(spinmatrix,n);
-            metropolis(n,spinmatrix, E, M, temp);
+            metropolis(n,spinmatrix, E, M, w);
             averages(0)+=E; averages(1)+=E*E; averages(2)+=fabs(M);
             averages(3) +=M;    averages(4) +=M*M;
        }
-       variance = averages(1)/((double)N) -(averages(0)/((double)N))*(averages(0)/((double)N));
-       crude_mc = averages(4)/((double)N) -(averages(3)/((double)N))*(averages(3)/((double)N));
+       variance = (averages(1)/((double)N) -(averages(0)/((double)N))*(averages(0)/((double)N)))/(n*n);
+       crude_mc = (averages(4)/((double)N) -(averages(3)/((double)N))*(averages(3)/((double)N)))/(n*n);
       cout<<"average energy "<<averages(0)/((double)N)<<" variance_E "<<variance/N;
       cout<<" average magnetization "<<averages(3)/((double)N)<<" variance_M "<<crude_mc/N<<endl;
     }
 #pragma omp critical
     {
-        crude_mc += l_sum; 
-        g_sigma += sum_sigma;
+        //crude_mc += l_sum; 
+        //g_sigma += sum_sigma;
         //num_cores = omp_get_num_threads();
     }
     }
