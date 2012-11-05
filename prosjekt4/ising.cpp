@@ -14,17 +14,19 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 100000;
+    int N = 10;
     double variance_M,variance_E;
     variance_E=variance_M = 0;
-    double g_sigma = 0;
-    int num_cores = 0;
+    //double g_sigma = 0;
+    //int num_cores = 0;
     mat spinmatrix = zeros<mat>(n+2,n+2);
-    double start = clock();
+    //double start = clock();
     double max_temp = 1.5;
     double temp_step = 0.5;
     vec averages = zeros<vec>(5);
-
+    long idum = -1*time(0);
+    cout << idum << endl;
+    //idum  = -1352137323;
 #pragma omp parallel 
     {
         double average_E = 0;
@@ -44,11 +46,11 @@ int main(int argc, char** argv) {
         }
         w.print("w:");
         E = M = 0;
-        spinmatrix = init(0,n);
+        spinmatrix = init(1,n,idum);
         update_ghosts(spinmatrix,n);
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
-            metropolis(n, spinmatrix, E, M, w);
+            metropolis(n, spinmatrix, E, M, w, idum);
             if (j>N/10){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
@@ -59,8 +61,8 @@ int main(int argc, char** argv) {
         average_M = averages(2)/((double) N);    //Note the use of abs(M)
         average_E2 = averages(1)/((double) N);
         average_M2 = averages(4)/((double) N);
-        variance_E = (average_E2 - average_E*average_E)/((double) (n*n));
-        variance_M = (average_M2 - average_M*average_M)/((double) (n*n));
+        variance_E = (average_E2 - average_E*average_E)/n/n;
+        variance_M = (average_M2 - average_M*average_M)/n/n;
         cout<<"average energy "<<average_E<<" variance_E "<<variance_E;
         cout<<" average magnetization "<<average_M<<" variance_M "<<variance_M<<endl;
     }
@@ -72,8 +74,8 @@ int main(int argc, char** argv) {
     }
     }
 
-    double stop = clock();
-    double diff = timediff(start,stop)*0.25;
+    //double stop = clock();
+    //double diff = timediff(start,stop)*0.25;
 
     /*Print some results to terminal*/
     /*
