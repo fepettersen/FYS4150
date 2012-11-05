@@ -82,7 +82,7 @@ void metropolis(int n,mat spinmatrix,double &E,double &M, vec w){
 			}
 			*/
 			if(ran0(&idum) <= w(dE/4 + 2)){
-				cout<<"hei"<<endl;
+				//cout<<"dE = "<<dE<<endl;
 				spinmatrix(a,b) *= -1;
 				E += (double) dE;
 				M += (double) 2*spinmatrix(a,b);

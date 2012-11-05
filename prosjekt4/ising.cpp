@@ -14,9 +14,9 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 10;
-    double crude_mc,variance;
-    crude_mc=0;
+    int N = 100000;
+    double variance_M,variance_E;
+    variance_E=variance_M = 0;
     double g_sigma = 0;
     int num_cores = 0;
     mat spinmatrix = zeros<mat>(n+2,n+2);
@@ -27,32 +27,42 @@ int main(int argc, char** argv) {
 
 #pragma omp parallel 
     {
-        //double l_sum = 0;
-        //double fx = 0;
-        //double sum_sigma = 0;
+        double average_E = 0;
+        double average_M = 0;
+        double average_E2 = 0;
+        double average_M2 = 0;
         double E,M;
         vec w = zeros<vec>(5);
 #pragma omp for
     for(double temp = 1; temp <= max_temp; temp += temp_step){
         /*Loop over temperatures*/
+        averages(0) = 0; averages(1) = 0; averages(2) = 0;
+        averages(3) = 0; averages(4) = 0;
         cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
-        for (int p=0;p<5;p++){
+        for(int p=0;p<5;p++){
             w(p) = exp(-(4*p-8)/temp);
         }
         w.print("w:");
         E = M = 0;
-        spinmatrix = init(1,n);
+        spinmatrix = init(0,n);
         update_ghosts(spinmatrix,n);
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
-            metropolis(n,spinmatrix, E, M, w);
-            averages(0)+=E; averages(1)+=E*E; averages(2)+=fabs(M);
-            averages(3) +=M;    averages(4) +=M*M;
-       }
-       variance = (averages(1)/((double)N) -(averages(0)/((double)N))*(averages(0)/((double)N)))/(n*n);
-       crude_mc = (averages(4)/((double)N) -(averages(3)/((double)N))*(averages(3)/((double)N)))/(n*n);
-      cout<<"average energy "<<averages(0)/((double)N)<<" variance_E "<<variance/N;
-      cout<<" average magnetization "<<averages(3)/((double)N)<<" variance_M "<<crude_mc/N<<endl;
+            metropolis(n, spinmatrix, E, M, w);
+            if (j>N/10){
+                averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
+                averages(3) += M; averages(4) += M*M;
+            }
+
+        }
+        average_E = averages(0)/((double) N);
+        average_M = averages(2)/((double) N);    //Note the use of abs(M)
+        average_E2 = averages(1)/((double) N);
+        average_M2 = averages(4)/((double) N);
+        variance_E = (average_E2 - average_E*average_E)/((double) (n*n));
+        variance_M = (average_M2 - average_M*average_M)/((double) (n*n));
+        cout<<"average energy "<<average_E<<" variance_E "<<variance_E;
+        cout<<" average magnetization "<<average_M<<" variance_M "<<variance_M<<endl;
     }
 #pragma omp critical
     {
