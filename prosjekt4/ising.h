@@ -25,7 +25,8 @@ mat init(int high,int n,double &E, double &M);
 double timediff(double time1, double time2);
 double ran0(long *idum);
 void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long &idum);
-void update_ghosts(mat &spinmatrix, int n);
+void update_ghosts(mat &spinmatrix, int n, int a, int b);
+void update_all(mat &spinmatrix, int n);
 double ran3(long *idum);
 double ran2(long *idum);
 #endif	/* INTEGRATE_H */
@@ -53,7 +54,7 @@ mat init(int high, int n,double &E, double &M)
 		}
   }
   else{spinmatrix.ones(n+2,n+2);}
-  update_ghosts(spinmatrix,n);
+  update_all(spinmatrix,n);
   for(int i = 1; i<=n; i++){
   	for(int j = 1; j<= n; j++){
   		E -= 0.5*((double) spinmatrix(i,j)*\
@@ -63,13 +64,55 @@ mat init(int high, int n,double &E, double &M)
   }
   return spinmatrix;
 }
-void update_ghosts(mat &spinmatrix, int n){
+
+void update_all(mat &spinmatrix, int n){
+	//Do not upddate all points every time!!!
+	for(int i =1; i <= n; i++){
+		spinmatrix(0,i) = spinmatrix(n,i);
+		spinmatrix(n+1,i) = spinmatrix(1,i);
+		spinmatrix(i,0) = spinmatrix(i,n);
+		spinmatrix(i,n+1) = spinmatrix(i,1);
+	}
+	return ;
+}
+
+void update_ghosts(mat &spinmatrix, int n, int a, int b){
 	/*Do not upddate all points every time!!!*/
 	for(int i =1; i <= n; i++){
 		spinmatrix(0,i) = spinmatrix(n,i);
 		spinmatrix(n+1,i) = spinmatrix(1,i);
 		spinmatrix(i,0) = spinmatrix(i,n);
 		spinmatrix(i,n+1) = spinmatrix(i,1);
+	}
+	if(a==n || b==n || a==1 || b==1){
+		if(a==1 && b==1){
+			spinmatrix(1,n+1) = spinmatrix(1,1);
+			spinmatrix(n+1,1) = spinmatrix(1,1);
+		}
+		else if(a==1 && b==n){
+			spinmatrix(1,0) = spinmatrix(1,n);
+			spinmatrix(n+1,n) = spinmatrix(1,n);
+		}
+		else if(a==n && b==1){
+			spinmatrix(0,1) = spinmatrix(n,1);
+			spinmatrix(n,n+1) = spinmatrix(n,1);
+		}
+		else if(a==n && b==n){
+			spinmatrix(n,0) = spinmatrix(n,n);
+			spinmatrix(0,n) = spinmatrix(n,n);
+		}
+		else if(a==1){
+			spinmatrix(n+1,b) = spinmatrix(1,b);
+		}
+		else if(a==n){
+			spinmatrix(0,b) = spinmatrix(n,b);
+		}
+		else if(b==1){
+			spinmatrix(a,n+1) = spinmatrix(a,1);
+		}
+		else{
+			spinmatrix(a,0) = spinmatrix(a,n);
+		}
 	}
 	return ;
 }
@@ -88,7 +131,7 @@ void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long &idum){
 				E += ((double) dE);
 				M += ((double) 2*spinmatrix(a,b));
 			}
-			update_ghosts(spinmatrix,n);
+			update_ghosts(spinmatrix,  n,  a,  b);
 		}
 	}
 }
