@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
         outfile<<average_E<<"  "<< average_M<<"  "<< N<<endl;
         variance_E = (average_E2 - average_E*average_E)/n/n;
         variance_M = (average_M2 - average_M*average_M)/n/n;
+        cout<<"-----------------------------"<<endl;
         cout<<"average energy "<<average_E/n/n<<" variance_E "<<variance_E<<endl;
         cout<<"average magnetization "<<average_M/n/n<<" variance_M "<<variance_M<<endl;
     
