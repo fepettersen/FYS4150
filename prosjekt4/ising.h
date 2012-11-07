@@ -11,6 +11,7 @@
 #include <cmath>
 #include <iostream>
 #include <time.h>
+#include <fstream>
 using namespace std;
 using namespace arma;
 
@@ -23,7 +24,7 @@ using namespace arma;
 mat init(int high,int n,double &E, double &M);
 double timediff(double time1, double time2);
 double ran0(long *idum);
-void metropolis(int n,mat spinmatrix,double &E,double &M, vec w, long idum);
+void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long &idum);
 void update_ghosts(mat &spinmatrix, int n);
 double ran3(long *idum);
 double ran2(long *idum);
@@ -63,7 +64,7 @@ mat init(int high, int n,double &E, double &M)
   return spinmatrix;
 }
 void update_ghosts(mat &spinmatrix, int n){
-	
+	/*Do not upddate all points every time!!!*/
 	for(int i =1; i <= n; i++){
 		spinmatrix(0,i) = spinmatrix(n,i);
 		spinmatrix(n+1,i) = spinmatrix(1,i);
@@ -72,20 +73,20 @@ void update_ghosts(mat &spinmatrix, int n){
 	}
 	return ;
 }
-void metropolis(int n,mat spinmatrix,double &E,double &M, vec w, long idum){
+void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long &idum){
 	int a,b,dE;
 	for (int x = 1; x <= n; x++){
 		for(int y=1; y <= n; y++){
-			//double r1 = ran2(&idum);
-			//double r2 = ran2(&idum);
-			a = (int) (1 + (n-0.5)*ran2(&idum));
-			b = (int) (1 + (n-0.5)*ran2(&idum));
+			a = (int) (1 + (n-0.5)*ran0(&idum));
+			b = (int) (1 + (n-0.5)*ran0(&idum));
 			dE = 2*spinmatrix(a,b)*\
 			(spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1));
+
 			if(ran0(&idum) <= w(dE/4 + 2)){
 				spinmatrix(a,b) *= -1;
+				//cout<<"dE = "<<dE<<endl;
 				E += ((double) dE);
-				M += (double) 2*spinmatrix(a,b);
+				M += ((double) 2*spinmatrix(a,b));
 			}
 			update_ghosts(spinmatrix,n);
 		}
