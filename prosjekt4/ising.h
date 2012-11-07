@@ -20,7 +20,7 @@ using namespace arma;
 #ifndef INTEGRATE_H
 #define	INTEGRATE_H
 
-mat init(int high,int n,long idum);
+mat init(int high,int n,double &E, double &M);
 double timediff(double time1, double time2);
 double ran0(long *idum);
 void metropolis(int n,mat spinmatrix,double &E,double &M, vec w, long idum);
@@ -31,20 +31,34 @@ double ran2(long *idum);
 
 
 
-mat init(int high, int n,long idum)
+mat init(int high, int n,double &E, double &M)
 {
-
+	/*
 	int a,b;
+	a = int (1 + n*ran2(&idum));
+	b = int (1 + n*ran2(&idum));
+	//cout<<"a = "<<a<<" b = "<<b<<endl;
+	*/
 	mat spinmatrix;
-	spinmatrix.ones(n+2,n+2);
+	
 	if(high){
 		//cout<<"hei"<<endl;
-		for (int i =0;i<n;i++){
-			a = int (1 + n*ran2(&idum));
-			b = int (1 + n*ran2(&idum));
-			//cout<<"a = "<<a<<" b = "<<b<<endl;
-			spinmatrix(a,b) *= -1;
+		spinmatrix.randu(n+2,n+2);
+		for (int i =0;i<n+2;i++){
+			for(int j=0;j<n+2;j++){
+			spinmatrix(i,j) = (int) (2*spinmatrix(i,j));
+			if(spinmatrix(i,j)==0){spinmatrix(i,j)=-1;}
+			}
 		}
+  }
+  else{spinmatrix.ones(n+2,n+2);}
+  update_ghosts(spinmatrix,n);
+  for(int i = 1; i<=n; i++){
+  	for(int j = 1; j<= n; j++){
+  		E -= 0.5*((double) spinmatrix(i,j)*\
+  			(spinmatrix(i-1,j)+spinmatrix(i+1,j)+spinmatrix(i,j+1)+spinmatrix(i,j-1)));
+  		M += ((double) spinmatrix(i,j));
+  	}
   }
   return spinmatrix;
 }
@@ -62,22 +76,17 @@ void metropolis(int n,mat spinmatrix,double &E,double &M, vec w, long idum){
 	int a,b,dE;
 	for (int x = 1; x <= n; x++){
 		for(int y=1; y <= n; y++){
-			double r1 = ran2(&idum);
-			double r2 = ran2(&idum);
-			a = (int) (1 + (n-1)*r1);
-			b = (int) (1 + (n-1)*r2);
-			//cout<<"a = "<<a<<" b = "<<b<<endl;
-			//cout<<"r1 = "<<r1<<" r2 = "<<r2<<endl;
-			dE = 2*spinmatrix(a,b)*(spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1));
-			cout<<"dE = "<<dE<<" w(dE/4 + 2) "<<w(dE/4 + 2)<<endl;
-			if(ran3(&idum) <= w(dE/4 + 2)){
-				//
+			//double r1 = ran2(&idum);
+			//double r2 = ran2(&idum);
+			a = (int) (1 + (n-0.5)*ran2(&idum));
+			b = (int) (1 + (n-0.5)*ran2(&idum));
+			dE = 2*spinmatrix(a,b)*\
+			(spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1));
+			if(ran0(&idum) <= w(dE/4 + 2)){
 				spinmatrix(a,b) *= -1;
-				E += (double) dE;
+				E += ((double) dE);
 				M += (double) 2*spinmatrix(a,b);
 			}
-			
-			//spinmatrix.print("...");
 			update_ghosts(spinmatrix,n);
 		}
 	}
@@ -121,6 +130,7 @@ double ran0(long *idum)
 
 double ran3(long *idum)
 {
+	/*DO NOT USE THIS GENERATOR! GIVES VALUES LARGER THAN 1 FOR SOME SEEDS*/
    static int        inext, inextp;
    static long       ma[56];      // value 56 is special, do not modify
    static int        iff = 0;
