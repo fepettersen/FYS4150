@@ -14,7 +14,7 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 5;
+    int N = 500000;
     double variance_M,variance_E;
     variance_E=variance_M = 0;
     //double g_sigma = 0;
@@ -23,18 +23,19 @@ int main(int argc, char** argv) {
     //double start = clock();
     
     double temp_step = 0.1;
-    double start_temp = 1.6;
-    double max_temp = 2.0;
+    double start_temp = 2.3;
+    double max_temp = 2.4;
     vec averages = zeros<vec>(5);
     long idum = -1*time(0);
     ofstream outfile;
-    outfile.open("results.txt");
+    outfile.open("other_results.txt");
 #pragma omp parallel 
     {
         double average_E = 0;
         double average_M = 0;
         double average_E2 = 0;
         double average_M2 = 0;
+        double average_Mabs = 0;
         double E,M;
         vec w = zeros<vec>(5);
 #pragma omp for
@@ -46,35 +47,37 @@ int main(int argc, char** argv) {
         average_M = 0;
         average_E2 = 0;
         average_M2 = 0;
-        cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
+        average_Mabs = 0;
         for(int p=0;p<5;p++){
             w(p) = exp(-(4*p-8)/temp);
         }
         E = M = 0;
-        spinmatrix = init(1,n,E,M);
+        spinmatrix = init(0,n,E,M);
 
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
             //spinmatrix.print("før:"); 
-            metropolis(n, spinmatrix, E, M, w, idum);
+            metropolis(n, spinmatrix, E, M, w, &idum);
             //cout<<"Initial E = "<<E<<" initial M = "<<M<<endl;
             //spinmatrix.print("etter:");
-            if (j>N/10){
+            if (j>0){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
+                outfile<<averages(0)/((double)j)<<"               "<< averages(2)/((double)j)<<endl;
             }
         }
         //cout<<"Cumulative energy: "<<averages(0)<<" compared to 4*8*N = "<<4*8*N<<endl;
-        average_E = averages(0)/((double) N);
-        average_M = averages(2)/((double) N);    //Note the use of abs(M)
-        average_E2 = averages(1)/((double) N);
-        average_M2 = averages(4)/((double) N);
-        outfile<<average_E<<"  "<< average_M<<"  "<< N<<endl;
+        average_E = averages(0)/(((double) N));
+        average_M = averages(3)/(((double) N));    //Note the use of abs(M)
+        average_Mabs = averages(2)/(((double) N));
+        average_E2 = averages(1)/(((double) N));
+        average_M2 = averages(4)/(((double) N));
         variance_E = (average_E2 - average_E*average_E)/n/n;
         variance_M = (average_M2 - average_M*average_M)/n/n;
         cout<<"-----------------------------"<<endl;
-        cout<<"average energy "<<average_E/n/n<<" variance_E "<<variance_E<<endl;
-        cout<<"average magnetization "<<average_M/n/n<<" variance_M "<<variance_M<<endl;
+        cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
+        cout<<"average energy "<<average_E/n/n<<" heat capacity "<<variance_E/(temp*temp)<<endl;
+        cout<<"average magnetization "<<average_Mabs/n/n<<" magnetic suceptibility "<<variance_M/(temp)<<endl;
     
     }
 #pragma omp critical
