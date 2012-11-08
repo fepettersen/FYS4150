@@ -120,18 +120,19 @@ void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long &idum){
 	int a,b,dE;
 	for (int x = 1; x <= n; x++){
 		for(int y=1; y <= n; y++){
-			a = (int) (1 + (n-0.5)*ran0(&idum));
-			b = (int) (1 + (n-0.5)*ran0(&idum));
+			a = (int) (1 + (n)*ran0(&idum));
+			b = (int) (1 + (n)*ran0(&idum));
 			dE = 2*spinmatrix(a,b)*\
 			(spinmatrix(a+1,b)+spinmatrix(a-1,b)+spinmatrix(a,b+1)+spinmatrix(a,b-1));
 
 			if(ran0(&idum) <= w(dE/4 + 2)){
 				spinmatrix(a,b) *= -1;
-				//cout<<"dE = "<<dE<<endl;
+				cout<<"dE = "<<dE<<endl;
 				E += ((double) dE);
 				M += ((double) 2*spinmatrix(a,b));
+				update_ghosts(spinmatrix,  n,  a,  b);
+				spinmatrix.print("asdf");
 			}
-			update_ghosts(spinmatrix,  n,  a,  b);
 		}
 	}
 }

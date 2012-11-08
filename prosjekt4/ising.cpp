@@ -14,7 +14,7 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 500000;
+    int N = 5;
     double variance_M,variance_E;
     variance_E=variance_M = 0;
     //double g_sigma = 0;
@@ -55,9 +55,10 @@ int main(int argc, char** argv) {
 
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
-             
+            //spinmatrix.print("før:"); 
             metropolis(n, spinmatrix, E, M, w, idum);
             //cout<<"Initial E = "<<E<<" initial M = "<<M<<endl;
+            //spinmatrix.print("etter:");
             if (j>N/10){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
