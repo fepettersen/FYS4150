@@ -15,20 +15,16 @@ int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
     int N = 500000;
-    double variance_M,variance_E;
-    variance_E=variance_M = 0;
     //double g_sigma = 0;
     //int num_cores = 0;
-    mat spinmatrix = zeros<mat>(n+2,n+2);
     //double start = clock();
     
-    double temp_step = 0.1;
-    double start_temp = 2.3;
-    double max_temp = 2.4;
-    vec averages = zeros<vec>(5);
-    long idum = -1*time(0);
     ofstream outfile;
-    outfile.open("other_results.txt");
+   
+    double start_temp = 1.6;
+    double max_temp = 2.5;
+    double temp_step = 0.1;
+    int ntemps = ((double) 1/temp_step);
 #pragma omp parallel 
     {
         double average_E = 0;
@@ -37,9 +33,17 @@ int main(int argc, char** argv) {
         double average_M2 = 0;
         double average_Mabs = 0;
         double E,M;
+        double variance_M,variance_E;
+        variance_E=variance_M = 0;
+        long idum = -1*time(0);
+        mat spinmatrix = zeros<mat>(n+2,n+2);
+        vec averages = zeros<vec>(5);
+        int accepted_flips = 0;
         vec w = zeros<vec>(5);
+        vec temp = linspace<vec>(start_temp,max_temp,1/temp_step);
+        //temp.print("sjaaz");
 #pragma omp for
-    for(double temp = start_temp; temp < max_temp; temp += temp_step){
+    for(int t = 0; t < ntemps; t++){
         /*Loop over temperatures*/
         averages(0) = 0; averages(1) = 0; averages(2) = 0;
         averages(3) = 0; averages(4) = 0;
@@ -49,36 +53,44 @@ int main(int argc, char** argv) {
         average_M2 = 0;
         average_Mabs = 0;
         for(int p=0;p<5;p++){
-            w(p) = exp(-(4*p-8)/temp);
+            w(p) = exp(-(4*p-8)/temp(t));
         }
         E = M = 0;
         spinmatrix = init(0,n,E,M);
-
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
-            //spinmatrix.print("før:"); 
-            metropolis(n, spinmatrix, E, M, w, &idum);
-            //cout<<"Initial E = "<<E<<" initial M = "<<M<<endl;
-            //spinmatrix.print("etter:");
-            if (j>0){
+            accepted_flips = metropolis(n, spinmatrix, E, M, w, &idum);
+            if (j>0.1*N){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
-                outfile<<averages(0)/((double)j)<<"               "<< averages(2)/((double)j)<<endl;
+                //outfile<<averages(0)/((double)j)<<"               "<< averages(2)/((double)j)<<\
+                        "      "<<accepted_flips<<endl;
             }
         }
-        //cout<<"Cumulative energy: "<<averages(0)<<" compared to 4*8*N = "<<4*8*N<<endl;
-        average_E = averages(0)/(((double) N));
-        average_M = averages(3)/(((double) N));    //Note the use of abs(M)
-        average_Mabs = averages(2)/(((double) N));
-        average_E2 = averages(1)/(((double) N));
-        average_M2 = averages(4)/(((double) N));
+        /*Handling the results*/
+        outfile.open(make_filename(n,temp(t)));
+        
+        average_E = averages(0)/(0.9*((double) N));
+        average_M = averages(3)/(0.9*((double) N));    //Note the use of abs(M)
+        average_Mabs = averages(2)/(0.9*((double) N));
+        average_E2 = averages(1)/(0.9*((double) N));
+        average_M2 = averages(4)/(0.9*((double) N));
         variance_E = (average_E2 - average_E*average_E)/n/n;
         variance_M = (average_M2 - average_M*average_M)/n/n;
         cout<<"-----------------------------"<<endl;
-        cout<<"temp = "<<temp<<" out of "<<max_temp<<endl;
-        cout<<"average energy "<<average_E/n/n<<" heat capacity "<<variance_E/(temp*temp)<<endl;
-        cout<<"average magnetization "<<average_Mabs/n/n<<" magnetic suceptibility "<<variance_M/(temp)<<endl;
-    
+        cout<<"temp = "<<temp(t)<<" out of "<<max_temp<<endl;
+        cout<<"average energy "<<average_E/n/n<<" heat capacity "<<variance_E/(temp(t)*temp(t))<<endl;
+        cout<<"average magnetization "<<average_Mabs/n/n<<" magnetic suceptibility "<<\
+                variance_M/(temp(t))<<endl;
+        /*
+        outfile<<average_E/n/n<<setw(12)<<setprecision(8)<<"  "<<variance_E/(temp(t)*temp(t))<<\
+                setw(12)<<setprecision(8)<<"  "<<average_Mabs/n/n<<setw(12)<<setprecision(8)<<"  "<<\
+                variance_M/(temp(t))<<endl;
+        */
+        outfile<<average_E/n/n<<"      "<<variance_E/(temp(t)*temp(t))<<\
+                "        "<<average_Mabs/n/n <<"           "<<\
+                variance_M/(temp(t))<<"      "<<temp(t)<<endl;
+        outfile.close();
     }
 #pragma omp critical
     {

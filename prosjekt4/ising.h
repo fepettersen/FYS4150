@@ -12,11 +12,17 @@
 #include <iostream>
 #include <time.h>
 #include <fstream>
+
+/*from lib.h. do'nt know what they do*/
+#include <new>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+
 using namespace std;
 using namespace arma;
 
-#define EPS 3.0e-14
-#define MAXIT 10
 
 #ifndef INTEGRATE_H
 #define	INTEGRATE_H
@@ -24,9 +30,10 @@ using namespace arma;
 mat init(int high,int n,double &E, double &M);
 double timediff(double time1, double time2);
 double ran0(long *idum);
-void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long *idum);
+int metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long *idum);
 void update_ghosts(mat &spinmatrix, int n, int a, int b);
 void update_all(mat &spinmatrix, int n);
+char *make_filename(int n, double temp);
 double ran3(long *idum);
 double ran2(long *idum);
 #endif	/* INTEGRATE_H */
@@ -116,8 +123,8 @@ void update_ghosts(mat &spinmatrix, int n, int a, int b){
 	}
 	return ;
 }
-void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long *idum){
-	int a,b,dE;
+int metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long *idum){
+	int a,b,dE,counter = 0;
 	for (int x = 1; x <= n; x++){
 		for(int y=1; y <= n; y++){
 			a = (int) (1 + (n)*ran0(idum));
@@ -131,17 +138,24 @@ void metropolis(int n,mat &spinmatrix,double &E,double &M, vec w, long *idum){
 				E += ((double) dE);
 				M += ((double) 2*spinmatrix(a,b));
 				update_ghosts(spinmatrix,  n,  a,  b);
-				//spinmatrix.print("asdf");
+				counter++;
+                                //spinmatrix.print("asdf");
 			}
 		}
 	}
+        return counter;
 }
 
 double timediff(double time1, double time2){
 	// This function returns the elapsed time in milliseconds
 	return ((time2 - time1)*1000)/CLOCKS_PER_SEC;
 }
-
+char *make_filename(int n, double temp){
+        //Returns a filename saying something about the particular run.
+        char* buffer = new char[60];
+        sprintf(buffer,"isingresults_n%d_temp_%.4f.txt",n,temp);
+        return buffer;
+}
 #define IA 16807
 #define IM 2147483647
 #define AM (1.0/IM)
