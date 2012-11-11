@@ -21,30 +21,69 @@
 
 \section*{About the problem}
 The aim of this project is to simulate the development of a system of spins fixed in a position in the plane. The particles can 
-have spin up or down represented by the values $\pm 1$. We simulate using the Ising model 
-\section*{The algorithm}
+have spin up or down represented by the values $\pm 1$. We simulate using the simplest form of the Ising model in 2D where the energy 
+of a particle is given by $E = -J\sum\limits_{\langle kl\rangle}s_{kl}$. The notation on the summation sign indicates a sum over the 
+nearest neighbours of the paricle in question. $J$ is here a coupling constant which we will set equal to 1 throughout the project. 
+We will also limit ourselves to using only the Metropolis algorithm with periodic boundary conditions meaning that at the boundary 
+(say the right boundary) the neighbouring partice to the right of a particle at the boundary is the particle on the left boundary 
+with the corresponding coordinates.
 
+\section*{The algorithm}
+The algorithm of choise here is the Metropolis algorithm.
 \section*{Analytic solution}
+In the case where we have a lattice size of $2\times2$ we are able to find a closed form solution for all the important parameters 
+in this project. We will start off by finding the energy of the system for all $2^4 = 16$ possible microstates of the system:
+begin{table}[H]
+ 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+configuration & multiplicity ($\Omega$)& E & $|M|$ & $M$ & $M^2$\\
+\hline
+$\begin{matrix}\uparrow \uparrow\\ \uparrow \uparrow\end{matrix}$ & 1 & -8J & 4 & 4 & 16 \\
+\hline
+$\begin{matrix}\uparrow \downarrow \\ \uparrow \uparrow\end{matrix}$& 4 & 0 & 2 & 2 & 4\\
+\hline
+$\begin{matrix}\uparrow \uparrow \\ \downarrow \downarrow \end{matrix}$ & 4 & 0 & 0 & 0 & 0 \\
+\hline
+$\begin{matrix}\uparrow \downarrow  \\ \downarrow \uparrow \end{matrix}$ & 2 & 8J & 0 & 0 & 0 \\
+\hline
+$\begin{matrix}\uparrow \downarrow \\ \downarrow \downarrow \end{matrix}$ & 4 & 0 & 2  & -2 & 4\\
+\hline
+$\begin{matrix}\downarrow \downarrow  \\ \downarrow \downarrow \end{matrix}$ & 1& -8J & 4 & -4 & 16 \\
+
+\hline
+\end{tabular}
+\caption{All the possible spin configurations for a $2\times 2$ system of spins with periodic boudarys.}
+\label{table1}
+\end{table}
+From this we can find the partition function of the $2\times2$ system through the well known formula for the partition function
+$$
+Z = \sum\limits_E \Omega(E)e^{-\beta E} = 12 + 2e^{-8\beta J} + 2e^{8\beta J} = 4\left(3+\cosh(8\beta J)\right)
+$$
+We can now find the energy of the system through the relation 
+\begin{align*}
+ \langle E\rangle = -\frac{\partial \ln\left(Z\right)}{\partial \beta} &= -\frac{1}{4\left(3+\cosh(8\beta J)\right)}\cdot \frac{d}{d\beta}4\left(3+\cosh(8\beta J)\right)\\
+ \langle E\rangle &= \frac{-8\beta J \sinh(8\beta J)}{\left(3+\cosh(8\beta J)\right)}
+\end{align*}
+And by differentiating this expression one more time with respect to $\beta$ we can find the heat capacity
+\begin{align*}
+ \langle C_V\rangle&= \frac{1}{k_BT^2}\cdot\frac{\partial^2 \ln\left(Z\right)}{\partial^2 \beta} = \frac{-(8J)^2}{k_BT^2}\cdot
+ \left(\frac{\cosh(8\beta J)(3+\cosh(8\beta J)) - \sinh^2(8\beta J)}{(3+\cosh(8\beta J))^2}\right)\\
+ &= \frac{-(8J)^2}{k_BT^2}\cdot\frac{3\cosh(8\beta J)}{(3+\cosh(8\beta J))^2}
+\end{align*}
+We can also find the expectation value of the absolute magnetization
+\begin{align*}
+ \langle |M|\rangle = \frac{1}{Z}\sum\limits_{i=1}^N |M_i|e^{-\beta E_i} = \frac{1}{Z}\left(2\cdot4e^{8\beta J} + 2\cdot (4\cdot 2)\right)
+  = \frac{2e^{8\beta J} + 4}{3+\cosh(8\beta J)}
+\end{align*}
+And finally we can find the magnetic sucepitbility $\chi = \frac{\sigma_M^2}{k_BT} = \frac{\langle M^2\rangle -
+\langle M \rangle^2}{k_BT}$. We find the relevant values of $\langle M^2\rangle$ and $\langle M \rangle^2$ from table \ref{table1}.
 
 \section*{Results}
+\
 
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-N & $\epsilon_r$ LU decomposition& CPU time LU decomposition &$\epsilon_r$& CPU time tridiagonal decomposition \\
-\hline
-5 & -12.5 & - & -0.7 & - \\
-10 & ? & - & -1.2 & - \\
-100 & -1.3 & - & -3.0 & - \\
-500 & -1.9 & - & -4.4 & - \\
-1000 & -2.2 & 30 & -4.8 & - \\
-10000 & -3.2 & 3160 & -5.0 & - \\
-$10^5$ & x & out of memory & -5.1 & - \\
-$10^6$ & x & out of memory & -5.07 & 20 \\
-$10^7$ & x & out of memory & x & 250 \\
-$10^8$ & x & out of memory & x & 2380 \\
-$1.5*10^8$ & x & out of memory & x & 3480 \\
-\hline
-\end{tabular} \\ \\
 \section*{Stability and precision}
 \section*{Final comments}
 
