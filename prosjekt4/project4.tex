@@ -1,0 +1,51 @@
+\documentclass[a4paper,english, 10pt, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+%opening
+\title{Project 4, FYS4150}
+\author{Fredrik E Pettersen\\ fredriep@student.matnat.uio.no}
+
+
+\begin{document}
+
+\maketitle
+
+
+\section*{About the problem}
+The aim of this project is to simulate the development of a system of spins fixed in a position in the plane. The particles can 
+have spin up or down represented by the values $\pm 1$. We simulate using the Ising model 
+\section*{The algorithm}
+The algorithm of choise here is the Metropolis algorithm.
+\section*{Analytic solution}
+
+\section*{Results}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+N & $\epsilon_r$ LU decomposition& CPU time LU decomposition &$\epsilon_r$& CPU time tridiagonal decomposition \\
+\hline
+5 & -12.5 & - & -0.7 & - \\
+10 & ? & - & -1.2 & - \\
+100 & -1.3 & - & -3.0 & - \\
+500 & -1.9 & - & -4.4 & - \\
+1000 & -2.2 & 30 & -4.8 & - \\
+10000 & -3.2 & 3160 & -5.0 & - \\
+$10^5$ & x & out of memory & -5.1 & - \\
+$10^6$ & x & out of memory & -5.07 & 20 \\
+$10^7$ & x & out of memory & x & 250 \\
+$10^8$ & x & out of memory & x & 2380 \\
+$1.5*10^8$ & x & out of memory & x & 3480 \\
+\hline
+\end{tabular} \\ \\
+\section*{Stability and precision}
+\section*{Final comments}
+
+\end{document}
