@@ -1,9 +1,15 @@
+"""
+A simple script which runs an executable file in the same directory, collects the output-files from the 
+program into one file with a reasonable filename, and plots the results in the end.
+"""
+
 import os, glob, numpy as np
 import matplotlib.pyplot as mpl
 
-N = [10]
-j=0
+N = [20,40,60,80]
 counter = [0]*len(N)
+'''
+j=0
 for i in N:
 	print "-------HER!----------"
 	os.system('./kalle %d'%i)
@@ -17,7 +23,7 @@ for i in N:
 		os.remove(dings)
 	outfile.close()
 	j+=1
-
+'''
 mpl.figure(1)
 n=0
 for somefile in sorted(glob.glob('collected_results_ising*.txt')):
@@ -28,7 +34,7 @@ for somefile in sorted(glob.glob('collected_results_ising*.txt')):
 	mpl.xlabel('temperature in units of kT/J')
 	mpl.ylabel('average energy per particle')
 	#mpl.figlegend((line1),'%d by %d' %(counter[n],counter[n]),'upper left')
-	#n +=1
+	n +=1
 mpl.legend(loc=2)
 
 #mpl.savefig('filename.extension')
@@ -37,10 +43,11 @@ mpl.figure(2)
 n=0
 for somefile in sorted(glob.glob('collected_results_ising*.txt')):
 	infile = np.loadtxt(somefile)
-	mpl.plot(infile[:,-1],infile[:,1],label='%d by %d' %(counter[n],counter[n]))
+	mpl.plot(infile[:,-1],infile[:,1],label='%d by %d' %(N[n],N[n]))
 	mpl.hold('on')
 	mpl.xlabel('temperature in units of kT/J')
 	mpl.ylabel('heat capacity per particle')
+	n +=1
 	
 mpl.legend(loc=2)
 #mpl.savefig('filename.extension')
@@ -49,10 +56,11 @@ n=0
 
 for somefile in sorted(glob.glob('collected_results_ising*.txt')):
 	infile = np.loadtxt(somefile)
-	mpl.plot(infile[:,-1],infile[:,2],label='%d by %d' %(counter[n],counter[n]))
+	mpl.plot(infile[:,-1],infile[:,2],label='%d by %d' %(N[n],N[n]))
 	mpl.hold('on')
 	mpl.xlabel('temperature in units of kT/J')
 	mpl.ylabel('average magnetization per particle')
+	n +=1
 
 mpl.legend(loc=1)
 #mpl.savefig('filename.extension')
@@ -61,10 +69,11 @@ n=0
 
 for somefile in sorted(glob.glob('collected_results_ising*.txt')):
 	infile = np.loadtxt(somefile)
-	mpl.plot(infile[:,-1],infile[:,1],label='%d by %d' %(counter[n],counter[n]))
+	mpl.plot(infile[:,-1],infile[:,1],label='%d by %d' %(N[n],N[n]))
 	mpl.hold('on')
 	mpl.xlabel('temperature in units of kT/J')
 	mpl.ylabel('magnetic suceptibility per particle')
+	n +=1
 
 mpl.legend(loc=2)
 #mpl.savefig('filename.extension')

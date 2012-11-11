@@ -14,17 +14,17 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 500000;
+    int N = 1000000;
     //double g_sigma = 0;
     //int num_cores = 0;
     //double start = clock();
     
     ofstream outfile;
    
-    double start_temp = 1.6;
-    double max_temp = 2.5;
-    double temp_step = 0.1;
-    int ntemps = ((double) 1/temp_step);
+    double start_temp = 2.0;
+    double max_temp = 2.4;
+    double temp_step = 0.02;
+    int ntemps = ((max_temp-start_temp)/temp_step)+2;
 #pragma omp parallel 
     {
         double average_E = 0;
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
         vec averages = zeros<vec>(5);
         int accepted_flips = 0;
         vec w = zeros<vec>(5);
-        vec temp = linspace<vec>(start_temp,max_temp,1/temp_step);
+        vec temp = linspace<vec>(start_temp,max_temp,ntemps);
         //temp.print("sjaaz");
 #pragma omp for
     for(int t = 0; t < ntemps; t++){
@@ -63,8 +63,10 @@ int main(int argc, char** argv) {
             if (j>0.1*N){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
+                /*
                 //outfile<<averages(0)/((double)j)<<"               "<< averages(2)/((double)j)<<\
                         "      "<<accepted_flips<<endl;
+                        */
             }
         }
         /*Handling the results*/
