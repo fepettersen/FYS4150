@@ -101,7 +101,6 @@ double timediff(double time1, double time2){
 double f_sub(double r1,double r2,double theta1,double theta2,double phi1,double phi2){
     double denom = (r1*r1 + r2*r2 -\
 r1*r2*(cos(theta1+theta2)*(1-cos(phi1-phi2))+cos(theta1-theta2)*(1+cos(phi1-phi2))));
-    //double pow = -1*(r1+r2);
     double kapow = sin(theta1)*sin(theta2)/sqrt(denom);
     return (denom>1e-12)?kapow:0;
 }

@@ -29,11 +29,18 @@ We will also limit ourselves to using only the Metropolis algorithm with periodi
 with the corresponding coordinates.
 
 \section*{The algorithm}
-The algorithm of choise here is the Metropolis algorithm.
+The algorithm of choise here is the Metropolis algorithm combined with Monte Carlo (MC) cycles. What we end up doing in the final 
+program is to run some N MC cycles and for each cycle we run trough the entire $n \times n$ grid, pick a spin at random and flip 
+it. We then use the Metropolis principle to estimate wehter or not the flip is accepted. We calculate the change in energy 
+$\Delta E$ caused by the flip. If the change in energy is negative the energy of the system is reduced, and the flip is accepted. 
+Should the flip however increase the energy of the system we need to compare the probability of this happening to some other 
+probability. In this case a random number drawn from the uniform distribution. The increase in energy for the system is not a 
+non-physical move, it is simply a very unlikely one. However, this unlikeliness decreases when the temperature becomes large, 
+thus more energy states will become avalible for the system at larger temperatures.
+
 \section*{Analytic solution}
 In the case where we have a lattice size of $2\times2$ we are able to find a closed form solution for all the important parameters 
 in this project. We will start off by finding the energy of the system for all $2^4 = 16$ possible microstates of the system:
-begin{table}[H]
  
 \begin{table}[H]
 \centering
@@ -55,9 +62,10 @@ $\begin{matrix}\downarrow \downarrow  \\ \downarrow \downarrow \end{matrix}$ & 1
 
 \hline
 \end{tabular}
-\caption{All the possible spin configurations for a $2\times 2$ system of spins with periodic boudarys.}
 \label{table1}
+\caption{All the possible spin configurations for a $2\times 2$ system of spins with periodic boudarys.}
 \end{table}
+
 From this we can find the partition function of the $2\times2$ system through the well known formula for the partition function
 $$
 Z = \sum\limits_E \Omega(E)e^{-\beta E} = 12 + 2e^{-8\beta J} + 2e^{8\beta J} = 4\left(3+\cosh(8\beta J)\right)
@@ -79,12 +87,86 @@ We can also find the expectation value of the absolute magnetization
   = \frac{2e^{8\beta J} + 4}{3+\cosh(8\beta J)}
 \end{align*}
 And finally we can find the magnetic sucepitbility $\chi = \frac{\sigma_M^2}{k_BT} = \frac{\langle M^2\rangle -
-\langle M \rangle^2}{k_BT}$. We find the relevant values of $\langle M^2\rangle$ and $\langle M \rangle^2$ from table \ref{table1}.
+\langle M \rangle^2}{k_BT}$. We find the relevant values of $\langle M^2\rangle$ and $\langle M \rangle^2$ from table 
+\ref{table1}.
+\begin{align*}
+\chi &= \frac{1}{Z}\sum\limits_{i=1}^N M_i^2e^{-\beta E_i} -\left[\frac{1}{Z}\sum\limits_{i=1}^N M_ie^{-\beta E_i}\right]^2\\
+ &= \frac{1}{Z}\left(2\cdot 16e^{8\beta J} + 2\cdot 4^2 \right) - \left[\frac{1}{Z}\left(4e^{8\beta J}-4e^{8\beta J} + 
+ 2-2 \right)\right]^2 = \frac{8(e^{8\beta J} + 1)}{3+\cosh(8\beta J)}
+\end{align*}
 
 \section*{Results}
-\
+As a verification of the program we can check that it reproduces the analytical results for a $2\times 2$ grid with periodic 
+boundary conditions. Now, the analytical solution is for the entire system, while the program gives the results per particle, so 
+we will need to divide the analytical solution by 4 to get corresponding numbers. As mentioned in the introduction we use the 
+values $k_B = J = 1$ and futhermore we will do the verification for the temperature $T = 1$ where T is in units of 
+$\frac{k_B T}{J}$. The results of the verification are found in table \ref{table2}
 
+\begin{table}[H]
+\centering
+ \begin{tabular}{|c|c|c|c|c|}
+ \hline
+  - & $\langle E \rangle$ & $\langle |M|\rangle$ & $C_V$ & $\chi$  \\
+\hline
+  analytical & -1,995982086 & 0,998660733& 0,032075159& 3,993303776\\
+  numeric & -1.99606 & 0.998681 & 0.0314933 & 3.98768\\
+  \hline
+ \end{tabular}
+ \caption{verification of the program for a $2\times 2$ grid with 1 000 000 Monte Carlo cycles.}
+\label{table2}
+\end{table}
+As we can see there is a fair compliance between the analytical results and the results from the program.\\ \\
+We would also like to see if the initial configuration of spins has a lot to say with regard to how fast the system reaches 
+equilibrium. We do this for a $20 \times 20$ grid starting out with $T = 1$. 
+\begin{figure}[H]
+\includegraphics[scale=0.5]{energy_ordered_temp1.png}
+\includegraphics[scale=0.5]{energy_ordered_temp1_zoom.png}
+\caption{Convergence of the total energy $20 \times 20$ grid temperature is 1, all spins pointing up initially.}
+\label{energy_ordered_temp1}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{magnetization_ordered_temp1.png}
+\includegraphics[scale=0.5]{magnetization_ordered_temp1_zoom.png}
+\caption{Convergence of the total magnetization $20 \times 20$ grid temperature is 1, all spins pointing up initially.}
+\label{magnet_ordered_temp1}
+\end{figure}
+In both figure \ref{energy_ordered_temp1} and \ref{magnet_ordered_temp1} the picture on the right is simply a closeup of 
+the interesting part of the left picture. We can see that it takes roughly $5\cdot10^4 = 50 000$ MC cycles for the energy to 
+reach equilibrium which is 10\% of the total amount of MC cycles in this run. Of course when we look at the magnetization 
+at equilibrium, the starting point could not have been better. So what happens if we should start out with a random distribution. 
+We can see the results in figure \ref{energy_random_temp1}. Surprisingly this seems like a much better starting point even though
+the initial distribution of spins is far from the equilibrium at the relevant temperature. Figures \ref{magnet_random_temp2.4}
+and \ref{both_ordered_temp2} show the same plots for the temperature 2.4. We can see from theese plots that it does not seem 
+to matter too much which configuration we start out with. This is because there is no well defined equilibrium configuration of 
+spins at this temperature. The stable (equilibrium) configuration is the random one (we can see this from the magnetization plot 
+when we know that the absolute value of the magnetization is plotted). Thus every initial configuration is equally close to the 
+equilibrium configuration and as we saw for $T = 1$ starting close to equilibrium means slow convergence.
+
+\begin{figure}[H]
+ \includegraphics[scale=0.5]{energy_random_temp1_zoom.png}
+ \includegraphics[scale=0.6]{magnetization_random_temp1_zoom}
+ \caption{Convergence of the total energy and magnetization $20 \times 20$ grid temperature is 1,random initial configuration.}
+\label{energy_random_temp1}
+ \end{figure}
+
+\begin{figure}[H]
+ \includegraphics[scale=0.5]{energy_random_temp2dot4_zoom.png}
+ \includegraphics[scale=0.5]{magnetization_random_temp2dot4_zoom}
+ \caption{Convergence of the total energy and magnetization $20 \times 20$ grid. temperature is 2.4, random initial configuration.}
+\label{magnet_random_temp2.4}
+ \end{figure}
+
+\begin{figure}[H]
+ \includegraphics[scale=0.5]{energy_ordered_temp2dot4_zoom.png}
+ \includegraphics[scale=0.5]{magnetization_ordered_temp2dot4_zoom}
+ \caption{Convergence of the total energy and magnetization $20 \times 20$ grid. Temperature is 2.4 all spins initially point up.}
+\label{both_ordered_temp2.4}
+ \end{figure} 
+  \\
+  
 \section*{Stability and precision}
+
 \section*{Final comments}
 
 \end{document}
