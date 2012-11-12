@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.10.21)  12 NOV 2012 17:30
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.10.21)  12 NOV 2012 17:35
 entering extended mode
  %&-line parsing enabled.
-**project4.tex
-(./project4.tex
+**project4_appendix.tex
+(./project4_appendix.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
 yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
@@ -422,22 +422,23 @@ Package ifvtex Info: VTeX not detected.
 \Gm@dimlist=\toks26
 
 (/usr/share/texmf-texlive/tex/xelatex/xetexconfig/geometry.cfg))
-(./project4.aux)
-\openout1 = `project4.aux'.
+(./project4_appendix.aux)
+\openout1 = `project4_appendix.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
- (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+
+(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count113
 \scratchdimen=\dimen125
@@ -493,142 +494,99 @@ driver: pdftex
 \@twosidetrue \@mparswitchtrue 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
-LaTeX Font Info:    Try loading font information for U+msa on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 17.
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 19.
+LaTeX Font Info:    Try loading font information for U+msb on input line 17.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [1
+) (./ising.cpp
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1.
+
+(/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<energy_ordered_temp1.png, id=16, 521.95pt x 530.783pt>
-File: energy_ordered_temp1.png Graphic file (type png)
-
-<use energy_ordered_temp1.png>
-<energy_ordered_temp1_zoom.png, id=17, 521.95pt x 530.783pt>
-File: energy_ordered_temp1_zoom.png Graphic file (type png)
-
-<use energy_ordered_temp1_zoom.png>
-Underfull \hbox (badness 10000) in paragraph at lines 124--133
-
- []
-
-[2] <magnetization_ordered_temp1.png, id=23, 521.95pt x 530.783pt>
-File: magnetization_ordered_temp1.png Graphic file (type png)
-
-<use magnetization_ordered_temp1.png>
-<magnetization_ordered_temp1_zoom.png, id=24, 521.95pt x 530.783pt>
-File: magnetization_ordered_temp1_zoom.png Graphic file (type png)
-
-<use magnetization_ordered_temp1_zoom.png>
-<energy_random_temp1_zoom.png, id=25, 521.95pt x 530.783pt>
-File: energy_random_temp1_zoom.png Graphic file (type png)
-
-<use energy_random_temp1_zoom.png>
-<magnetization_random_temp1_zoom.png, id=26, 411.136pt x 308.352pt>
-File: magnetization_random_temp1_zoom.png Graphic file (type png)
-
-<use magnetization_random_temp1_zoom.png>
-Overfull \hbox (26.18266pt too wide) in paragraph at lines 154--156
-[][] [] 
+Overfull \hbox (92.1669pt too wide) in paragraph at lines 74--75
+[][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Underfull \vbox (badness 4353) has occurred while \output is active []
+Overfull \hbox (128.15839pt too wide) in paragraph at lines 91--92
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
- [3 <./energy_ordered_temp1.png (PNG copy)> <./energy_ordered_temp1_zoom.png (P
-NG copy)> <./magnetization_ordered_temp1.png (PNG copy)> <./magnetization_order
-ed_temp1_zoom.png (PNG copy)>]
-<energy_random_temp2dot4_zoom.png, id=30, 521.95pt x 530.783pt>
-File: energy_random_temp2dot4_zoom.png Graphic file (type png)
 
-<use energy_random_temp2dot4_zoom.png>
-<magnetization_random_temp2dot4_zoom.png, id=31, 521.95pt x 530.783pt>
-File: magnetization_random_temp2dot4_zoom.png Graphic file (type png)
+Overfull \hbox (38.17967pt too wide) in paragraph at lines 92--93
+[][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
-<use magnetization_random_temp2dot4_zoom.png>
-<energy_ordered_temp2dot4_zoom.png, id=32, 521.95pt x 530.783pt>
-File: energy_ordered_temp2dot4_zoom.png Graphic file (type png)
 
-<use energy_ordered_temp2dot4_zoom.png>
-<magnetization_ordered_temp2dot4_zoom.png, id=33, 521.95pt x 530.783pt>
-File: magnetization_ordered_temp2dot4_zoom.png Graphic file (type png)
-
-<use magnetization_ordered_temp2dot4_zoom.png>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./energy_random_temp1_zoom.png (PNG copy)> <./magnetization_random_temp1_z
-oom.png (PNG copy)> <./energy_random_temp2dot4_zoom.png (PNG copy)> <./magnetiz
-ation_random_temp2dot4_zoom.png (PNG copy)>] <energy.png, id=37, 586.8324pt x 4
-42.2924pt>
-File: energy.png Graphic file (type png)
+ [2])
+(./ising.h [3]
+Overfull \hbox (110.16264pt too wide) in paragraph at lines 68--69
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
-<use energy.png> <magnetization.png, id=39, 586.8324pt x 442.2924pt>
-File: magnetization.png Graphic file (type png)
 
-<use magnetization.png>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5 <./energy_ordered_temp2dot4_zoom.png (PNG copy)> <./magnetization_ordered_t
-emp2dot4_zoom.png (PNG copy)> <./energy.png>]
-<magnetic_suceptibility.png, id=44, 586.8324pt x 442.2924pt>
-File: magnetic_suceptibility.png Graphic file (type png)
+ [4]
+Overfull \hbox (104.16406pt too wide) in paragraph at lines 133--135
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
-<use magnetic_suceptibility.png>
-<heat_capacity.png, id=45, 586.8324pt x 442.2924pt>
-File: heat_capacity.png Graphic file (type png)
- <use heat_capacity.png>
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [6 <./magnetization.png> <./magnetic_suceptibility.png>]
-<probability_temp1.png, id=51, 586.8324pt x 442.2924pt>
-File: probability_temp1.png Graphic file (type png)
-
-<use probability_temp1.png>
-<probability_temp2dot4.png, id=52, 586.8324pt x 442.2924pt>
-File: probability_temp2dot4.png Graphic file (type png)
-
-<use probability_temp2dot4.png> [7 <./heat_capacity.png> <./probability_temp1.p
-ng>] <accepted_flips_temp2dot4.png, id=59, 513.92pt x 736.351pt>
-File: accepted_flips_temp2dot4.png Graphic file (type png)
-
-<use accepted_flips_temp2dot4.png>
-<accepted_flips_temp1.png, id=60, 513.92pt x 736.351pt>
-File: accepted_flips_temp1.png Graphic file (type png)
-
-<use accepted_flips_temp1.png>
+ [5]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8 <./probability_temp2dot4.png> <./accepted_flips_temp2dot4.png (PNG copy)> <
-./accepted_flips_temp1.png (PNG copy)>] [9] (./project4.aux) ) 
+ [6])
+(./isingscript.py
+Overfull \hbox (134.15697pt too wide) in paragraph at lines 2--3
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (14.18535pt too wide) in paragraph at lines 3--4
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[7]
+Overfull \hbox (20.18393pt too wide) in paragraph at lines 32--33
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8])
+[9] (./project4_appendix.aux) ) 
 Here is how much of TeX's memory you used:
- 4441 strings out of 493848
- 57055 string characters out of 1152822
- 123055 words of memory out of 3000000
- 7644 multiletter control sequences out of 15000+50000
+ 4617 strings out of 493848
+ 56321 string characters out of 1152822
+ 154925 words of memory out of 3000000
+ 7825 multiletter control sequences out of 15000+50000
  13822 words of font info for 45 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 32i,14n,32p,233b,260s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf
-/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-texlive/fonts/type1
-/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cm
-mi5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></us
-r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texm
-f-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/publ
-ic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
-/cm/cmsy5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pf
-b></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/
-fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/c
-m-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb
->
-Output written on project4.pdf (9 pages, 500061 bytes).
+ 32i,6n,32p,234b,1516s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-su
+per-t1.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fo
+nts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-
+super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb>
+Output written on project4_appendix.pdf (9 pages, 99327 bytes).
 PDF statistics:
- 114 PDF objects out of 1000 (max. 8388607)
+ 53 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 91 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

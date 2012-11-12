@@ -14,7 +14,7 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 1000000;
+    int N = 10000000;
     //double g_sigma = 0;
     //int num_cores = 0;
     //double start = clock();
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
             }
         }
         /*Handling the results*/
-        outfile.open("probability2.txt");
+        //outfile.open("probability2.txt");
         
         average_E = averages(0)/(0.9*((double) N));
         average_M = averages(3)/(0.9*((double) N));    //Note the use of abs(M)
@@ -91,19 +91,16 @@ int main(int argc, char** argv) {
         cout<<"average energy "<<average_E/n/n<<" heat capacity "<<variance_E/(temp(t)*temp(t))<<endl;
         cout<<"average magnetization "<<average_Mabs/n/n<<" magnetic suceptibility "<<\
                 variance_M/(temp(t))<<endl;
-        /*
-        outfile<<average_E/n/n<<setw(12)<<setprecision(8)<<"  "<<variance_E/(temp(t)*temp(t))<<\
-                setw(12)<<setprecision(8)<<"  "<<average_Mabs/n/n<<setw(12)<<setprecision(8)<<"  "<<\
-                variance_M/(temp(t))<<endl;
-        
+        /*        
         outfile<<average_E/n/n<<"      "<<variance_E/(temp(t)*temp(t))<<\
                 "        "<<average_Mabs/n/n <<"           "<<\
                 variance_M/(temp(t))<<"      "<<temp(t)<<endl;
-        */
+        
         for(int i=0;i<=n*n;i++){
             outfile<<prob[i]/((double)0.9*N)<<endl;
         }
         outfile.close();
+        */
     }
 #pragma omp critical
     {

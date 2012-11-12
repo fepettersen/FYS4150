@@ -36,7 +36,9 @@ $\Delta E$ caused by the flip. If the change in energy is negative the energy of
 Should the flip however increase the energy of the system we need to compare the probability of this happening to some other 
 probability. In this case a random number drawn from the uniform distribution. The increase in energy for the system is not a 
 non-physical move, it is simply a very unlikely one. However, this unlikeliness decreases when the temperature becomes large, 
-thus more energy states will become avalible for the system at larger temperatures.
+thus more energy states will become avalible for the system at larger temperatures. We can see this very clearly if we plot the 
+probability for the system to have a specific energy (or the energy distribution if we do this for all energies). We can use this 
+as a sort of verification of our model, and the results can be found in the ``stability and precision'' section.
 
 \section*{Analytic solution}
 In the case where we have a lattice size of $2\times2$ we are able to find a closed form solution for all the important parameters 
@@ -108,26 +110,31 @@ $\frac{k_B T}{J}$. The results of the verification are found in table \ref{table
  \hline
   - & $\langle E \rangle$ & $\langle |M|\rangle$ & $C_V$ & $\chi$  \\
 \hline
-  analytical & -1,995982086 & 0,998660733& 0,032075159& 3,993303776\\
-  numeric & -1.99606 & 0.998681 & 0.0314933 & 3.98768\\
+  analytical & -1,995982086 & 0,998660733& 0,032075159& 3,993303776\\ \hline
+  $10^5$ MC cycles & -1.99542 & 0.9984 & 0.0365311 & 3.97347\\ \hline
+  $5\cdot10^5$ MC cycles & -1.99592 & 0.998659 & 0.0325315 & 3.97159\\ \hline
+  $10^6$ MC cycles & -1.99606 & 0.998681 & 0.0314933 & 3.98768\\ \hline
+   $5\cdot10^6$ MC cycles & -1.99599 & 0.99867  & 0.0320465 & 3.98959\\ \hline
+   $10^7$ MC cycles & -1.99605 & 0.998681 & 0.0315278 & 3.99266\\ 
   \hline
  \end{tabular}
- \caption{verification of the program for a $2\times 2$ grid with 1 000 000 Monte Carlo cycles.}
+ \caption{verification of the program for a $2\times 2$ grid with increasing number of MC cycles.}
 \label{table2}
 \end{table}
-As we can see there is a fair compliance between the analytical results and the results from the program.\\ \\
+As we can see there is a fair compliance between the analytical results and the results from the program for as few MC cycles as 
+100 000. To achieve both ok results and a decent computation time I will use 1 000 000 MC cycles throughout the project.\\ \\
 We would also like to see if the initial configuration of spins has a lot to say with regard to how fast the system reaches 
 equilibrium. We do this for a $20 \times 20$ grid starting out with $T = 1$. 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{energy_ordered_temp1.png}
-\includegraphics[scale=0.5]{energy_ordered_temp1_zoom.png}
+\includegraphics[scale=0.45]{energy_ordered_temp1.png}
+\includegraphics[scale=0.45]{energy_ordered_temp1_zoom.png}
 \caption{Convergence of the total energy $20 \times 20$ grid temperature is 1, all spins pointing up initially.}
 \label{energy_ordered_temp1}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{magnetization_ordered_temp1.png}
-\includegraphics[scale=0.5]{magnetization_ordered_temp1_zoom.png}
+\includegraphics[scale=0.45]{magnetization_ordered_temp1.png}
+\includegraphics[scale=0.45]{magnetization_ordered_temp1_zoom.png}
 \caption{Convergence of the total magnetization $20 \times 20$ grid temperature is 1, all spins pointing up initially.}
 \label{magnet_ordered_temp1}
 \end{figure}
@@ -137,7 +144,7 @@ reach equilibrium which is 10\% of the total amount of MC cycles in this run. Of
 at equilibrium, the starting point could not have been better. So what happens if we should start out with a random distribution. 
 We can see the results in figure \ref{energy_random_temp1}. Surprisingly this seems like a much better starting point even though
 the initial distribution of spins is far from the equilibrium at the relevant temperature. Figures \ref{magnet_random_temp2.4}
-and \ref{both_ordered_temp2} show the same plots for the temperature 2.4. We can see from theese plots that it does not seem 
+and \ref{both_ordered_temp2.4} show the same plots for the temperature 2.4. We can see from theese plots that it does not seem 
 to matter too much which configuration we start out with. This is because there is no well defined equilibrium configuration of 
 spins at this temperature. The stable (equilibrium) configuration is the random one (we can see this from the magnetization plot 
 when we know that the absolute value of the magnetization is plotted). Thus every initial configuration is equally close to the 
@@ -151,22 +158,102 @@ equilibrium configuration and as we saw for $T = 1$ starting close to equilibriu
  \end{figure}
 
 \begin{figure}[H]
- \includegraphics[scale=0.5]{energy_random_temp2dot4_zoom.png}
- \includegraphics[scale=0.5]{magnetization_random_temp2dot4_zoom}
+ \includegraphics[scale=0.45]{energy_random_temp2dot4_zoom.png}
+ \includegraphics[scale=0.45]{magnetization_random_temp2dot4_zoom}
  \caption{Convergence of the total energy and magnetization $20 \times 20$ grid. temperature is 2.4, random initial configuration.}
 \label{magnet_random_temp2.4}
  \end{figure}
 
 \begin{figure}[H]
- \includegraphics[scale=0.5]{energy_ordered_temp2dot4_zoom.png}
- \includegraphics[scale=0.5]{magnetization_ordered_temp2dot4_zoom}
+ \includegraphics[scale=0.45]{energy_ordered_temp2dot4_zoom.png}
+ \includegraphics[scale=0.45]{magnetization_ordered_temp2dot4_zoom}
  \caption{Convergence of the total energy and magnetization $20 \times 20$ grid. Temperature is 2.4 all spins initially point up.}
 \label{both_ordered_temp2.4}
  \end{figure} 
-  \\
-  
-\section*{Stability and precision}
 
+One of the things the Ising model can predict is a phase transition, and we can see this in our simplified version too, if we 
+know what to look for. A (second order) phase transition is characterized by a divergence in the heat capacity and in the 
+magnetic suceptibility. Unfortunately theese quantities will only truly diverge in the thermodynamic limit ($n_{spins}
+\to \infty$), however we can see a discontinuity if we plot them around the critical temperature were the phase transistion 
+takes place. This discontinuity will become more clear for larger grid sizes, as we can see in figure \ref{heat_capacity}. I 
+realized that I have written the wrong value to file for the magnetic suceptibility (it is in fact the heat capacity) but since 
+it took 8 hours to produce this data, I do not have the time to correct this... We can also see the phase transition on the 
+average magnetization per particle. This will be 0 at the phase transition in the thermodynamic limit, but for finite grid sizes 
+it will tend to zero more slowly as we can see in figure \ref{M_transition}.
+\begin{figure}[H]
+  \centering
+ \includegraphics[scale=0.5]{energy.png}
+ \caption{Energy at phase transition}
+\label{E_transition}
+ \end{figure} 
+ 
+ \begin{figure}[H]
+  \centering
+ \includegraphics[scale=0.5]{magnetization.png}
+ \caption{Magnetization at phase transition}
+\label{M_transition}
+ \end{figure} 
+ 
+  \begin{figure}[H]
+  \centering
+ \includegraphics[scale=0.5]{magnetic_suceptibility.png}
+ \caption{Magnetc sucepitbility at phase transition}
+\label{magnetic_suceptibility}
+ \end{figure} 
+ 
+  \begin{figure}[H]
+  \centering
+ \includegraphics[scale=0.5]{heat_capacity.png}
+ \caption{Heat capacity at phase transition}
+\label{heat_capacity}
+ \end{figure} 
+\section*{Stability and precision}
+All in all the Ising model with the Metropolis algorithm is a very stable, an d a very precise one. We have seen that is reproduces 
+the analytical solutions for a $2\times 2$ grid nicely, and from figures \ref{probability_temp1} and \ref{probability_temp2.4} we 
+see the expected behavioure that more energy-states will become avalible for the system at larger temperatures. We find the same 
+behavioure in the number of accepted spin flips. For lower temperatures, very few spin configurations will be possible, and thus 
+few spinflips will be accepted. For higher temperatures however, quite a lot of spin configurations are possible and more spin-flips 
+will be accepted. Although I have not found a good way to illustrate this, we see the trends in figures \ref{both_accepted_flpis}.\\
+The one critical 
+parameter I have found is how many MC cycles we divide by when we calculate our results. If we throw away the first 10\% of the 
+measurments it is absolutely vital that we only divide by 90\% of the MC cycles. Otherwise we will get completely ridiculus 
+results, especially for the heat capacity, and it will take some time to debug.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.6]{probability_temp1.png}
+ \caption{Probability distribution for the total energy of the system for T = 1}
+ \label{probability_temp1}
+\end{figure}
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.6]{probability_temp2dot4.png}
+ \caption{Probability distribution for the total energy of the system for T = 2.4}
+ \label{probability_temp2.4}
+\end{figure}
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.45]{accepted_flips_temp2dot4.png}
+ \includegraphics[scale = 0.45]{accepted_flips_temp1.png}
+ \caption{Number of accepted spin flips. T = 2.4 to the left, and T = 1 on the right.}
+ \label{both_accepted_flpis}
+\end{figure}
 \section*{Final comments}
+I am not completely sure that I have understood the final part (f) of the project, but as far as I can see this is simply a question 
+of finding the estimated critical temperature from figure \ref{heat_capacity} for some grid sizes, and calculate the critical 
+temperature in the thermodynamic limit. We have the eqiuation
+$$
+T_C(L) - T_C(L=\infty) = aL^{\frac{-1}{\nu}}
+$$
+where $\nu = 1$. Now we happen to have 4 estimates of $T_C(L)$, but we only need two so we pick the two which should be best 
+$n = 80$ and $n = 60$. This gives us
+\begin{align*}
+ T_C(80) - T_C(L=\infty) &= \frac{a}{80} \\
+  T_C(60) - T_C(L=\infty) &= \frac{a}{60} \\
+  \implies T_C(80) - \frac{a}{80} &= T_C(60) - \frac{a}{60} \\
+  T_C(80) - T_C(60) = a\left(\frac{1}{80} - \frac{1}{60}\right) &\implies -0.06 = −0.004166667a \\
+  a &= 14.4
+\end{align*}
 
 \end{document}
