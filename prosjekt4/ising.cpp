@@ -14,7 +14,7 @@
 int main(int argc, char** argv) {
   
     int n = atoi(argv[1]);
-    int N = 500000;
+    int N = 1000000;
     //double g_sigma = 0;
     //int num_cores = 0;
     //double start = clock();
@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     ofstream outfile;
    
     double start_temp = 1.0;
-    double max_temp = 2.4;
-    double temp_step = 1.4;
+    double max_temp = 1.0001;
+    double temp_step = 1.0;
     int ntemps = ((max_temp-start_temp)/temp_step)+1;
 #pragma omp parallel 
     {
@@ -41,7 +41,12 @@ int main(int argc, char** argv) {
         int accepted_flips = 0;
         vec w = zeros<vec>(5);
         vec temp = linspace<vec>(start_temp,max_temp,ntemps);
-        //temp.print("sjaaz");
+        double prob[n*n+1];
+        for(int i = 0; i<=n*n;i++){
+            prob[i] = 0;
+        }
+  
+
 #pragma omp for
     for(int t = 0; t < ntemps; t++){
         /*Loop over temperatures*/
@@ -55,29 +60,30 @@ int main(int argc, char** argv) {
         for(int p=0;p<5;p++){
             w(p) = exp(-(4*p-8)/temp(t));
         }
-        outfile.open(make_filename(0,temp(t)));
         E = M = 0;
-        spinmatrix = init(1,n,E,M);
+        spinmatrix = init(0,n,E,M);
         for(int j = 0; j<N;j++){
             /*Loop over Monte Carlo cycles*/
             accepted_flips = metropolis(n, spinmatrix, E, M, w, &idum);
-            if (j>0){
+            if (j>0.1*N){
                 averages(0) += E; averages(1) += E*E; averages(2) += fabs(M);
                 averages(3) += M; averages(4) += M*M;
-                //cout<<"j = "<<j<<endl;
+                int j = (E+2*n*n)/4;
+                prob[j] +=1;
+                /*
                 outfile<<averages(0)/((double)j)<<"               "<< averages(2)/((double)j)<<\
-                        "      "<<accepted_flips<<endl;
-                        
+                        "      "<<accepted_flips<<"   "<<probendl;
+                  */      
             }
         }
         /*Handling the results*/
-        //outfile.open(make_filename(n,temp(t)));
+        outfile.open("probability2.txt");
         
-        average_E = averages(0)/(((double) N));
-        average_M = averages(3)/(((double) N));    //Note the use of abs(M)
-        average_Mabs = averages(2)/(((double) N));
-        average_E2 = averages(1)/(((double) N));
-        average_M2 = averages(4)/(((double) N));
+        average_E = averages(0)/(0.9*((double) N));
+        average_M = averages(3)/(0.9*((double) N));    //Note the use of abs(M)
+        average_Mabs = averages(2)/(0.9*((double) N));
+        average_E2 = averages(1)/(0.9*((double) N));
+        average_M2 = averages(4)/(0.9*((double) N));
         variance_E = (average_E2 - average_E*average_E)/n/n;
         variance_M = (average_M2 - average_M*average_M)/n/n;
         cout<<"-----------------------------"<<endl;
@@ -93,7 +99,10 @@ int main(int argc, char** argv) {
         outfile<<average_E/n/n<<"      "<<variance_E/(temp(t)*temp(t))<<\
                 "        "<<average_Mabs/n/n <<"           "<<\
                 variance_M/(temp(t))<<"      "<<temp(t)<<endl;
-         * */
+        */
+        for(int i=0;i<=n*n;i++){
+            outfile<<prob[i]/((double)0.9*N)<<endl;
+        }
         outfile.close();
     }
 #pragma omp critical
