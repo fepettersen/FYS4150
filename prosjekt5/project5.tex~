@@ -17,18 +17,18 @@
 \begin{document}
 
 \maketitle
+\tableofcontents
 
+\section{About the problem}
 
-\section*{About the problem}
-
-\section*{Notation}
+\subsection{Notation}
 For finite differences I will use the the notation 
 \begin{equation*}
  u(t_n,x_i,y_j) = u^n_{i,j}
 \end{equation*}
 where $t_n = t_0 + n\cdot\Delta t$, $x_i = x_0 +i\cdot\Delta x$ and $y_j = y_0 +j\cdot\Delta y$. Thus it is important not to 
 confuse $u^n$ (u to the power of n) with $u^n_{i,j}$ (u evaluated at timestep n and position i,j).
-\section*{The algorithm}
+\section{The algorithm}
 We will solve the 1+1 dimensional difusion equation by three different finite differnce schemes in this project. Using the 
 standard approximation of the second derivative in space, we use successively more elaborate approximations to the time derivative. 
 \subsection*{Forward Euler}
@@ -100,11 +100,16 @@ Again we observe that we will need to invert a matrix, but this time we will als
 This is the same problem as we had in the BE case, only with a modified right-hand side
 \subsection*{2+1 dimensional diffusion equation}
 For simplicity we will only use explicit schemes for the 2+1 dimensional case. That is we will discretize using the FE and 
-a centered difference scheme. These are both very straightforward to discretize and implement
+a centered difference approximation. These are both very straightforward to discretize and implement
 \begin{align*}
  \frac{u^{n+1}_{i,j}-u^n_{i,j}}{\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
  \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
 \end{align*}
+This leads us to the same scheme as in \ref{FE} only with one more dimension.
+\begin{equation*}
+ u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\left(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\right) +
+ \frac{\Delta t}{\Delta x^2}\left(u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}\right)+u^n_{i,j}
+\end{equation*}
 
 
 \begin{align*}
