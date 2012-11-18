@@ -92,7 +92,13 @@ where $C = \frac{\Delta t}{\Delta x^2}$. This can also be expressed as a linear 
 \begin{equation}\label{CN}
  (2\mathbf{I}+C\mathbf{B})\mathbf{u}^n = (2\mathbf{I}-C\mathbf{B})\mathbf{u}^{n-1}
 \end{equation}
-Again we observe that we will need to invert a matrix, but this time we will also need to do a matrix-matrix multiplication.
+Again we observe that we will need to invert a matrix, but this time we will also need to do a matrix-vector multiplication.
+\begin{align*}
+ (2\mathbf{I}+C\mathbf{B})\mathbf{u}^n = (2\mathbf{I}-C\mathbf{B})\mathbf{u}^{n-1} = \tilde{\mathbf{u}}^{n-1}\\
+ \mathbf{u}^n = (2\mathbf{I}+C\mathbf{B})^{-1}\tilde{\mathbf{u}}^{n-1}
+\end{align*}
+This is the same problem as we had in the BE case, only with a modified right-hand side
+\subsection*{2+1 dimensional diffusion equation}
 \section*{Analytic solution}
 As a comparison we can find the analytic solution to this problem as follows. 
  \begin{align}\label{eq}

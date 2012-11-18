@@ -34,7 +34,7 @@ standard approximation of the second derivative in space, we use successively mo
 \subsection*{Forward Euler}
 Starting off with the Forward Euler (FE) approximation we get the following scheme
 \begin{align*}
- \frac{u^{n+1}_i-u^n_i}{\Delta t} = \frac{u^n_{i+1}-2u^n_i + u^n_{i-1}}{\Delta x^2} \\
+ \frac{u^{n+1}_i-u^n_i}{\Delta t} = \frac{u^n_{i+1}-2u^n_i + u^n_{i-1}}{\Delta x^2}
 \end{align*}
 \begin{equation}\label{FE}
  u^{n+1}_i = \frac{\Delta t}{\Delta x^2}\left(u^n_{i+1}-2u^n_i + u^n_{i-1}\right) +u^n_i
@@ -98,6 +98,26 @@ Again we observe that we will need to invert a matrix, but this time we will als
  \mathbf{u}^n = (2\mathbf{I}+C\mathbf{B})^{-1}\tilde{\mathbf{u}}^{n-1}
 \end{align*}
 This is the same problem as we had in the BE case, only with a modified right-hand side
+\subsection*{2+1 dimensional diffusion equation}
+For simplicity we will only use explicit schemes for the 2+1 dimensional case. That is we will discretize using the FE and 
+a centered difference approximation. These are both very straightforward to discretize and implement
+\begin{align*}
+ \frac{u^{n+1}_{i,j}-u^n_{i,j}}{\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
+ \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
+\end{align*}
+This leads us to the same scheme as in \ref{FE} only with one more dimension.
+\begin{equation*}
+ u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\left(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\right) +
+ \frac{\Delta t}{\Delta x^2}\left(u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}\right)+u^n_{i,j}
+\end{equation*}
+
+
+\begin{align*}
+ \frac{u^{n+1}_{i,j}-u^{n-1}_{i,j}}{2\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
+ \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
+\end{align*}
+
+
 \section*{Analytic solution}
 As a comparison we can find the analytic solution to this problem as follows. 
  \begin{align}\label{eq}
