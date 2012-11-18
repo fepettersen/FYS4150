@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  16 NOV 2012 16:50
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  18 NOV 2012 15:06
 entering extended mode
  %&-line parsing enabled.
 **project5.tex
@@ -496,32 +496,50 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 19.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [1
+)
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./project5.aux) ) 
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 46.
+(/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 46.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 74--78
+
+ []
+
+[2] [3] (./project5.aux) ) 
 Here is how much of TeX's memory you used:
- 4331 strings out of 495061
- 53775 string characters out of 1182622
- 119957 words of memory out of 3000000
- 7458 multiletter control sequences out of 15000+50000
- 13822 words of font info for 45 fonts, out of 3000000 for 9000
+ 4617 strings out of 495061
+ 56092 string characters out of 1182622
+ 124981 words of memory out of 3000000
+ 7737 multiletter control sequences out of 15000+50000
+ 15525 words of font info for 49 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 32i,8n,32p,225b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
- </h
-ome/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/fredr
-ik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/fredrik/.texmf
--var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fredrik/.texmf-var/font
-s/pk/ljfour/jknappen/ec/ecrm1728.600pk></usr/share/texmf-texlive/fonts/type1/pu
-blic/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7
-.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmsy7.pfb>
-Output written on project5.pdf (2 pages, 114403 bytes).
+ 32i,18n,32p,225b,1214s stack positions out of 5000i,500n,10000p,200000b,50000s
+ </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/e
+c/ecbx1200.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm100
+0.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> 
+</home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fr
+edrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.p
+fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texl
+ive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/typ
+e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/a
+msfonts/cm/cmsy7.pfb>
+Output written on project5.pdf (3 pages, 157360 bytes).
 PDF statistics:
- 159 PDF objects out of 1000 (max. 8388607)
+ 216 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
