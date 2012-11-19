@@ -255,8 +255,28 @@ u(x+\Delta x,t) = u(x,t') &+ \frac{\partial u(x,t')}{\partial x}\Delta x - \frac
 &-\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3)\\
 u(x-\Delta x,t) = u(x,t') &- \frac{\partial u(x,t')}{\partial x}\Delta x - \frac{\partial u(x,t')}{\partial x}\Delta t/2
 + \frac{\partial^2u(x,t')}{2\partial x^2}\Delta x^2 + \frac{\partial^2u(x,t')}{2\partial t^2}\Delta t^2/4 \\
-&+\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3)
+&+\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3)\\
+u(x,t+\Delta t) = u(x,t') &+\frac{\partial u(x,t')}{\partial t}\Delta t/2 + \frac{\partial^2 u(x,t')}{2\partial t^2}\Delta t^2/4 
++ \mathcal{O}(\Delta t^3) \\
+u(x,t) = u(x,t') &-\frac{\partial u(x,t')}{\partial t}\Delta t/2 + \frac{\partial^2 u(x,t')}{2\partial t^2}\Delta t^2/4 
++ \mathcal{O}(\Delta t^3)
 \end{align*}
+Which means that the error of the whole scheme scales like
+\begin{align*}
+ \frac{\partial u(x,t')}{\partial t} \approx \frac{\partial u(x,t')}{\partial t} + \mathcal{O}(\Delta t^2)\\
+ \frac{\partial^2 u(x,t')}{\partial x^2} \approx\frac{\partial^2 u(x,t')}{\partial x^2}+ \mathcal{O}(\Delta x^2)
+\end{align*}
+
+We can check the stability of the CN scheme in the same way that we checked it for FE and BE schemes by assuming the same solution 
+\ref{general solution} as we did for the FE and BE case, and insert it in the CN scheme.
+\begin{align*}
+ A^ne^{ikq\Delta x}(1-A^{-1}) &= A^n\frac{C}{2}\big(e^{i(q+1)k\Delta x} -2e^{iqk\Delta x} +e^{i(q-1)k\Delta x}\big) + 
+ A^{n-1}\frac{C}{2}\big(e^{i(q+1)k\Delta x} -2e^{iqk\Delta x} +e^{i(q-1)k\Delta x}\big) \\
+ (1-A^{-1}) &= \frac{C}{2}\left(-4\sin^2(k\Delta x/2) -4A^{-1}\sin^2(k\Delta x/2)\right) \\
+ 1+2C\sin^2(k\Delta x/2) &= A^{-1}\big(1-2C\sin^2(k\Delta x/2)\big) \\
+ A &= \frac{1-2C\sin^2(k\Delta x/2)}{1+2C\sin^2(k\Delta x/2)}
+\end{align*}
+And the limitations are $-1\leq A \leq 1$
 
 % \begin{figure}[H]
 %  \centering

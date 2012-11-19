@@ -47,7 +47,8 @@ for n = 0,1, ... , N
     u_prev = u_new;
 end;
 \end{lstlisting}
-Skriv om trunkeringsfeil her
+
+A discussion of stability and the error in this scheme can be found in the ``Stability and precision'' section.
 \subsection{Backward Euler}
 The Backward Euler (BE) approximation gives us a slightly more elaborate scheme seeing at it is an implicit one. The discretization 
 gives
@@ -76,7 +77,7 @@ the previous timestep. Looking a bit closer at equation (\ref{BE}) we realize tw
 $\mathbf{A}$ does'nt change at all throughout the computation so we can get away with invertig it once. Second, and perhaps 
 more important, we allready have a very efficient solver for this kind of problem from project 1.\\
 
-Skriv noe om trunkeringsfeil her
+A discussion of stability and the error in this scheme can be found in the ``Stability and precision'' section.
 
 \subsection{Crank Nicolson}
 Finally, we can use the Crank Nicolson approximation of the time derivative which is a special case of the so called theta -rule 
@@ -116,7 +117,7 @@ This leads us to the same scheme as in \ref{FE} only with one more dimension.
  \frac{u^{n+1}_{i,j}-u^{n-1}_{i,j}}{2\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
  \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
 \end{align*}
-
+A discussion of stability and the error in this scheme can be found in the ``Stability and precision'' section.
 
 \section{Analytic solution}
 As a comparison we can find the analytic solution to this problem as follows. 
@@ -266,6 +267,23 @@ Which means that the error of the whole scheme scales like
  \frac{\partial u(x,t')}{\partial t} \approx \frac{\partial u(x,t')}{\partial t} + \mathcal{O}(\Delta t^2)\\
  \frac{\partial^2 u(x,t')}{\partial x^2} \approx\frac{\partial^2 u(x,t')}{\partial x^2}+ \mathcal{O}(\Delta x^2)
 \end{align*}
+
+We can check the stability of the CN scheme in the same way that we checked it for FE and BE schemes by assuming the same solution 
+\ref{general solution} as we did for the FE and BE case, and insert it in the CN scheme.
+\begin{align*}
+ A^ne^{ikq\Delta x}(1-A^{-1}) &= A^n\frac{C}{2}\big(e^{i(q+1)k\Delta x} -2e^{iqk\Delta x} +e^{i(q-1)k\Delta x}\big) + 
+ A^{n-1}\frac{C}{2}\big(e^{i(q+1)k\Delta x} -2e^{iqk\Delta x} +e^{i(q-1)k\Delta x}\big) \\
+ (1-A^{-1}) &= \frac{C}{2}\left(-4\sin^2(k\Delta x/2) -4A^{-1}\sin^2(k\Delta x/2)\right) \\
+ 1+2C\sin^2(k\Delta x/2) &= A^{-1}\big(1-2C\sin^2(k\Delta x/2)\big) \\
+ A &= \frac{1-2C\sin^2(k\Delta x/2)}{1+2C\sin^2(k\Delta x/2)}
+\end{align*}
+And the limitations are $-1\leq A \leq 1$
+\begin{align*}
+\frac{1-2C\sin^2(k\Delta x/2)}{1+2C\sin^2(k\Delta x/2)} &\leq 1 \\
+1-2C\sin^2(k\Delta x/2) &\leq 1+2C\sin^2(k\Delta x/2)\\
+\implies C &\geq 0
+\end{align*}
+The other limitation ($A\geq -1$) gives us nothing and thus the CN scheme is stable for all choises of $\Delta t$ and $\Delta x$.
 
 % \begin{figure}[H]
 %  \centering
