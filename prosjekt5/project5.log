@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  19 NOV 2012 11:44
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.3)  19 NOV 2012 16:11
 entering extended mode
  %&-line parsing enabled.
 **project5.tex
@@ -518,33 +518,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 74--78
 
  []
 
-[2] [3] [4] (./project5.aux) ) 
+[2] [3] [4] [5] [6] (./project5.aux) ) 
 Here is how much of TeX's memory you used:
- 4623 strings out of 495061
- 56162 string characters out of 1182622
- 127989 words of memory out of 3000000
- 7739 multiletter control sequences out of 15000+50000
+ 4624 strings out of 495061
+ 56183 string characters out of 1182622
+ 127958 words of memory out of 3000000
+ 7740 multiletter control sequences out of 15000+50000
  16301 words of font info for 50 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  32i,18n,32p,225b,1530s stack positions out of 5000i,500n,10000p,200000b,50000s
- </home/fredrik/.texmf-var/fonts/pk/ljfour/jknapp
-en/ec/ecbx1200.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecr
-m1000.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1000.600
-pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </hom
-e/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fredrik
-/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk></usr/share/texmf-texliv
-e/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/typ
-e1/public/amsfonts/cm/cmbx7.pfb></usr/share/texmf-texlive/fonts/type1/public/am
-sfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/c
-mmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></
-usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/te
-xmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/f
-onts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/cm/cmsy7.pfb>
-Output written on project5.pdf (4 pages, 178980 bytes).
+ </home/fredrik/.texmf-var/fonts/pk/ljfou
+r/jknappen/ec/ecbx1200.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappe
+n/ec/ecrm1000.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx
+1000.600pk> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600p
+k> </home/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home
+/fredrik/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk></usr/share/texm
+f-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/f
+onts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
+nts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi
+7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
+share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/publi
+c/amsfonts/cm/cmsy7.pfb>
+Output written on project5.pdf (6 pages, 183064 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
+ 269 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -10,8 +10,8 @@
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 %\newcommand{\d}{\partial}
 %opening
-\title{Project 4, FYS4150}
-\author{Fredrik E Pettersen\\ fredriep@student.matnat.uio.no}
+\title{Project 5, FYS4150}
+\author{Candidate 55}
 
 
 \begin{document}
@@ -187,15 +187,85 @@ Theese are the local errors, meaning that our complete scheme gives the error of
 Let us also look at the stability of the scheme, but by in slightly different way than what has been done in the rest of the 
 course. Let us assume that the slution of the diffusion equation takes the form
 \begin{align}\label{general solution}
- u(x,t) = e^{pt}e^{inx}
+ u(x,t) = A^ne^{ikq\Delta x}
 \end{align}
-if we insert this expression \ref{general solution} into the scheme \ref{FE} we get
+Where $A^n$ is a damping factor which is time dependent. If we insert this expression \ref{general solution} into the scheme 
+\ref{FE} we get
 \begin{align*}
- e^{inx}e^{pt}(e^{-t}-1) = Ce^{pt}(e^{i(n+1)x}-2e^{inx} +e^{i(n-1)x})\\
- (e^{-t}-1) = C(e^{ix}-2+e^{-ix})\\
- (e^{-t}-1) = 2C(cos(x)-1)
+ A^ne^{ikq\Delta x}(A-1) = CA^ne^{ikq\Delta x}(e^{i(q+1)k\Delta x}-2e^{iqk\Delta x} +e^{i(q-1)k \Delta x})\\
+ A-1 = C(e^{ik\Delta x}-2+e^{-ik \Delta x})\\
+ A = 1 - 4C(cos(k\Delta x)-1) = 1 -4C\sin^2(k\Delta x/2)
 \end{align*}
+Note that $x_i$ has been replaced by $x_q$. This means that the final solution is on the form
+\begin{equation*}
+ u^n_q = \left(1 -4C\sin^2(k\Delta x/2)\right)^ne^{ikq\Delta x}
+\end{equation*}
+It is obvious that we need $-1\leq A\leq 1$ to avoid divergence. $A\leq 1 \implies C\geq 0$ is not of to much interest, however 
+if we insert for 
+\begin{align*}
+ -1 \leq A \implies 1 -4C\sin^2(k\Delta x/2) \geq -1 \\
+ C \leq \frac{1}{2\sin^2(k\Delta x/2)}
+\end{align*}
+and $max(\sin^2(k\Delta x/2)) = 1$ we are left with
+\begin{equation}\label{stability criterion}
+ C = \frac{\Delta t}{\Delta x^2} \leq \frac{1}{2}
+\end{equation}
 
+\subsection{Backward Euler}
+The truncation error of the BE scheme is very similar to the FE case. In fact it is obvious that the spacial part is identical, so 
+we only need to redo the time dependence.
+\begin{align*}
+ u(x,t-\Delta t) = u(x,t) -\frac{\partial u(x,t)}{\partial t}\Delta t + \mathcal{O}(\Delta t^2)
+\end{align*}
+And so the complete scheme gives an error of
+\begin{align*}
+  \frac{u^{n}-u^{n-1}}{\Delta t} \approx \frac{\partial u(x,t)}{\partial t} +\mathcal{O}(\Delta t)\\
+ \frac{u_{i+1}-2u_i +u_{i-1}}{\Delta x^2} \approx \frac{\partial^2 u(x,t)}{\partial x^2} +\mathcal{O}(\Delta x^2)
+\end{align*}
+We can investigate the stability of the BE scheme in the same way as we did for the FE scheme. Assume again that we have a general 
+solution on the form \ref{general solution}. Insert it in \ref{BE} as follows
+\begin{align*}
+ A^ne^{ikq\Delta x}(1-A^{-1}) &= CA^n\left(e^{ik(q+1)\Delta x}-2e^{ikq\Delta x} + e^{ik(q-1)\Delta x}\right)\\
+ A^{-1} &= 1-4C\sin^2(k\Delta x/2)\\
+ A &= \frac{1}{1-4C\sin^2(k\Delta x/2)}
+\end{align*}
+giving us the general term
+$$
+u^n_q = \left(\frac{1}{1-4C\sin^2(k\Delta x/2)}\right)^ne^{ikq\Delta x}
+$$
+but now we have that $0\leq A \leq 1$. 
+\begin{align*}
+ \frac{1}{1-4C\sin^2(k\Delta x/2)}\leq 1 \\
+ 1 \leq 1-4C\sin^2(k\Delta x/2) \implies C\geq 0
+\end{align*}
+The other limitation ($A\geq 0$) gives us nothing and thus the scheme is stable for all values of $\Delta t$ and $\Delta x$.
+
+\subsection{Crank Nicolson}
+The truncation error of the CN scheme is slightly more intricate to calculate because we need to Taylor expand around 
+$t' = t + \Delta t/2$
+\begin{align*}
+u(x+\Delta x,t+\Delta t) = u(x,t') &+ \frac{\partial u(x,t')}{\partial x}\Delta x + \frac{\partial u(x,t')}{\partial x}\Delta t/2
++ \frac{\partial^2u(x,t')}{2\partial x^2}\Delta x^2 + \frac{\partial^2u(x,t')}{2\partial t^2}\Delta t^2/4 \\
+&+\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3) \\
+u(x-\Delta x,t+\Delta t) = u(x,t') &- \frac{\partial u(x,t')}{\partial x}\Delta x + \frac{\partial u(x,t')}{\partial x}\Delta t/2
++ \frac{\partial^2u(x,t')}{2\partial x^2}\Delta x^2 + \frac{\partial^2u(x,t')}{2\partial t^2}\Delta t^2/4 \\
+&-\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3) \\
+u(x+\Delta x,t) = u(x,t') &+ \frac{\partial u(x,t')}{\partial x}\Delta x - \frac{\partial u(x,t')}{\partial x}\Delta t/2
++ \frac{\partial^2u(x,t')}{2\partial x^2}\Delta x^2 + \frac{\partial^2u(x,t')}{2\partial t^2}\Delta t^2/4 \\
+&-\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3)\\
+u(x-\Delta x,t) = u(x,t') &- \frac{\partial u(x,t')}{\partial x}\Delta x - \frac{\partial u(x,t')}{\partial x}\Delta t/2
++ \frac{\partial^2u(x,t')}{2\partial x^2}\Delta x^2 + \frac{\partial^2u(x,t')}{2\partial t^2}\Delta t^2/4 \\
+&+\frac{\partial^2u(x,t')}{\partial x\partial t}\Delta x\Delta t/2 + \mathcal{O}(\Delta x^3)\\
+u(x,t+\Delta t) = u(x,t') &+\frac{\partial u(x,t')}{\partial t}\Delta t/2 + \frac{\partial^2 u(x,t')}{2\partial t^2}\Delta t^2/4 
++ \mathcal{O}(\Delta t^3) \\
+u(x,t) = u(x,t') &-\frac{\partial u(x,t')}{\partial t}\Delta t/2 + \frac{\partial^2 u(x,t')}{2\partial t^2}\Delta t^2/4 
++ \mathcal{O}(\Delta t^3)
+\end{align*}
+Which means that the error of the whole scheme scales like
+\begin{align*}
+ \frac{\partial u(x,t')}{\partial t} \approx \frac{\partial u(x,t')}{\partial t} + \mathcal{O}(\Delta t^2)\\
+ \frac{\partial^2 u(x,t')}{\partial x^2} \approx\frac{\partial^2 u(x,t')}{\partial x^2} \mathcal{O}(\Delta x^2)
+\end{align*}
 
 % \begin{figure}[H]
 %  \centering

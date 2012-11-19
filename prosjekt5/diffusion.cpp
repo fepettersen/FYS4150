@@ -59,6 +59,7 @@ int main(int argc, char** argv){
         for(int i=1;i<N_x;i++){
             u_new(i) = dtdx2*(u_prev(i+1)-2*u_prev(i) + u_prev(i-1)) + u_prev(i);
         }
+        u_new(0) = 1; u_new(N_x) = 0;
         u_prev = u_new;
         /*write to file for plotting*/
     }
