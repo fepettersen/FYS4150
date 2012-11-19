@@ -168,6 +168,34 @@ which satisfies all initial and boundary conditions.
 
 
 \section{Stability and precision}
+To get a feeling of how good the numerical schemes are we will analyze their errors and stability criterions indivudually.
+\subsection{Forward Euler}
+Let us fist look at the truncation error of this scheme. If we do a Taylor expansion of $u(x+\Delta x,t)$, $u(x-\Delta x,t)$ 
+and $u(x,t+\Delta t)$, assuming $\Delta x,\Delta t \to 0$ we get the following
+\begin{align*}
+ u(x+\Delta x,t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
+ +\mathcal{O}(\Delta x^3)\\
+ u(x-\Delta x,t) = u(x,t) - \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
+ +\mathcal{O}(\Delta x^3) \\
+  u(x,t+\Delta t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta t +\mathcal{O}(\Delta t^2)
+ \end{align*}
+Theese are the local errors, meaning that our complete scheme gives the error of 
+\begin{align*}
+ \frac{u^{n+1}-u^n}{\Delta t} \approx \frac{\partial u(x,t)}{\partial t} +\mathcal{O}(\Delta t)\\
+ \frac{u_{i+1}-2u_i +u_{i-1}}{\Delta x^2} \approx \frac{\partial^2 u(x,t)}{\partial x^2} +\mathcal{O}(\Delta x^2)
+\end{align*}
+Let us also look at the stability of the scheme, but by in slightly different way than what has been done in the rest of the 
+course. Let us assume that the slution of the diffusion equation takes the form
+\begin{align}\label{general solution}
+ u(x,t) = e^{pt}e^{inx}
+\end{align}
+if we insert this expression \ref{general solution} into the scheme \ref{FE} we get
+\begin{align*}
+ e^{inx}e^{pt}(e^{-t}-1) = Ce^{pt}(e^{i(n+1)x}-2e^{inx} +e^{i(n-1)x})\\
+ (e^{-t}-1) = C(e^{ix}-2+e^{-ix})\\
+ (e^{-t}-1) = 2C(cos(x)-1) = -4C\sin^2(x/2)
+\end{align*}
+
 
 % \begin{figure}[H]
 %  \centering

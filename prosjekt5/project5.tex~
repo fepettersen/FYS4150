@@ -31,7 +31,7 @@ confuse $u^n$ (u to the power of n) with $u^n_{i,j}$ (u evaluated at timestep n 
 \section{The algorithm}
 We will solve the 1+1 dimensional difusion equation by three different finite differnce schemes in this project. Using the 
 standard approximation of the second derivative in space, we use successively more elaborate approximations to the time derivative. 
-\subsection*{Forward Euler}
+\subsection{Forward Euler}
 Starting off with the Forward Euler (FE) approximation we get the following scheme
 \begin{align*}
  \frac{u^{n+1}_i-u^n_i}{\Delta t} = \frac{u^n_{i+1}-2u^n_i + u^n_{i-1}}{\Delta x^2}
@@ -48,7 +48,7 @@ for n = 0,1, ... , N
 end;
 \end{lstlisting}
 Skriv om trunkeringsfeil her
-\subsection*{Backward Euler}
+\subsection{Backward Euler}
 The Backward Euler (BE) approximation gives us a slightly more elaborate scheme seeing at it is an implicit one. The discretization 
 gives
 \begin{align*}
@@ -78,7 +78,7 @@ more important, we allready have a very efficient solver for this kind of proble
 
 Skriv noe om trunkeringsfeil her
 
-\subsection*{Crank Nicolson}
+\subsection{Crank Nicolson}
 Finally, we can use the Crank Nicolson approximation of the time derivative which is a special case of the so called theta -rule 
 with $\theta = 0.5$.
 \begin{align*}
@@ -98,7 +98,7 @@ Again we observe that we will need to invert a matrix, but this time we will als
  \mathbf{u}^n = (2\mathbf{I}+C\mathbf{B})^{-1}\tilde{\mathbf{u}}^{n-1}
 \end{align*}
 This is the same problem as we had in the BE case, only with a modified right-hand side
-\subsection*{2+1 dimensional diffusion equation}
+\subsection{2+1 dimensional diffusion equation}
 For simplicity we will only use explicit schemes for the 2+1 dimensional case. That is we will discretize using the FE and 
 a centered difference approximation. These are both very straightforward to discretize and implement
 \begin{align*}
@@ -118,7 +118,7 @@ This leads us to the same scheme as in \ref{FE} only with one more dimension.
 \end{align*}
 
 
-\section*{Analytic solution}
+\section{Analytic solution}
 As a comparison we can find the analytic solution to this problem as follows. 
  \begin{align}\label{eq}
   &\frac{\partial u}{\partial t} = D\frac{\partial^2 u}{\partial x^2}, \,\,\,\,\, u(x,0) = u(d,t) = 0\\
@@ -164,10 +164,38 @@ This gives us the full analytical solution
  v(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
 \end{equation}
 which satisfies all initial and boundary conditions.
-\section*{Results}
+\section{Results}
 
 
-\section*{Stability and precision}
+\section{Stability and precision}
+To get a feeling of how good the numerical schemes are we will analyze their errors and stability criterions indivudually.
+\subsection{Forward Euler}
+Let us fist look at the truncation error of this scheme. If we do a Taylor expansion of $u(x+\Delta x,t)$, $u(x-\Delta x,t)$ 
+and $u(x,t+\Delta t)$, assuming $\Delta x,\Delta t \to 0$ we get the following
+\begin{align*}
+ u(x+\Delta x,t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
+ +\mathcal{O}(\Delta x^3)\\
+ u(x-\Delta x,t) = u(x,t) - \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
+ +\mathcal{O}(\Delta x^3) \\
+  u(x,t+\Delta t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta t +\mathcal{O}(\Delta t^2)
+ \end{align*}
+Theese are the local errors, meaning that our complete scheme gives the error of 
+\begin{align*}
+ \frac{u^{n+1}-u^n}{\Delta t} \approx \frac{\partial u(x,t)}{\partial t} +\mathcal{O}(\Delta t)\\
+ \frac{u_{i+1}-2u_i +u_{i-1}}{\Delta x^2} \approx \frac{\partial^2 u(x,t)}{\partial x^2} +\mathcal{O}(\Delta x^2)
+\end{align*}
+Let us also look at the stability of the scheme, but by in slightly different way than what has been done in the rest of the 
+course. Let us assume that the slution of the diffusion equation takes the form
+\begin{align}\label{general solution}
+ u(x,t) = e^{pt}e^{inx}
+\end{align}
+if we insert this expression \ref{general solution} into the scheme \ref{FE} we get
+\begin{align*}
+ e^{inx}e^{pt}(e^{-t}-1) = Ce^{pt}(e^{i(n+1)x}-2e^{inx} +e^{i(n-1)x})\\
+ (e^{-t}-1) = C(e^{ix}-2+e^{-ix})\\
+ (e^{-t}-1) = 2C(cos(x)-1)
+\end{align*}
+
 
 % \begin{figure}[H]
 %  \centering
@@ -176,6 +204,6 @@ which satisfies all initial and boundary conditions.
 %  \caption{Number of accepted spin flips. T = 2.4 to the left, and T = 1 on the right.}
 %  \label{both_accepted_flpis}
 % \end{figure}
-\section*{Final comments}
+\section{Final comments}
 
 \end{document}
