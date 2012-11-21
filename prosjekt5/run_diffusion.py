@@ -1,20 +1,28 @@
-import os,argparse
+import os,argparse,glob,numpy as np
+import matplotlib.pyplot as mpl
 
-spacing = 10
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-run",action="store_true", help="run the diffusion.cpp excecutable file")
 parser.add_argument("-compile",action="store_true", help="complie the diffusion project")
 parser.add_argument("-tofile", action="store_true", help="write results to file (for plotting)")
-parser.add_argument("-spacing", type=int, dest="spacing", help="write every spacing'th result to file")
+parser.add_argument("-spacing", type=int, action="store",dest="spacing",default=10, help="write every spacing'th result to file")
+parser.add_argument("-removefiles",action="store_true", help="remove the resultfiles")
 args = parser.parse_args()
 
 tofile = 1 if args.tofile else 0
-
 if args.compile:
 	os.system('g++ -o willy -O3 diffusion.cpp -larmadillo')
 
 if args.run:
-		os.system('./willy %d %d' %(tofile,spacing))
+		os.system('./willy %d %d' %(tofile,args.spacing))
+
+for files in sorted(glob.glob('results_FE*.txt')):
+	u = np.loadtxt(files)
+	mpl.plot(u)
+	mpl.show()
+	if args.removefiles:
+		os.remove(files)
 
 '''
 parser.add_argument("-plug",action="store_true", help="Verify that the program can reproduce a square plug exactly in 1D")
