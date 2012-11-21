@@ -5,44 +5,23 @@
  * Created on 15. oktober 2012, 09:58
  */
 
-//#include "diffusion.h"
+#include "diffusion.h"
+/*
 #include <armadillo>
 #include <iostream>
 
 using namespace std;
 using namespace arma;
-
+*/
 #define PI 3.14159
 
 
-void tridiag(double a, double b, double c, vec &v, vec &f, int n){
-    vec temp = zeros<vec>(n+1);
-    double btemp = 0;
-
-
-    for(int i=1;i<n;i++){
-        //forward substitution without vectors
-        temp[i] = c/btemp;
-        btemp = b -a*temp[i];
-        v[i] = (f[i] -a*v[i-1])/btemp;
-    }
-    
-    for(int i=n-2;i>=0;i--){
-        //Backward substitution 
-        v[i] -= temp[i+1]*v[i+1];
-    }
-    //return v;
-}
-
-void make_uprev(vec &uprev, double a, double c, double b1, int n){
-    for(int i =1;i< n; i++){
-        uprev(i) = a*uprev(i-1) +c*uprev(i+1) -b1*uprev(i);
-    }
-}
 int main(int argc, char** argv){
     //--------Common variables--------------
-    int N = atoi(argv[1]);
-    
+    //int N = atoi(argv[1]);
+    ofstream outfile;
+    int tofile = atoi(argv[1]);
+    int spacing = atoi(argv[2]);
     //########################################
     //--------Forward Euler scheme----------##
     //########################################
@@ -62,6 +41,8 @@ int main(int argc, char** argv){
         u_new(0) = 1; u_new(N_x) = 0;
         u_prev = u_new;
         /*write to file for plotting*/
+        if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,0,N_x);}
+
     }
     cout<<"Explicit scheme finished. "<<endl;
     
