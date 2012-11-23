@@ -29,6 +29,7 @@ char *make_filename(int n, int scheme);
 void tridiag(double a, double b, double c, vec &v, vec &f, int n);
 void make_uprev(vec &uprev, double a, double c, double b1, int n);
 void output(ofstream* outfile, vec u, int n, int scheme, int N);
+void output2D(ofstream* outfile, mat u, int n, int scheme, int N);
 #endif	/* DIFFUSION_H */
 
 
@@ -45,16 +46,24 @@ char *make_filename(int n, int scheme){
     	else if(scheme ==1){
     		sprintf(buffer,"results_BE_n%d.txt",n);	
     	}
-    	else
+    	else if(scheme ==2){
     		sprintf(buffer,"results_CN_n%d.txt",n);
+        }
+        else if(scheme ==3){
+            sprintf(buffer,"results_FE2D_n%d.txt",n);
+        }
+        else{
+            sprintf(buffer,"results_LF2D_n%d.txt",n);
+        }
         return buffer;
 }
 
 
 void tridiag(double a, double b, double c, vec &v, vec &f, int n){
     vec temp = zeros<vec>(n+1);
-    double btemp = 0;
-
+    double btemp = b;
+    //v(0) = f(0)/btemp;
+    v(0) = 1;
 
     for(int i=1;i<n;i++){
         //forward substitution without vectors
@@ -67,6 +76,7 @@ void tridiag(double a, double b, double c, vec &v, vec &f, int n){
         //Backward substitution 
         v[i] -= temp[i+1]*v[i+1];
     }
+    //v.print("asdf");
     //return v;
 }
 
@@ -77,9 +87,29 @@ void make_uprev(vec &uprev, double a, double c, double b1, int n){
 }
 
 void output(ofstream* outfile, vec u, int n, int scheme, int N){
+    /*outfile is an ofstram-object letting us open a file
+    **u is an armadillo-object containing the solution at time n
+    **n is the timestep number
+    **scheme is an integer telling what scheme is used to obtain the solution
+    **N is the size of the array (in one direction)*/
 	outfile->open(make_filename(n,scheme));
 	for(int i=0;i<N;i++){
 		*outfile <<u(i)<<endl;
 	}
 	outfile->close();
+}
+
+void output2D(ofstream* outfile, mat u, int n, int scheme, int N){
+    /*outfile is an ofstram-object letting us open a file
+    **u is an armadillo-object containing the solution at time n
+    **n is the timestep number
+    **scheme is an integer telling what scheme is used to obtain the solution
+    **N is the size of the array (in one direction)*/
+    outfile->open(make_filename(n,scheme));
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            *outfile <<u(i,j)<<endl;
+            }
+    }
+    outfile->close();
 }

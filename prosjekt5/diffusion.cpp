@@ -22,102 +22,133 @@ int main(int argc, char** argv){
     ofstream outfile;
     int tofile = atoi(argv[1]);
     int spacing = atoi(argv[2]);
-    //########################################
-    //--------Forward Euler scheme----------##
-    //########################################
+    int FE1D = atoi(argv[3]);
+    int BE1D = atoi(argv[4]);
+    int CN1D = atoi(argv[5]);
+    int FE2D = atoi(argv[6]);
+    int LeapFrog = atoi(argv[7]);
+    int nx = atoi(argv[8]);
+    int n_t = atoi(argv[9]);
+
+    cout<<"FE1D = "<<FE1D<<" BE1D = "<<BE1D<<" CN1D = "<<CN1D<<" FE2D = "<<FE2D<<" LF = "<<LeapFrog<<endl;
     
-    int N_x = 100;
-    vec u_new = zeros<vec>(N_x+1);
+    //int N_x = 100;
+    vec u_new = zeros<vec>(nx+1);
     vec u_prev = u_new;
-    double dx = 1.0/(N_x+1);
+    double dx = 1.0/(nx+1);
     double dt = dx*dx/4.0;      //Stability criterion dt <= dx*dx/2
     double dtdx2 = dt/(dx*dx);
     int N_t = 1/dt;
-    
-    for (int n = 0;n<N_t;n++){
-        for(int i=1;i<N_x;i++){
-            u_new(i) = dtdx2*(u_prev(i+1)-2*u_prev(i) + u_prev(i-1)) + u_prev(i);
-        }
-        u_new(0) = 1; u_new(N_x) = 0;
-        u_prev = u_new;
-        /*write to file for plotting*/
-        if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,0,N_x);}
+    cout<<"Nt = "<<N_t<<endl;
+    mat U = zeros<mat>(nx+2,nx+2);
+    mat U_p = U;
+    mat U_pp = U;
 
-    }
-    cout<<"Explicit scheme finished. "<<endl;
-    
+    if(FE1D){
+    //########################################
+    //--------Forward Euler scheme----------##
+    //########################################
+        if(dtdx2>0.5){dtdx2 = 0.5;} //make sure the stability criterion is fulfilled
+        for (int n = 0;n<N_t;n++){
+            for(int i=1;i<nx;i++){
+                u_new(i) = dtdx2*(u_prev(i+1)-2*u_prev(i) + u_prev(i-1)) + u_prev(i);
+            }
+            u_new(0) = 1; u_new(nx) = 0;
+            u_prev = u_new;
+            /*write to file for plotting*/
+            if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,0,nx);}
+
+        }
+        cout<<"Explicit scheme finished. "<<endl;
+        }
+    if(BE1D){
     //#########################################
     //-------Backward Euler scheme-----------##
     //#########################################
-    
-    double a = -dtdx2;
-    double c = a;
-    double b = 2+dtdx2;
-    for(int n = 0;n<N_t;n++){
-       tridiag(a,b,c, u_new, u_prev,N_x); 
-       /*Write to file for plotting*/
+        //dtdx2 = 1/(dx*dx*200);
+        double a = -dtdx2;
+        double c = a;
+        double b = 2+dtdx2;
+        u_prev.zeros(); u_new.zeros();
+        u_prev(0)=u_new(0) = 1;
+        vec diff = u_new;
+        for(int n = 0;n<200;n++){
+            //u_prev(0)=1;u_prev(nx-1)=0;
+            tridiag(a,b,c, u_new, u_prev,nx);
+            diff = u_new-u_prev;
+            u_prev = u_new;
+            
+            /*Write to file for plotting*/
+            if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);diff.print("asdf");;}
+
+        }
+        cout<<"Implicit scheme finished"<<endl;
     }
-    cout<<"Implicit scheme finished"<<endl;
-    
+    if(CN1D){
     //##########################################
     //------Crank Nicolson scheme-------------##
     //##########################################
     
-    vec uprev = zeros<vec>(N_x+1);
-    a = c = dtdx2;
-    double b1 = 2-2*dtdx2;
-    double b2 = 2+2*dtdx2;
-    
-    for(int n = 0; n < N_t; n++){
-       make_uprev(uprev,a,c,b1,N_x); 
-       tridiag(a,b2,c, u_new, u_prev,N_x); 
-       /*Write to file for plotting*/
+        vec uprev = zeros<vec>(nx+1);
+        //dtdx2 = 1/(dx*dx*20);
+        double a = dtdx2;
+        double c = a;
+        double b1 = 2-2*dtdx2;
+        double b2 = 2+2*dtdx2;
+        u_prev.zeros(); u_new.zeros();
+        u_prev(0)=u_new(0) = 1;
+        
+        for(int n = 0; n < N_t; n++){
+            u_prev(0)=1;u_prev(nx-1)=0;
+            make_uprev(uprev,a,c,b1,nx); 
+            tridiag(a,b2,c, u_new, u_prev,nx);
+            u_prev = u_new;
+            /*Write to file for plotting*/
+            if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,2,nx);} 
+        }
+        cout<<"Crank Nicolson scheme finished"<<endl;
     }
-    cout<<"Crank Nicolson scheme finished"<<endl;
-    
-
     //########################################
     //---------------2D solvers-------------##
     //--------------Forward Euler-----------##
     //########################################
-    int FE = atoi(argv[3]);
-    int LeapFrog = atoi(argv[4]);
-    int nx = atoi(argv[5]);
-    int n_t = atoi(argv[6]);
-    mat U = zeros<mat>(nx,nx);
-    mat U_p = U;
-    mat U_pp = U;
-    //U_p.print("sd");
-    if(FE){
-    double C = dtdx2;   //Insert for stability criterion!
+    if(FE2D){
+        double C = dtdx2;   //Insert for stability criterion!
 
+        U_p.col(0) = ones<vec>(nx);
+        
         for(int t=0; t<n_t; t++){
-            for(int i=1; i<(nx-1); i++){
-                for(int j=1; j<(nx-1); j++){
+            for(int i=1; i<=nx; i++){
+                for(int j=1; j<=nx; j++){
                     U(i,j) = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
                     + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1));
+                }
+                //Update boundarys!!
+                U(i,0) = 1; U(i,nx-1)=0;
             }
-            //Update boundarys!!
+            U_p = U;
+             //Write to file for plotting
+            if(tofile && (t%spacing)==0){output2D(&outfile,u_prev,t,3,nx);}
         }
-        U_p = U;
-        //Write to file for plotting        
+        cout<<"Forward Euler done!"<<endl;
+        U_p.print(" ");
     }
-    cout<<"Forward Euler done!"<<endl;
-    }
-    else if(LeapFrog){
-        /*
+    if(LeapFrog){
+        double C = dtdx2;
         for(int t=0; t<n_t; t++){
-           for(int i=1; i<(n-1); i++){
-                for(int j=1; j<(n-1); j++){
-                    U = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
-                    + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1));
+           for(int i=1; i<(nx-1); i++){
+                for(int j=1; j<(nx-1); j++){
+                    U(i,j) = U_p(i,j) + 2*C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
+                    + 2*C*(U_p(i,j+1)-2*U_p(i,j)+U_pp(i,j-1));
             }
             //Update boundarys!!
         }
+        U_pp = U_p;
         U_p = U;
         //Write to file for plotting        
+        if(tofile && (t%spacing)==0){output2D(&outfile,u_prev,t,4,nx);}
     }
-    */
+    cout<<"Leap Frog scheme finished"<<endl;
     }
     return 0;
 }        
