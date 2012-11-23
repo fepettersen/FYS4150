@@ -74,5 +74,50 @@ int main(int argc, char** argv){
        /*Write to file for plotting*/
     }
     cout<<"Crank Nicolson scheme finished"<<endl;
+    
+
+    //########################################
+    //---------------2D solvers-------------##
+    //--------------Forward Euler-----------##
+    //########################################
+    int FE = atoi(argv[3]);
+    int LeapFrog = atoi(argv[4]);
+    int nx = atoi(argv[5]);
+    int n_t = atoi(argv[6]);
+    mat U = zeros<mat>(nx,nx);
+    mat U_p = U;
+    mat U_pp = U;
+    //U_p.print("sd");
+    if(FE){
+    double C = dtdx2;   //Insert for stability criterion!
+
+        for(int t=0; t<n_t; t++){
+            for(int i=1; i<(nx-1); i++){
+                for(int j=1; j<(nx-1); j++){
+                    U(i,j) = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
+                    + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1));
+            }
+            //Update boundarys!!
+        }
+        U_p = U;
+        //Write to file for plotting        
+    }
+    cout<<"Forward Euler done!"<<endl;
+    }
+    else if(LeapFrog){
+        /*
+        for(int t=0; t<n_t; t++){
+           for(int i=1; i<(n-1); i++){
+                for(int j=1; j<(n-1); j++){
+                    U = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
+                    + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1));
+            }
+            //Update boundarys!!
+        }
+        U_p = U;
+        //Write to file for plotting        
+    }
+    */
+    }
     return 0;
 }        

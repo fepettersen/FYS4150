@@ -99,26 +99,50 @@ Again we observe that we will need to invert a matrix, but this time we will als
  \mathbf{u}^n = (2\mathbf{I}+C\mathbf{B})^{-1}\tilde{\mathbf{u}}^{n-1}
 \end{align*}
 This is the same problem as we had in the BE case, only with a modified right-hand side
+
 \subsection{2+1 dimensional diffusion equation}
-For simplicity we will only use explicit schemes for the 2+1 dimensional case. That is we will discretize using the FE and 
-a centered difference approximation. These are both very straightforward to discretize and implement
+
+The Jacobi algorithm for solving linear systems is an iterative scheme very well suited for solving the Poisson and Laplace 
+equations in 2 or 3 dimensions. If we breefly look at the discretization of the Laplace equation in 2D (\ref{laplace}) we see that 
+there is no obvious way to solve for a new point since we do not know 3 out of 5 points needed to calculate a new one. The solution 
+is then (since there is no initial condition either) to start out with an educated guess, and use the scheeme (\ref{laplace scheme}) 
+point by point on the entire grid several times until the solution (hopefully) converges.
+\begin{align*}
+ \nabla^2u(x,y) = 0\\
+ \frac{\partial^2 u}{\partial x^2} +  \frac{\partial^2 u}{\partial y^2} = 0 
+\end{align*}
+\begin{equation}\label{laplace}
+ \frac{u_{i+1,j}-2u_{i,j}+u_{i-1,j}}{\Delta x^2} +  \frac{u_{i,j+1}-2u_{i,j}+u_{i,j-1}}{\Delta y^2} = 0
+\end{equation}
+\begin{equation}\label{laplace scheme}
+u_{i,j} = \frac{1}{4}\Big(u_{i-1,j}+u_{i+1,j}+u_{i,j-1}+u_{i,j+1}\Big) 
+\end{equation}
+Where we have assumed that $\Delta x = \Delta y$. Seeing as we have a time dependence, we also have an initial condition on our 
+system. Therefore we allready know all values at previous timesteps (since the sceme is recursive), and we do not have to start 
+with a quess of what the solution might look like. In stead, but still with the mentality of the Jacobi algorithm of using the 
+previous value to get the new one, we can simply derive an explicit scheme by inserting our approximate derivatives. For example 
+if we approximate the time derivative using the FE method we get
 \begin{align*}
  \frac{u^{n+1}_{i,j}-u^n_{i,j}}{\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
- \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
+ \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2} \\
+ u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\big(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\big) + 
+ \frac{\Delta t}{\Delta y^2}\big(u^n_{i,j+1}-2u^n_{i,j} + u^n_{ij-1}\big) + u^n_{i,j}
 \end{align*}
-This leads us to the same scheme as in \ref{FE} only with one more dimension.
-\begin{equation*}
- u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\left(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\right) +
- \frac{\Delta t}{\Delta x^2}\left(u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}\right)+u^n_{i,j}
-\end{equation*}
-
+This is the same scheme as in \ref{FE} only with one more dimension. As we will se in the ``stability and precision'' section 
+the centered difference or ``Leap Frog'' scheme has a better truncation error with respect to time than the FE scheme, and this 
+will therefore (most likely) yield better results. The Leap Frog scheme is
 
 \begin{align*}
  \frac{u^{n+1}_{i,j}-u^{n-1}_{i,j}}{2\Delta t} = \frac{u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}}{\Delta x^2}+ 
- \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}
+ \frac{u^n_{i,j+1}-2u^n_{i,j} + u^n_{i,j-1}}{\Delta y^2}\\
+  u^{n+1}_{i,j} = \frac{\Delta t}{2\Delta x^2}\big(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\big) + 
+ \frac{\Delta t}{2\Delta y^2}\big(u^n_{i,j+1}-2u^n_{i,j} + u^n_{ij-1}\big) + u^{n-1}_{i,j}
 \end{align*}
-A discussion of stability and the error in this scheme can be found in the ``Stability and precision'' section.
 
+We could also make an explicit scheme by the mentality in the Gauss-Seidel algorithm. That is to use some of the new values to get 
+a new value. In one dimension this is known as the Euler-Chromer method and is known to be quite good for its simplicity. If we 
+look closer at the FE or Leap Frog scheme we notice that we allready know the values $u^{n+1}_{i-1,j}$ and $u^{n+1}_{i,j-1}$. 
+Using these values might give us better accuracy (at least compared to the FE case)
 \section{Analytic solution}
 As a comparison we can find the analytic solution to this problem as follows. 
  \begin{align}\label{eq}
@@ -283,7 +307,33 @@ And the limitations are $-1\leq A \leq 1$
 1-2C\sin^2(k\Delta x/2) &\leq 1+2C\sin^2(k\Delta x/2)\\
 \implies C &\geq 0
 \end{align*}
-The other limitation ($A\geq -1$) gives us nothing an thus the CN scheme is stable for all choises of $\Delta t$ and $\Delta x$.
+The other limitation ($A\geq -1$) gives us nothing and thus the CN scheme is stable for all choises of $\Delta t$ and $\Delta x$.
+
+\subsection{Schemes for diffusion in multiple dimensions}
+
+We can try the same approach to investigate the stability of the schemes in multiple dimesions. We start out with a general 
+solution on the form
+\begin{equation*}
+ A^ne^{ik(p\Delta x +q\Delta y)}
+\end{equation*}
+and insert it in the respective schemes.
+\begin{align*}
+ &A^ne^{ik(p\Delta x +q\Delta y)}\big(A-1\big) = CA^ne^{ikq\Delta y}\big(e^{ik(q+1)\Delta x} -2e^{ikq\Delta x}+e^{ik(q-1)\Delta x}\big)+\\
+ &CA^ne^{ikp\Delta x}\big(e^{ik(p+1)\Delta y} -2e^{ikp\Delta y} +e^{ik(p-1)\Delta y}\big) \\
+ &(A-1) = -4C\sin^2(k\Delta x/2) -4C\sin^2(k\Delta y/2)
+\end{align*}
+Plugging in for A we see that the limitations on A are $-1 \leq A \leq 1$
+\begin{align*}
+ &-4C\sin^2(k\Delta x/2) -4C\sin^2(k\Delta y/2)-1 \leq 1 \\
+ C &\leq \frac{1}{2(\sin^2(k\Delta x/2) +\sin^2(k\Delta y/2))} \\
+ &\implies C \leq \frac{1}{4}
+\end{align*}
+SJEKK FORTEGN!!\\
+We see that the other limit only gives us $C\geq 0$ which really is not that exciting. For the leap frog method we get
+\begin{align*}
+  &A^ne^{ik(p\Delta x +q\Delta y)}\big(A-A^{-1}\big) = 0.5CA^ne^{ikq\Delta y}\big(e^{ik(q+1)\Delta x} -2e^{ikq\Delta x}+e^{ik(q-1)\Delta x}\big)+\\
+ &CA^ne^{ikp\Delta x}\big(e^{ik(p+1)\Delta y} -2e^{ikp\Delta y} +e^{ik(p-1)\Delta y}\big)
+\end{align*}
 
 % \begin{figure}[H]
 %  \centering
