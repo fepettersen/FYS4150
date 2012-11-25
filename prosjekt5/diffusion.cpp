@@ -72,14 +72,13 @@ int main(int argc, char** argv){
         u_prev.zeros(); u_new.zeros();
         u_prev(0)=u_new(0) = 1;
         vec diff = u_new;
-        for(int n = 0;n<200;n++){
-            //u_prev(0)=1;u_prev(nx-1)=0;
+        for(int n = 0;n<n_t;n++){
             tridiag(a,b,c, u_new, u_prev,nx);
-            diff = u_new-u_prev;
+            u_new(0)=1;u_new(nx-1)=0;
             u_prev = u_new;
-            
+            //u_prev.col(0) = u_new.col(0);
             /*Write to file for plotting*/
-            if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);diff.print("asdf");;}
+            if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);}
 
         }
         cout<<"Implicit scheme finished"<<endl;

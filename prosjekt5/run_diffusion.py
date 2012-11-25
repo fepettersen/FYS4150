@@ -15,7 +15,7 @@ parser.add_argument("-CN1D", action="store_true",help="Run the Crank Nicolson di
 parser.add_argument("-FE2D", action="store_true",help="Run the Forward Euler discretization in time in 2D")
 parser.add_argument("-LF2D", action="store_true",help="Run the Leap Frog discretization in time in 2D")
 parser.add_argument("-nx", type=int, action="store",dest="nx",default=10, help="number of spacial gridpoints is n^2 in 2D")
-parser.add_argument("-nt", type=int, action="store",dest="nt",default=10, help="number of points in time (2D)")
+parser.add_argument("-nt", type=int, action="store",dest="nt",default=100, help="number of points in time (2D)")
 args = parser.parse_args()
 
 tofile = 1 if args.tofile else 0
@@ -34,20 +34,25 @@ if args.run:
 															LF2D,args.nx,args.nt))
 
 
-
-fig = mpl.figure(figsize=(5,5))
-ax = fig.add_subplot(111)
-for files in sorted(glob.glob('results_BE*.txt')):
-	u = np.loadtxt(files)
-	#ax.cla()
-	#ax.imshow(u)
-	mpl.plot(u)
-	#picname = files.split('.')
-	#picname[1] += '.png'
-	#fig.savefig(picname[1])
-	mpl.show()
-	if args.removefiles:
-		os.remove(files)
+solvers = [FE1D,BE1D,CN1D,FE2D,LF2D]
+names = ['FE*.txt','BE*.txt','CN*.txt','FE2D*.txt','LF2D*.txt']
+i=0
+for method in solvers:
+	filenames = 'results_'+names[i]
+	#fig = mpl.figure(figsize=(5,5))
+	#ax = fig.add_subplot(111)
+	i+=1
+	for files in sorted(glob.glob(filenames)):
+		u = np.loadtxt(files)
+		#ax.cla()
+		#ax.imshow(u)
+		mpl.plot(u)
+		#picname = files.split('.')
+		#picname[1] += '.png'
+		#fig.savefig(picname[1])
+		mpl.show()
+		if args.removefiles:
+			os.remove(files)
 '''
 os.system("mencoder 'mf://_tmp*.png' -mf type=png:fps=10 \
 	-ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")
