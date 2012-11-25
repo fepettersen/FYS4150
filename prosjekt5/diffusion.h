@@ -28,8 +28,8 @@ double timediff(double time1, double time2);
 char *make_filename(int n, int scheme);
 void tridiag(double a, double b, double c, vec &v, vec &f, int n);
 void make_uprev(vec &uprev, double a, double c, double b1, int n);
-void output(ofstream* outfile, vec u, int n, int scheme, int N);
-void output2D(ofstream* outfile, mat u, int n, int scheme, int N);
+void output(ofstream* outfile, vec &u, int n, int scheme, int N);
+void output2D(ofstream* outfile, mat &u, int n, int scheme, int N);
 #endif	/* DIFFUSION_H */
 
 
@@ -81,17 +81,19 @@ void tridiag(double a, double b, double c, vec &v, vec &f, int n){
 }
 
 void make_uprev(vec &uprev, double a, double c, double b1, int n){
+    uprev(0) =b1*uprev(0) +c*uprev(1);
     for(int i =1;i< n; i++){
-        uprev(i) = a*uprev(i-1) +c*uprev(i+1) -b1*uprev(i);
+        uprev(i) = a*uprev(i-1) +c*uprev(i+1) - b1*uprev(i);
     }
+    uprev(n) = a*uprev(n-2)+b1*uprev(n-1);
 }
 
-void output(ofstream* outfile, vec u, int n, int scheme, int N){
+void output(ofstream* outfile, vec &u, int n, int scheme, int N){
     /*outfile is an ofstram-object letting us open a file
     **u is an armadillo-object containing the solution at time n
     **n is the timestep number
     **scheme is an integer telling what scheme is used to obtain the solution
-    **N is the size of the array (in one direction)*/
+    **N is the size of the array*/
 	outfile->open(make_filename(n,scheme));
 	for(int i=0;i<N;i++){
 		*outfile <<u(i)<<endl;
@@ -99,17 +101,18 @@ void output(ofstream* outfile, vec u, int n, int scheme, int N){
 	outfile->close();
 }
 
-void output2D(ofstream* outfile, mat u, int n, int scheme, int N){
+void output2D(ofstream* outfile, mat &u, int n, int scheme, int N){
     /*outfile is an ofstram-object letting us open a file
     **u is an armadillo-object containing the solution at time n
     **n is the timestep number
     **scheme is an integer telling what scheme is used to obtain the solution
     **N is the size of the array (in one direction)*/
     outfile->open(make_filename(n,scheme));
-    for(int i=0;i<N;i++){
-        for(int j=0;j<N;j++){
-            *outfile <<u(i,j)<<endl;
+    for(int i=0;i<=N;i++){
+        for(int j=0;j<=N;j++){
+            *outfile <<u(i,j)<<"  ";
             }
+        *outfile <<endl;
     }
     outfile->close();
 }

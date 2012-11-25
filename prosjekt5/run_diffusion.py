@@ -1,7 +1,8 @@
 import os,argparse,glob,numpy as np
 import matplotlib.pyplot as mpl
-#from mayavi import mlab
-#from mayavi.api import OffScreenEngine
+from scitools.std import *
+from mayavi import mlab
+from mayavi.api import OffScreenEngine
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-run",action="store_true", help="run the diffusion.cpp excecutable file")
@@ -35,22 +36,48 @@ if args.run:
 
 
 solvers = [FE1D,BE1D,CN1D,FE2D,LF2D]
-names = ['FE*.txt','BE*.txt','CN*.txt','FE2D*.txt','LF2D*.txt']
+names = ['FE*.txt','BE*.txt','CN*.txt']
 i=0
-for method in solvers:
+for method in names:
 	filenames = 'results_'+names[i]
-	#fig = mpl.figure(figsize=(5,5))
-	#ax = fig.add_subplot(111)
 	i+=1
-	for files in sorted(glob.glob(filenames)):
+	for files in sorted(glob(filenames)):
+		picname = files.split('.')
+		picname[0] += '.png'
+		print files
 		u = np.loadtxt(files)
 		#ax.cla()
 		#ax.imshow(u)
 		mpl.plot(u)
-		#picname = files.split('.')
-		#picname[1] += '.png'
+		
 		#fig.savefig(picname[1])
 		mpl.show()
+		if args.removefiles:
+			os.remove(files)
+
+names2d =['FE2D*.txt','LF2D*.txt']
+i=0
+X,Y = np.meshgrid(np.linspace(0,1,args.nx+1),np.linspace(0,1,args.nx+1))
+for method in names2d:
+	filenames = 'results_'+names[i]
+	#fig = mpl.figure(figsize=(5,5))
+	#ax = fig.add_subplot(111)
+	i+=1
+	for files in sorted(glob(filenames)):
+		picname = files.split('.')
+		picname[0] += '.png'
+		u = np.loadtxt(files)
+		#mlab.options.offscreen = True
+		mlab.mesh(X,Y,u)
+		mlab.savefig(picname[0])
+		mlab.clf()
+
+		#ax.cla()
+		#ax.imshow(u)
+		#mpl.plot(u)
+		
+		#fig.savefig(picname[1])
+		#mpl.show()
 		if args.removefiles:
 			os.remove(files)
 '''
