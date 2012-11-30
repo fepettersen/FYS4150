@@ -66,7 +66,7 @@ void tridiag(double a, double b, double c, vec &v, vec &f, int n){
     //v(0) = 1;
 
     for(int i=1;i<n;i++){
-        //forward substitution without vectors
+        //forward substitution withoutvectors
         temp[i] = c/btemp;
         btemp = b -a*temp[i];
         v[i] = (f[i] -a*v[i-1])/btemp;
