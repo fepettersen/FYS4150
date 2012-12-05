@@ -34,7 +34,7 @@ if args.run:
 		os.system('./willy %d %d %d %d %d %d %d %d %d' %(tofile,args.spacing,FE1D,BE1D,CN1D,FE2D,\
 															LF2D,args.nx,args.nt))
 
-
+'''
 solvers = [FE1D,BE1D,CN1D,FE2D,LF2D]
 names = ['FE*.txt','BE*.txt','CN*.txt']
 i=0
@@ -46,6 +46,7 @@ for method in names:
 		picname[0] += '.png'
 		print files
 		u = np.loadtxt(files)
+		u += np.linspace(1,0,len(u))
 		#ax.cla()
 		#ax.imshow(u)
 		mpl.plot(u)
@@ -59,7 +60,7 @@ names2d =['FE2D*.txt','LF2D*.txt']
 i=0
 X,Y = np.meshgrid(np.linspace(0,1,args.nx+1),np.linspace(0,1,args.nx+1))
 for method in names2d:
-	filenames = 'results_'+names[i]
+	filenames = 'results_'+names2d[i]
 	#fig = mpl.figure(figsize=(5,5))
 	#ax = fig.add_subplot(111)
 	i+=1
@@ -83,4 +84,3 @@ for method in names2d:
 
 os.system("mencoder 'mf://_tmp*.png' -mf type=png:fps=10 \
 	-ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")
-'''

@@ -49,11 +49,12 @@ int main(int argc, char** argv){
     //--------Forward Euler scheme----------##
     //########################################
         if(dtdx2>0.5){dtdx2 = 0.5;} //make sure the stability criterion is fulfilled
+        u_prev = linspace<vec>(-1.0,0.0,nx+1);
         for(int n = 0;n < n_t; n++){
             for(int i = 1; i < nx; i++){
                 u_new(i) = dtdx2*(u_prev(i+1)-2*u_prev(i) + u_prev(i-1)) + u_prev(i);
             }
-            u_new(0) = 1; u_new(nx) = 0;
+            u_new(0) = 0; u_new(nx) = 0;
             u_prev = u_new;
             /*write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,0,nx);}
@@ -66,19 +67,18 @@ int main(int argc, char** argv){
     //-------Backward Euler scheme-----------##
     //#########################################
         //dtdx2 = 1/(dx*dx*200);
+        u_prev = linspace<vec>(-1.0,0.0,nx+1);
         double a = -dtdx2;
         double c = a;
         double b = 1+2*dtdx2;
-        u_prev.zeros(); u_new.zeros();
-        u_prev(0)=u_new(0) = 1;
+        //u_prev.zeros(); u_new.zeros();
+        //u_prev(0)=u_new(0) = 1;
         vec diff = u_new;
         for(int n = 0;n<n_t;n++){
-            u_prev(0)=1;u_prev(nx-1)=0;
             tridiag(a,b,c, u_new, u_prev,nx);
-            
+            u_new(0)=u_new(nx) = 0;
             u_prev = u_new;
-            //u_prev.print("asdsd");
-            //u_prev.col(0) = u_new.col(0);
+            u_prev(0)=u_prev(nx)=0;
             /*Write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);}
 
@@ -92,22 +92,22 @@ int main(int argc, char** argv){
     
         //vec uprev = zeros<vec>(nx+1);
         //dtdx2 = 1/(dx*dx*20);
+        u_prev = linspace<vec>(-1.0,0.0,nx+1);
         double a1 = -dtdx2;
         double c1 = a1;
         double b1 = 2+2*dtdx2;
         double a2 = dtdx2;
         double c2 = a2;
         double b2 = 2-2*dtdx2;
-        u_prev.zeros(); u_new.zeros();
-        u_prev(0)=u_new(0) = 1;
-        
+        u_new = u_prev;
         for(int n=0; n<n_t; n++){
-            //u_prev(0)=1;u_prev(nx-1)=0;
             //u_prev.print("before:");
-            make_uprev(u_prev,a2,c2,b2,nx); 
+            make_uprev(u_prev,u_new,a2,c2,b2,nx); 
             //u_prev.print("after:");
+            u_prev(0)=u_prev(nx)=0;
             tridiag(a1,b1,c1, u_new, u_prev,nx);
             u_prev = u_new;
+            u_prev(0)=0;u_prev(nx)=0;
             /*Write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,2,nx);} 
         }
