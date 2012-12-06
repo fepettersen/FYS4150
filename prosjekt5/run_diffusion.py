@@ -34,7 +34,7 @@ if args.run:
 		os.system('./willy %d %d %d %d %d %d %d %d %d' %(tofile,args.spacing,FE1D,BE1D,CN1D,FE2D,\
 															LF2D,args.nx,args.nt))
 
-'''
+
 solvers = [FE1D,BE1D,CN1D,FE2D,LF2D]
 names = ['FE*.txt','BE*.txt','CN*.txt']
 i=0
@@ -81,7 +81,7 @@ for method in names2d:
 		#mpl.show()
 		if args.removefiles:
 			os.remove(files)
-
+'''
 '''
 os.system("mencoder 'mf://_tmp*.png' -mf type=png:fps=10 \
 	-ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")

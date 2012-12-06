@@ -8,7 +8,7 @@
 \usepackage{listings}
 \usepackage{float}
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
-%\newcommand{\d}{\partial}
+\renewcommand{\d}{\partial}
 %opening
 \title{Project 5, FYS4150}
 \author{Candidate 55}
@@ -17,9 +17,59 @@
 \begin{document}
 
 \maketitle
+\newpage
 \tableofcontents
-
+\newpage
 \section{About the problem}
+In this project we will look at the transportation of neurotransmitter molecules across the so called synaptic cleft separating a 
+brain cell and a target cell. After an ``action-potential'' is recieved (in the axon terminal) vesicles inside the axon terminal merge with the 
+presynaptic membrane, releasing the neurotransmitter molecules into the synaptic cleft. 
+A vesicle is a kind of ``bubble'' inside a cell. Here we are talking about vesicles containing neurotransmitter moleules located in the axon (or 
+nerve fibers) of a brain cell. The molecules then diffuse across the synaptic cleft, and are picked up by receptors on the target cell (or the 
+postsynaptic side of the synaptic cleft if you want). We want to modell this particular event using a continuum modell, and the mathematical 
+expression is the diffusion equation.
+\begin{equation*}
+{\d u \over \d t} = D\nabla^2 u 
+\end{equation*}
+Where D is a diffusion coefficient. An illustrative figure of the problem can be found in figure (\ref{synapse}).
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{Chemical_synapse_schema.jpg}
+ \caption{Illustration of communication between two brain cells and a close-up of the synaptic cleft separating the axon (presynaptic side) and
+ the target cell (postsynaptic side). (From wikipedia search Chemical synapse) }
+ %http://en.wikipedia.org/wiki/Chemical_synapse
+ \label{synapse}
+\end{figure}
+We will assume that the synaptic cleft is of roughly equal width, and that the area of the synaptic cleft is large compared to its width. The 
+concentration of neurotransmitters therefore only vary in one direction, from presynaptic to postsynaptic side. The diffusion equation then reduces 
+to
+\begin{equation*}
+ {\d u \over \d t} = D{\d^2 u \over \d x^2}
+\end{equation*}
+which we can rescale to be dimensionless by introducing $x = \alpha\tilde{x} $
+\begin{equation*}
+ {\d u \over \d t} = D{\d^2 u \over \alpha^2\d\tilde{x}^2}
+\end{equation*}
+and define $\alpha^2 = D; \; \tilde{x} = x$ giving us the diffusion equation in its simplest form.
+\begin{equation*}
+ {\d u \over \d t} = {\d^2 u \over \d x^2}
+\end{equation*}
+We will say that at some time $t = 0$ the ``action potential'' is recieved, and the vesicles merge with the presynaptic membrane meaning that the 
+initial distribution of neurotransmitters is $u(x,0) = \delta(x)$, that is 1 at $x = 0$ and 0 everywhere else. Furthermore we say that the 
+neurotransmitters which reach the postsynaptic membrane (or the receptors) are removed from the synaptic cleft (and our system). This means that at 
+the far side ($x=d$) $u(d,t) = 0$. We are now ready to solve the equation, see sections \ref{numerical} and \ref{analytic}.\\
+We will also extend the diffusion equation to two spatial dimensions, also using dimensionless variables. The boundary and initial conditions of 
+the two dimensional equation are quite different from the one dimensional case. We use $x,y\in[0,1]$,
+$$
+u(x,y,0) = (1-y)e^{x}
+$$
+and
+\begin{align*}
+ u(0,y,t) &= (1-y)e^{t} \\
+ u(1,y,t) &= (1-y)e^{1+t} \\
+ u(x,0,t) &= e^{x+t} \\
+ u(x,1,t) &= 0
+\end{align*}
 
 \subsection{Notation}
 For finite differences I will use the the notation 
@@ -38,7 +88,7 @@ matrix B to simplify writing. B is defined to be
          0& \dots & & &0&-1 & 2 
        \end{array}\right)
 \end{align*}
-\section{The algorithm}
+\section{The algorithm}\label{numerical}
 We will solve the 1+1 dimensional difusion equation by three different finite differnce schemes in this project. Using the 
 standard approximation of the second derivative in space, we use successively more elaborate approximations to the time derivative. 
 \subsection{Forward Euler}
@@ -153,7 +203,7 @@ We could also make an explicit scheme by the mentality in the Gauss-Seidel algor
 a new value. In one dimension this is known as the Euler-Chromer method and is known to be quite good for its simplicity. If we 
 look closer at the FE or Leap Frog scheme we notice that we allready know the values $u^{n+1}_{i-1,j}$ and $u^{n+1}_{i,j-1}$. 
 Using these values might give us better accuracy (at least compared to the FE case)
-\section{Analytic solution}
+\section{Analytic solution}\label{analytic}
 As a comparison we can find the analytic solution to this problem as follows. 
  \begin{align}\label{eq}
   &\frac{\partial u}{\partial t} = D\frac{\partial^2 u}{\partial x^2}, \,\,\,\,\, u(x,0) = u(d,t) = 0\\
@@ -199,10 +249,54 @@ This gives us the full analytical solution
  v(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
 \end{equation}
 which satisfies all initial and boundary conditions.
-\section{Results}
+\section{Results/Verification}
+From section \ref{analytic} we have the analytic solution to our problem, and we can use this to verify our numerical schemes. Now we know from 
+section \ref{stability} that both the FE and the BE schemes have errors going like $\mathcal{O}(\Delta t)$, and that the FE scheme has a stability 
+criterion of $\Delta t\leq {\Delta x^2 \over 2}$. From experience I know that using exactily this criterion can be bad, so we will use half of this 
+and we will use the same for all the schemes so that we can easily compare results. In the analytic solution we have an infinite sum, which we of 
+course have to cut at some point. Looking at our solution (\ref{solution}) we see that $t=0$ will have the slowest convergence because there will be 
+no additional dampening term in the exponential term. From figure (\ref{convergence_analytic}) we see that there is very little change in afer 25 
+terms. It will then be very safe to terminate the sum after some 100-200 terms to make sure no ``invisible'' roundoffs are made.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{series_convergence_t0.png}
+ \caption{Plot of the analytic solution at $t=0$ while adding more terms. }
+ \label{convergence_analytic}
+\end{figure}
+The errors we get from the different schemes have been visualized in figures (\ref{errors_nx10}) and (\ref{errors_nx100}). As mentioned the error 
+should go like $\mathcal{O}(\Delta t)$. 
+%Both the anticipated and the real errors can be found in table ()
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_plot_x10.png}
+ \caption{The absolute error for $\Delta x = ^1/_{10}$. }
+ \label{errors_nx10}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_plot_x100.png}
+ \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \label{errors_nx100}
+\end{figure}
+We notice that contrary to the results of the truncation error the BE scheme gives the best results. As another verification we could let the 
+simulation run untill the steady state is reached. Since the steadu state is a first order polynomial, this should be represented to machine precision, 
+which means that the error should go to 0 as the number of time-steps gets large. However, as is also expected in a diffusion equation, the 
+convergence is very slow after the simulation has run for a while. we can see the results of this experiment in figures (\ref{errors_nx10_long}) and 
+(\ref{errors_nx100_long}).
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_plot_x10_long.png}
+ \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \label{errors_nx10_long}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_plot_x100_long.png}
+ \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \label{errors_nx100_long}
+\end{figure}
 
-
-\section{Stability and precision}
+\section{Stability and precision}\label{stability}
 To get a feeling of how good the numerical schemes are we will analyze their errors and stability criterions indivudually.
 \subsection{Forward Euler}
 Let us fist look at the truncation error of this scheme. If we do a Taylor expansion of $u(x+\Delta x,t)$, $u(x-\Delta x,t)$ 
@@ -370,6 +464,7 @@ HER TROR JEG DET ER NOE FEIL..
 %  \caption{Number of accepted spin flips. T = 2.4 to the left, and T = 1 on the right.}
 %  \label{both_accepted_flpis}
 % \end{figure}
+\section{Solving by Finite Element Methods}
 \section{Final comments}
 
 \end{document}
