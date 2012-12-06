@@ -82,5 +82,7 @@ for method in names2d:
 		if args.removefiles:
 			os.remove(files)
 
+'''
 os.system("mencoder 'mf://_tmp*.png' -mf type=png:fps=10 \
 	-ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")
+'''

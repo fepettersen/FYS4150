@@ -31,6 +31,8 @@ void tridiag(double a, double b, double c, vec &v, vec &f, int n);
 void make_uprev(vec &uprev,vec &u, double a, double c, double b1, int n);
 void output(ofstream* outfile, vec &u, int n, int scheme, int N);
 void output2D(ofstream* outfile, mat &u, int n, int scheme, int N);
+void initial_condition(mat &u, double dx, int n);
+void update_boundarys(mat &u, double t, double dx, int n);
 #endif	/* DIFFUSION_H */
 
 
@@ -116,4 +118,23 @@ void output2D(ofstream* outfile, mat &u, int n, int scheme, int N){
         *outfile <<endl;
     }
     outfile->close();
+}
+
+void initial_condition(mat &u, double dx, int n){
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=n;j++){
+            u(i,j) = (1- j*dx)*exp(i*dx);
+        }
+    }
+}
+
+void update_boundarys(mat &u, double t, double dx, int n){
+    for(int i=0; i<=n;i++){
+        for(int j=0; j<=n;j++){
+            u(0,j) = (1- j*dx)*exp(t);
+            u(n,j) = (1- j*dx)*exp(1+t);
+            u(i,0) = exp(i*dx+t);
+            u(i,n) = 0;
+        }
+    }
 }

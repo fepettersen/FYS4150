@@ -117,14 +117,13 @@ int main(int argc, char** argv){
     //---------------2D solvers-------------##
     //--------------Forward Euler-----------##
     //########################################
-    if(0){
+    if(FE2D){
         double C = dtdx2;
         if(C >= 0.25)
         {//Insert for stability criterion!
             C = 0.2;
         }
-        U_p.col(0) = ones<vec>(nx+1);
-        cout<<"U(nx,nx) = "<<U(nx,nx)<<endl;
+        initial_condition(U_p,dx,nx);
         for(int t=0; t<n_t; t++){
             for(int i=1; i<nx; i++){
                 for(int j=1; j<nx; j++){
@@ -132,11 +131,8 @@ int main(int argc, char** argv){
                     U(i,j) = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
                     + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1));
                 }
-                //Update boundarys!!
-
-                U(i,0) = 1; U(i,nx)=0;
-                U(0,i) = 0; U(nx,i)=0;
             }
+            update_boundarys(U,t*dt,dx,nx);
             U_p = U;
              //Write to file for plotting
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,3,nx);}
@@ -178,7 +174,7 @@ int main(int argc, char** argv){
     }
     cout<<"Leap Frog scheme finished"<<endl;
     }
-    if(FE2D){
+    if(0){
     //################################################
     //----------Euler Chromer scheme----------------##
     //################################################

@@ -27,7 +27,17 @@ For finite differences I will use the the notation
  u(t_n,x_i,y_j) = u^n_{i,j}
 \end{equation*}
 where $t_n = t_0 + n\cdot\Delta t$, $x_i = x_0 +i\cdot\Delta x$ and $y_j = y_0 +j\cdot\Delta y$. Thus it is important not to 
-confuse $u^n$ (u to the power of n) with $u^n_{i,j}$ (u evaluated at timestep n and position i,j).
+confuse $u^n$ (u to the power of n) with $u^n_{i,j}$ (u evaluated at timestep n and position i,j). I will at some points use the 
+matrix B to simplify writing. B is defined to be
+\begin{align*}
+ \mathbf{B} = \left(\begin{array}{c c c c c c c}
+        2 & -1 &0 &\dots & &0 &0 \\
+        -1 & 2 & -1 &0 &\dots & &0 \\
+        0& \ddots & \ddots & \ddots &  &  &0\\
+        0& \dots &  &0&-1 & 2 & -1\\
+         0& \dots & & &0&-1 & 2 
+       \end{array}\right)
+\end{align*}
 \section{The algorithm}
 We will solve the 1+1 dimensional difusion equation by three different finite differnce schemes in this project. Using the 
 standard approximation of the second derivative in space, we use successively more elaborate approximations to the time derivative. 
