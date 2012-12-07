@@ -1,8 +1,8 @@
 /* 
- * File:   main.cpp
- * Author: fredrik
+ * File:   diffusion.cpp
+ * Author: candidate 55
  *
- * Created on 15. oktober 2012, 09:58
+ * Created on 28. november 2012, 09:58
  */
 
 #include "diffusion.h"
