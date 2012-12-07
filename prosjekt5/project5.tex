@@ -295,7 +295,8 @@ convergence is very slow after the simulation has run for a while. we can see th
  \caption{The absolute error for $\Delta x = ^1/_{100}$. }
  \label{errors_nx100_long}
 \end{figure}
-
+For the two-dimensional case we also have an analytic solution which we can compare our results with. We will use the absolute error in this 
+verification as well, and make a plot over the entire area as before. The results can be found in figure (SOMTHIN).
 \section{Stability and precision}\label{stability}
 To get a feeling of how good the numerical schemes are we will analyze their errors and stability criterions indivudually.
 \subsection{Forward Euler}
@@ -465,6 +466,54 @@ HER TROR JEG DET ER NOE FEIL..
 %  \label{both_accepted_flpis}
 % \end{figure}
 \section{Solving by Finite Element Methods}
-\section{Final comments}
+The normal approach to solving partial differential equations (especially in more than one dimension) in industry is to discretize using a finite 
+difference 
+scheme in time, and a finite element method in space. The finite element method is quite a lot more complex both in its discretization and in its 
+implementation, which is why we will use the FEniCS software pack to solve the equation using finite elements. The reason one would typically use 
+finite elements for PDEs is that it easily generalizes to complex geometries with dynamic choise of resolution, and that one can choose freely how 
+accurate the approximation should be.\\
+Consider this a very short and superficial explaniation of the finite element method. We will stick to 1 dimension.\\
+The basic idea is to map our approximation of the solution on a function space of some piecewise continous functions. That is, we divide the unit 
+square, on which our equation is defined, into some number of elements. Notice that an element typically takes the form of a triangle, and that the 
+elements can vary in size (for simplicity we will use elements of equal size). A triangle in one dimension is simply an interval, defined by two 
+points. Theese points are called nodes. We now use the nodes to define linear functions on each element, and demand that each linear function is exactly 
+1 on one node and 0 on the other. We can of course use any function we want which fulfills this cirterion, but the standard functions to use are 
+some orthogonal polynomial, specifically the Lagrange polynomials (of some degree depending on the number of nodes per element). So far we have our 
+equation and we have a finctionspace $V = span\{\phi_i\}$ where $\phi_i$ is the Lagrange polynomial at element number i. We discretize the equation 
+in time ($u_{xx}$ denotes the duble derivative of u wrt x).
+\begin{align*}
+ u^{n+1}-u^n -\Delta tu^n_{xx} = 0 \\
+ R = 0
+\end{align*}
+we now want to approximate R on V, minimizing the error. There are a few ways to do this, and again we will use a quite general one, the Galerkin 
+method. To minimize the error we take the inner product $(R,V) = 0 \forall \phi_i \in V$ which leads to the following integrals
+\begin{align*}
+ \int_\Omega u^{n+1}\phi_id\Omega - \int_\Omega u^{n}\phi_id\Omega -\Delta t \int_\Omega u^{n}_{xx}\phi_id\Omega = 0 \\
+ \int_\Omega \sum\limits_{j=1}^N(\phi_j\phi_i)u^{n+1}d\Omega - \int_\Omega \sum\limits_{j=1}^N(\phi_j\phi_i)u^{n}d\Omega -
+ \Delta t \int_\Omega \sum\limits_{j=1}^N(\phi_j''\phi_i)u^{n}d\Omega = 0 
+\end{align*}
+where we have used the approximation of u on V $u\simeq\sum\limits_{j=1}^N\phi_ju$. We notice that taking a double derivative of $\phi_j$ leaves us 
+with 0, so we try integrating it by parts
+\begin{align*}
+ - \Delta t \int_\Omega \sum\limits_{j=1}^N(\phi_j''\phi_i)u^{n}d\Omega = \Delta t\big([\phi_j'\phi_iu]_{\d\Omega} -\int_\Omega \sum 
+ \phi_j'\phi_i'u^nd\Omega\big)
+\end{align*}
+which is a boundary term and a new integral. This is actually sufficient for FEniCS to work with. The rest of the computation is simply assembly of a 
+linear system from the integrals, and solving the linear system.
 
+\section{Final comments}
+Even though the analysis in section \ref{stability} suggests that the Crank Nicolson scheme is supposed to have a better error than the other two, 
+the results from our verification tells us that the Backward Euler scheme is better. It is also easier to implement, and it demands less FLOPS than 
+the CN scheme because there is no need to make a new vector at each timestep. The Crank Nicolson scheme is also known to have some porblems with 
+oscillating solutions, even though we do not see any of theese here. This is probably due to the restrictions put on $\Delta t$ from the Forward 
+Euler scheme which we have used for all schemes.\\
+We notice from figures (\ref{errors_nx10}) and (\ref{errors_nx100}) that the error is not quite of the order we had expected. The expected value is 
+that the error goes like $\mathcal{O}(\Delta t)$ and we have $\Delta t \propto \Delta x^2$, so we should have an error of $10^{-2}$ for 
+$\Delta x = 0.1$ and $10^{-4}$ for $\Delta x = 0.01$. We almost have this error, but not quite. This is telling me that there either is something 
+wrong somewhere in my program, or there is an error done at some point while making the exact solution. Havinig looked over both of theese possibilities 
+quite a few times, I have unfortunately yet to find this error. My perliminary explanation is that the error still is proportional to 
+$\Delta t$, the proportionality-constant just happens to be 10.\\
+The section on finite element methods is ment only as a short glance onward from this project into more complex problems which are still on the same 
+form as this one. \\
+Source code can be found in the appendix.
 \end{document}

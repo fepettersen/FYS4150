@@ -87,7 +87,8 @@ int main(int argc, char** argv){
     //------Crank Nicolson scheme-------------##
     //##########################################
     
-        //vec uprev = zeros<vec>(nx+1);
+        //vec uprev = zeros<vec>(nx-1);
+        //vec unew = uprev;
         //dtdx2 = 1/(dx*dx*20);
         u_prev = linspace<vec>(-1.0,0.0,nx+1);
         double a1 = -dtdx2;
@@ -100,7 +101,7 @@ int main(int argc, char** argv){
         for(int n=0; n<=n_t; n++){
             make_uprev(u_prev,u_new,a2,c2,b2,nx); 
             u_prev(0)=u_prev(nx)=0;
-            tridiag(a1,b1,c1, u_new, u_prev,nx);
+            tridiag(a1,b1,c1, u_new, u_prev,nx-2);
             u_prev = u_new;
             u_prev(0)=0;u_prev(nx)=0;
             /*Write to file for plotting*/
