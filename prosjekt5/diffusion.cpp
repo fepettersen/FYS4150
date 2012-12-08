@@ -106,6 +106,7 @@ int main(int argc, char** argv){
         }
         dx = 1.0/nx;
         dt = C*dx*dx;
+        cout<<"dt = "<<dt<<" C = "<<C<<endl;
         initial_condition(U_p,dx,nx);
         for(int t=0; t<n_t; t++){
             for(int i=1; i<nx; i++){
@@ -116,7 +117,11 @@ int main(int argc, char** argv){
                 }
             }
             update_boundarys(U,t*dt,dx,nx);
-            U_p = U;
+            for(int k=0;k<=nx;k++){
+                for(int l=0;l<=nx;l++){
+                    U_p(k,l) = U(k,l);
+                }
+            }
              //Write to file for plotting
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,3,nx);}
         }
@@ -158,10 +163,14 @@ int main(int argc, char** argv){
     //################################################
     //----------Euler Chromer scheme----------------##
     //################################################
-        double C = dtdx2;   //Insert for stability criterion!
-
-        U_p.col(0) = ones<vec>(nx+1);
-        
+        double C = dtdx2;
+        if(C >= 0.25)
+        {//Insert for stability criterion!
+            C = 0.2;
+        }
+        dx = 1.0/nx;
+        dt = C*dx*dx;
+        initial_condition(U_p,dx,nx);
         for(int t=0; t<n_t; t++){
             for(int i=1; i<nx; i++){
                 for(int j=1; j<nx; j++){
@@ -170,7 +179,11 @@ int main(int argc, char** argv){
                 }
             }
             update_boundarys(U,t*dt,dx,nx);
-            U_p = U;
+            for(int k=0;k<=nx;k++){
+                for(int l=0;l<=nx;l++){
+                    U_p(k,l) = U(k,l);
+                }
+            }
              //Write to file for plotting
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,3,nx);}
         }

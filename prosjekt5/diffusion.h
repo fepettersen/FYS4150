@@ -115,7 +115,7 @@ void output2D(ofstream* outfile, mat &u, int n, int scheme, int N){
         for(int j=0;j<=N;j++){
             *outfile <<u(i,j)<<setprecision(12)<<"  ";
             }
-        *outfile <<endl;
+        if(i<N){*outfile <<endl;}
     }
     outfile->close();
 }
@@ -123,7 +123,7 @@ void output2D(ofstream* outfile, mat &u, int n, int scheme, int N){
 void initial_condition(mat &u, double dx, int n){
     for(int i=0;i<=n;i++){
         for(int j=0;j<=n;j++){
-            u(i,j) = (1- j*dx)*exp(i*dx);
+            u(j,i) = (1- j*dx)*exp(i*dx);
         }
     }
 }
@@ -131,10 +131,10 @@ void initial_condition(mat &u, double dx, int n){
 void update_boundarys(mat &u, double t, double dx, int n){
     for(int i=0; i<=n;i++){
         for(int j=0; j<=n;j++){
-            u(0,j) = (1- j*dx)*exp(t);
-            u(n,j) = (1- j*dx)*exp(1+t);
-            u(i,0) = exp(i*dx+t);
-            u(i,n) = 0;
+            u(j,0) = (1- j*dx)*exp(t);
+            u(j,n) = (1- j*dx)*exp(1+t);
+            u(0,i) = exp(i*dx+t);
+            u(n,i) = 0;
         }
     }
 }
