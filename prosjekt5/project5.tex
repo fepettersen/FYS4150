@@ -249,7 +249,7 @@ This gives us the full analytical solution
  v(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
 \end{equation}
 which satisfies all initial and boundary conditions.
-\section{Results/Verification}
+\section{Results/Verification}\label{results}
 From section \ref{analytic} we have the analytic solution to our problem, and we can use this to verify our numerical schemes. Now we know from 
 section \ref{stability} that both the FE and the BE schemes have errors going like $\mathcal{O}(\Delta t)$, and that the FE scheme has a stability 
 criterion of $\Delta t\leq {\Delta x^2 \over 2}$. From experience I know that using exactily this criterion can be bad, so we will use half of this 
@@ -269,13 +269,13 @@ should go like $\mathcal{O}(\Delta t)$.
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{error_plot_x10.png}
- \caption{The absolute error for $\Delta x = ^1/_{10}$. }
+ \caption{The absolute error for $\Delta x = ^1/_{10}$ and $\Delta t$ restricted by the stability criterion on the FE scheme. }
  \label{errors_nx10}
 \end{figure}
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{error_plot_x100.png}
- \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \caption{The absolute error for $\Delta x = ^1/_{100}$ and $\Delta t$ restricted by the stability criterion on the FE scheme.. }
  \label{errors_nx100}
 \end{figure}
 We notice that contrary to the results of the truncation error the BE scheme gives the best results. As another verification we could let the 
@@ -286,21 +286,36 @@ convergence is very slow after the simulation has run for a while. we can see th
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{error_plot_x10_long.png}
- \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \caption{The absolute error for $\Delta x = ^1/_{100}$ and $\Delta t$ restricted by the stability criterion on the FE scheme. }
  \label{errors_nx10_long}
 \end{figure}
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{error_plot_x100_long.png}
- \caption{The absolute error for $\Delta x = ^1/_{100}$. }
+ \caption{The absolute error for $\Delta x = ^1/_{100}$ and $\Delta t$ restricted by the stability criterion on the FE scheme.}
  \label{errors_nx100_long}
 \end{figure}
 For the two-dimensional case we also have an analytic solution which we can compare our results with. We will use the absolute error in this 
-verification as well, and make a plot over the entire area as before. The results can be found in figure (SOMTHIN).
+verification as well, and make a plot over the entire area as before. As we discussed in section \ref{numerical} there are many different ways 
+to simulate the diffusion equation in more than one dimesion as well. The simplest of which is of course the Forward Euler scheme, which is one of 
+the schemes we have implemented. The results of the same verification as we did in 1D is illustrated in figures (\ref{errors_FE2D_nx100}) and 
+(\ref{errors_FE2D_nx10})
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_FE2D_x100.png}
+ \caption{The absolute error for $\Delta x = ^1/_{100}$ and $\Delta t$ restricted by the stability criterion on the FE scheme in two spatial dimensons }
+ \label{errors_FE2D_nx100}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_FE2D_x10.png}
+ \caption{The absolute error for $\Delta x = ^1/_{10}$ and $\Delta t$ restricted by the stability criterion on the FE scheme in two spatial dimensons }
+ \label{errors_FE2D_nx10}
+\end{figure}
 \section{Stability and precision}\label{stability}
-To get a feeling of how good the numerical schemes are we will analyze their errors and stability criterions indivudually.
+To get a feeling of how good the numerical schemes are we will analyze their errors and stability criteria individually.
 \subsection{Forward Euler}
-Let us fist look at the truncation error of this scheme. If we do a Taylor expansion of $u(x+\Delta x,t)$, $u(x-\Delta x,t)$ 
+Let us first look at the truncation error of this scheme. If we do a Taylor expansion of $u(x+\Delta x,t)$, $u(x-\Delta x,t)$ 
 and $u(x,t+\Delta t)$, assuming $\Delta x,\Delta t \to 0$ we get the following
 \begin{align*}
  u(x+\Delta x,t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
@@ -502,17 +517,16 @@ which is a boundary term and a new integral. This is actually sufficient for FEn
 linear system from the integrals, and solving the linear system.
 
 \section{Final comments}
-Even though the analysis in section \ref{stability} suggests that the Crank Nicolson scheme is supposed to have a better error than the other two, 
-the results from our verification tells us that the Backward Euler scheme is better. It is also easier to implement, and it demands less FLOPS than 
-the CN scheme because there is no need to make a new vector at each timestep. The Crank Nicolson scheme is also known to have some porblems with 
-oscillating solutions, even though we do not see any of theese here. This is probably due to the restrictions put on $\Delta t$ from the Forward 
-Euler scheme which we have used for all schemes.\\
-We notice from figures (\ref{errors_nx10}) and (\ref{errors_nx100}) that the error is not quite of the order we had expected. The expected value is 
-that the error goes like $\mathcal{O}(\Delta t)$ and we have $\Delta t \propto \Delta x^2$, so we should have an error of $10^{-2}$ for 
-$\Delta x = 0.1$ and $10^{-4}$ for $\Delta x = 0.01$. We almost have this error, but not quite. This is telling me that there either is something 
-wrong somewhere in my program, or there is an error done at some point while making the exact solution. Havinig looked over both of theese possibilities 
-quite a few times, I have unfortunately yet to find this error. My perliminary explanation is that the error still is proportional to 
-$\Delta t$, the proportionality-constant just happens to be 10.\\
+The results from section \ref{stability} tells us that the Crank Nicolson scheme should give an error going as $\mathcal{O}(\Delta t^2)$, which is 
+better than both the Forward and Backward Euler schemes. Notice however that the Crank Nicolson is known to be somewhat difficult to implement in 
+such a way that the error actually has a second order convergence. We will therefore assume that this scheme also has a first order convergence. 
+Looking at the results form section \ref{results} however, we see a different story. 
+Surprisingly the Forward Euler scheme seems to give the best approximation to the exact solution. Notice also that all off the schemes have errors of 
+roughly $\mathcal{O}(\Delta t)$, suggesting that at least all the larger bugs in my program have been eradicated. I find theese results strange, but 
+not impossible. It could be that for some reason the Forward Euler scheme is simply better on this perticular problem than the two others. 
+Concidering simplicity of implementation (and in this case the error) the Forward Euler scheme would be my choise, but it comes with the drawback 
+of a strict stability criterion. For a more fool-proof (and brute force) approach which is allways stable and can therefore jump over the boring 
+part where the solution has a slow convergence, I would say that the Backward Euler scheme is definately the best one.\\
 The section on finite element methods is ment only as a short glance onward from this project into more complex problems which are still on the same 
 form as this one. \\
 Source code can be found in the appendix.

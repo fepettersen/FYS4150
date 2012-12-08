@@ -63,7 +63,10 @@ int main(int argc, char** argv){
         for(int n = 1;n<=n_t;n++){
             tridiag(a,b,c, u_new, u_prev,nx);
             u_new(0)=0; u_new(nx) = 0;
-            u_prev = u_new;
+            //u_prev = u_new;
+            for(int k=0;k<=nx;k++){
+                u_prev(k) = u_new(k);
+            }
             /*Write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);}
 
@@ -87,7 +90,10 @@ int main(int argc, char** argv){
             make_uprev(u_prev,u_new,a2,c2,b2,nx); 
             u_prev(0)=0;u_prev(nx)=0;
             tridiag(a1,b1,c1, u_new, u_prev,nx);
-            u_prev = u_new;
+            //u_prev = u_new;
+            for(int k=0;k<=nx;k++){
+                u_prev(k) = u_new(k);
+            }
             u_prev(0)=0;u_prev(nx)=0;
             /*Write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,2,nx);} 
