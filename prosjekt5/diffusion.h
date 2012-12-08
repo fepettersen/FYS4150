@@ -61,34 +61,34 @@ char *make_filename(int n, int scheme){
         return buffer;
 }
 
-
 void tridiag(double a, double b, double c, vec &v, vec &f, int n){
-    vec temp = zeros<vec>(n+1);
-    double btemp = b;
-    v(0) = f(0)/btemp;
+    vec bv = zeros<vec>(n+1);
+    double temp = 0;
+    bv(1)=b;
+    v(1) = f(1)/b;
     //v(0) = 1;
 
-    for(int i=1;i<=n;i++){
+    for(int i=2;i<=n-1;i++){
         //forward substitution withoutvectors
-        temp[i] = c/btemp;
-        btemp = b -a*temp[i];
-        v[i] = (f[i] -a*v[i-1])/btemp;
+        temp = a/bv(i-1);
+        bv(i) = b -c*temp;
+        f(i) -= f(i-1)*temp;
     }
-    
-    for(int i=n-1;i>=0;i--){
+    v(n-1)= f(n-1)/bv(n-2);
+    //v(n)=0;
+
+    for(int i=n-2;i>=1;i--){
         //Backward substitution 
-        v[i] -= temp[i+1]*v[i+1];
+        v[i] = (f(i)-c*v(i+1))/bv(i);
     }
-    //v.print("asdf");
-    //return v;
 }
 
 void make_uprev(vec &uprev, vec &u, double a, double c, double b, int n){
-    uprev(0) =b*u(0) +c*u(1);
-    for(int i =1;i< n; i++){
+    uprev(1) =b*u(1) +c*u(2);
+    for(int i =2;i< n-1; i++){
         uprev(i) = a*u(i-1) +c*u(i+1) + b*u(i);
     }
-    uprev(n) = a*u(n-1)+b*u(n);
+    uprev(n-1) = a*u(n-2)+b*u(n-1);
 }
 
 void output(ofstream* outfile, vec &u, int n, int scheme, int N){

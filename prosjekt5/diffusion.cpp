@@ -6,14 +6,6 @@
  */
 
 #include "diffusion.h"
-/*
-#include <armadillo>
-#include <iostream>
-
-using namespace std;
-using namespace arma;
-*/
-#define PI 3.14159
 
 
 int main(int argc, char** argv){
@@ -30,17 +22,15 @@ int main(int argc, char** argv){
     int nx = atoi(argv[8]);
     int n_t = atoi(argv[9]);
 
-    //cout<<"FE1D = "<<FE1D<<" BE1D = "<<BE1D<<" CN1D = "<<CN1D<<" FE2D = "<<FE2D<<" LF = "<<LeapFrog<<endl;
-    
     vec u_new = zeros<vec>(nx+1);
     vec u_prev = u_new;
-    double dx = 1.0/(nx+1);
+    double dx = 1.0/(nx);
     double dt = dx*dx/4.0;      //Stability criterion dt <= dx*dx/2
     double dtdx2 = dt/(dx*dx);
     mat U = zeros<mat>(nx+1,nx+1);
     mat U_p = U;
     mat U_pp = U;
-    //nx = u_new.n_elem;
+
     if(FE1D){
     //########################################
     //--------Forward Euler scheme----------##
@@ -69,12 +59,10 @@ int main(int argc, char** argv){
         double a = -dtdx2;
         double c = a;
         double b = 1+2*dtdx2;
-        //u_prev.zeros(); u_new.zeros();
-        //u_prev(0)=u_new(0) = 1;
-        u_new = u_prev;
-        for(int n = 0;n<=n_t;n++){
+        u_new.zeros();
+        for(int n = 1;n<=n_t;n++){
             tridiag(a,b,c, u_new, u_prev,nx);
-            u_new(0)=u_new(nx) = 0;
+            u_new(0)=0; u_new(nx) = 0;
             u_prev = u_new;
             /*Write to file for plotting*/
             if(tofile && (n%spacing)==0){output(&outfile,u_prev,n,1,nx);}
@@ -87,9 +75,6 @@ int main(int argc, char** argv){
     //------Crank Nicolson scheme-------------##
     //##########################################
     
-        //vec uprev = zeros<vec>(nx-1);
-        //vec unew = uprev;
-        //dtdx2 = 1/(dx*dx*20);
         u_prev = linspace<vec>(-1.0,0.0,nx+1);
         double a1 = -dtdx2;
         double c1 = a1;
@@ -98,10 +83,10 @@ int main(int argc, char** argv){
         double c2 = a2;
         double b2 = 2-2*dtdx2;
         u_new = u_prev;
-        for(int n=0; n<=n_t; n++){
+        for(int n=1; n<=n_t; n++){
             make_uprev(u_prev,u_new,a2,c2,b2,nx); 
-            u_prev(0)=u_prev(nx)=0;
-            tridiag(a1,b1,c1, u_new, u_prev,nx-2);
+            u_prev(0)=0;u_prev(nx)=0;
+            tridiag(a1,b1,c1, u_new, u_prev,nx);
             u_prev = u_new;
             u_prev(0)=0;u_prev(nx)=0;
             /*Write to file for plotting*/
@@ -119,6 +104,7 @@ int main(int argc, char** argv){
         {//Insert for stability criterion!
             C = 0.2;
         }
+        dx = 1.0/nx;
         dt = C*dx*dx;
         initial_condition(U_p,dx,nx);
         for(int t=0; t<n_t; t++){
@@ -135,7 +121,6 @@ int main(int argc, char** argv){
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,3,nx);}
         }
         cout<<"Forward Euler done!"<<endl;
-        //U_p.print(" ");
     }
     if(LeapFrog){
         double C = dtdx2;
@@ -190,7 +175,6 @@ int main(int argc, char** argv){
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,3,nx);}
         }
         cout<<"Euler Chromer done!"<<endl;
-        //U_p.print(" ");
     }
     return 0;
 }        
