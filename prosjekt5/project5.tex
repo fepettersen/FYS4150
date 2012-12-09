@@ -579,14 +579,19 @@ Source code can be found in the appendix.
 
 \section{Appendices}
 \appendix
+%\chapter{First Appendix}
 \section{Source code}
 \subsection{C++ files}
 \lstinputlisting{diffusion.cpp}
-\lstinputlisting{diffusion.h}8C 
+\lstinputlisting{diffusion.h} 
 \subsection{Python scripts for plotting}
 \lstinputlisting{run_diffusion.py}
 \lstinputlisting{diffusion_test_error.py}
-\appendix
+\subsection{FEniCS program/wrapper in Python}
+\lstinputlisting{project5_fem.py}
+\subsection{Leapfrog test program}
+\lstinputlisting{test_leapfrog.py}
+
 \section{Other resources}
 \subsection{The $\theta$-rule}
 As mentioned in section \ref{numerical} the Crank Nicoloson scheme is a special case of the $\theta$-rule. The theta rule is to calculate the new 
@@ -616,8 +621,7 @@ we can determine the coeficcients $\alpha_1$ and $\alpha_2$ from the initial con
  A^1 = \alpha_1(-x- \sqrt{x^2 + 1}) +\alpha_2 (-x + \sqrt{x^2 + 1}) = I(1 - x)
 \end{align*}
 And from this we can run some tests on just how these roots affect the solution.\\
-A friend on mine has allready done this exact analysis for the leapfrog scheme in one dimension on a simple ordinary differential equation, and 
-generously let me use some of the results to illustrate the problem with this scheme. Figures \ref{LF_error1} and \ref{LF_error2} show the nummeric 
+To illustrate the problem with this scheme I have done some tests. Figures \ref{LF_error1} and \ref{LF_error2} show the nummeric 
 and the analytic solution to the equation $u'(t) = -au(t)$ in the same plot.
 \begin{figure}[H]
  \centering

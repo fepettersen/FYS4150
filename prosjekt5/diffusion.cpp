@@ -151,15 +151,23 @@ int main(int argc, char** argv){
         U_pp = U_p;
         U_p = U;
         for(int t=1; t<n_t; t++){
-            for(int i=1; i<(nx-1); i++){
-                for(int j=1; j<(nx-1); j++){
-                    U(i,j) = 2*C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
-                    + 2*C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1))+U_pp(i,j);
+            for(int i=1; i<nx; i++){
+                for(int j=1; j<nx; j++){
+                    U(i,j) = C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
+                    + C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1))+0.5*U_pp(i,j);
                 }
             }
             update_boundarys(U,t*dt,dx,nx);
-            U_pp = U_p;
-            U_p = U;
+            for(int k=0;k<=nx;k++){
+                for(int l=0;l<=nx;l++){
+                    U_pp(k,l) = U_p(k,l);
+                }
+            }
+            for(int k=0;k<=nx;k++){
+                for(int l=0;l<=nx;l++){
+                    U_p(k,l) = U(k,l);
+                }
+            }
             //Write to file for plotting        
             if(tofile && (t%spacing)==0){output2D(&outfile,U_p,t,4,nx);}
     }
