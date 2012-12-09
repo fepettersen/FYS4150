@@ -20,9 +20,10 @@
 \newpage
 \tableofcontents
 \newpage
-\section{About the problem}
+\section{About the problem}\label{intro}
 In this project we will look at the transportation of neurotransmitter molecules across the so called synaptic cleft separating a 
-brain cell and a target cell. After an ``action-potential'' is recieved (in the axon terminal) vesicles inside the axon terminal merge with the 
+brain cell and a target cell. This is a common way of communication between cells in the brain and it is known as chemical synapse.
+After an ``action-potential'' is recieved (in the axon terminal) vesicles inside the axon terminal merge with the 
 presynaptic membrane, releasing the neurotransmitter molecules into the synaptic cleft. 
 A vesicle is a kind of ``bubble'' inside a cell. Here we are talking about vesicles containing neurotransmitter moleules located in the axon (or 
 nerve fibers) of a brain cell. The molecules then diffuse across the synaptic cleft, and are picked up by receptors on the target cell (or the 
@@ -40,7 +41,8 @@ Where D is a diffusion coefficient. An illustrative figure of the problem can be
  %http://en.wikipedia.org/wiki/Chemical_synapse
  \label{synapse}
 \end{figure}
-We will assume that the synaptic cleft is of roughly equal width, and that the area of the synaptic cleft is large compared to its width. The 
+We will assume that the synaptic cleft is of roughly equal width, and that the area of the synaptic cleft is large compared to its width which typically 
+is around 20nm. The 
 concentration of neurotransmitters therefore only vary in one direction, from presynaptic to postsynaptic side. The diffusion equation then reduces 
 to
 \begin{equation*}
@@ -134,13 +136,16 @@ If we insert for a few steps we see that this takes the form of
 
 So for each timestep we need to multiply the inverse of $\mathbf{A}$ with a vector $\mathbf{u}^{n-1}$ containig the solution at 
 the previous timestep. Looking a bit closer at equation (\ref{BE}) we realize two things. First of all, the matrix 
-$\mathbf{A}$ does'nt change at all throughout the computation so we can get away with invertig it once. Second, and perhaps 
-more important, we allready have a very efficient solver for this kind of problem from project 1.\\
+$\mathbf{A}$ is constant throughout the computation so we can get away with invertig it once. Second, and perhaps 
+more important, we allready have a very efficient solver for this kind of problem from project 1 where we solved a system of a tridiagonal matrix
+times an unknown vector equal to a known vector. The only difference is that we must solve this system for each timestep. the algorithm for 
+doing this is to do a specialized gaussian elimination utilizing the sparsity of the matirx A. Note that the tirdiagonal solver does not 
+like boundary conditions so theese need to be excluded from the \\
 
 A discussion of stability and the error in this scheme can be found in the ``Stability and precision'' section.
 
 \subsection{Crank Nicolson}
-Finally, we can use the Crank Nicolson approximation of the time derivative which is a special case of the so called theta -rule 
+Finally, we can use the Crank Nicolson approximation of the time derivative which is a special case of the so called theta -rule\footnote{See appendix} 
 with $\theta = 0.5$.
 \begin{align*}
  \frac{u^n_i - u^{n-1}_i}{\Delta t} = \frac{1}{2\Delta x^2}\Big(u^n_{i+1} -2u^n_{i} + u^n_{i-1}\Big) +\frac{1}{2\Delta x^2}
@@ -177,7 +182,8 @@ point by point on the entire grid several times until the solution (hopefully) c
 \begin{equation}\label{laplace scheme}
 u_{i,j} = \frac{1}{4}\Big(u_{i-1,j}+u_{i+1,j}+u_{i,j-1}+u_{i,j+1}\Big) 
 \end{equation}
-Where we have assumed that $\Delta x = \Delta y$. Seeing as we have a time dependence, we also have an initial condition on our 
+Where we have assumed that $\Delta x = \Delta y$. Seeing as we have a time dependence in the diffusion equation, we also have an initial 
+condition on our 
 system. Therefore we allready know all values at previous timesteps (since the sceme is recursive), and we do not have to start 
 with a quess of what the solution might look like. In stead, but still with the mentality of the Jacobi algorithm of using the 
 previous value to get the new one, we can simply derive an explicit scheme by inserting our approximate derivatives. For example 
@@ -188,7 +194,9 @@ if we approximate the time derivative using the FE method we get
  u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\big(u^n_{i+1,j}-2u^n_{i,j} + u^n_{i-1,j}\big) + 
  \frac{\Delta t}{\Delta y^2}\big(u^n_{i,j+1}-2u^n_{i,j} + u^n_{ij-1}\big) + u^n_{i,j}
 \end{align*}
-This is the same scheme as in \ref{FE} only with one more dimension. As we will se in the ``stability and precision'' section 
+This is the same scheme as in \ref{FE} only with one more dimension. Notice that $u^{n+1}_{i,j}$ only appears once, and so all values of 
+$u^n_{i,j}$ are known from the previous timestep. \\
+As we will se in the ``stability and precision'' section 
 the centered difference or ``Leap Frog'' scheme has a better truncation error with respect to time than the FE scheme, and this 
 will therefore (most likely) yield better results. The Leap Frog scheme is
 
@@ -202,25 +210,32 @@ will therefore (most likely) yield better results. The Leap Frog scheme is
 We could also make an explicit scheme by the mentality in the Gauss-Seidel algorithm. That is to use some of the new values to get 
 a new value. In one dimension this is known as the Euler-Chromer method and is known to be quite good for its simplicity. If we 
 look closer at the FE or Leap Frog scheme we notice that we allready know the values $u^{n+1}_{i-1,j}$ and $u^{n+1}_{i,j-1}$. 
-Using these values might give us better accuracy (at least compared to the FE case)
+Using these values might give us better accuracy (at least compared to the FE case). This is stictly a spontanious guess, I do not have anything 
+more than I have explained to back up this. I shall comment on the results from the comparison with the FE scheme in section \ref{summary}. The 
+explicit scheme for the two dimensional Euler Chromer scheme is
+\begin{align*}
+ u^{n+1}_{i,j} = \frac{\Delta t}{\Delta x^2}\big(u^n_{i+1,j}-2u^n_{i,j} + u^{n+1}_{i-1,j}\big) + 
+ \frac{\Delta t}{\Delta y^2}\big(u^n_{i,j+1}-2u^n_{i,j} + u^{n+1}_{ij-1}\big) + u^n_{i,j}
+\end{align*}
 \section{Analytic solution}\label{analytic}
-As a comparison we can find the analytic solution to this problem as follows. 
+As a comparison to the nummeric solution of our problem we can find the analytic solution to this problem, using the dimensionless variables
+from section \ref{intro} as follows. 
  \begin{align}\label{eq}
-  &\frac{\partial u}{\partial t} = D\frac{\partial^2 u}{\partial x^2}, \,\,\,\,\, u(x,0) = u(d,t) = 0\\
-  &x\in[0,d],\,\,\,\,\,\, D = d = u(0,t) = 1
+  &\frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2}, \,\,\,\,\, u(x,0) = u(d,t) = 0\\
+  &x\in[0,d],\,\,\,\,\,\,  d = u(0,t) = 1
  \end{align}
 We see right away that the boundary $x=0$ could give us some problems, so we start off with a small trick
 $$
-u(x,t) = v(x,t) = u(x,t) - u_s(x)
+u(x,t) = v(x,t)  + u_s(x)
 $$
 where the $u_s = 1-x$ term is the steady-state solution to equation \ref{eq}. This trick leaves us with new boundary conditions 
-un $u(x,t)$ 
+on $v(x,t)$ 
 $$
-v(0,t) = u(0,t) - u_s(0,t) = 1, \;\; u_s(0,t) = 1 \implies u(0,t) = 0
+u(0,t) = v(0,t)  + u_s(0,t) = 1, \;\; u_s(0,t) = 1 \implies v(0,t) = 0
 $$
 which makes the whole procedure much simpler. We now assume that $u(x,t)$ can be separated into factors 
 \begin{align*}
-&u(x,t) = F(x)G(t) \implies \frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2} \to F(x)\frac{\partial G}{\partial t}
+&v(x,t) = F(x)G(t) \implies \frac{\partial v}{\partial t} = \frac{\partial^2 v}{\partial x^2} \to F(x)\frac{\partial G}{\partial t}
 = G(t)\frac{\partial^2 F}{\partial x^2}\\
 &\frac{1}{G(t)}\frac{\partial G}{\partial t} =-k^2 =  \frac{1}{F(x)}\frac{\partial^2 F}{\partial x^2}
 \end{align*}
@@ -231,32 +246,33 @@ We start with the simplest of the equations which is the time dependence
 \end{align*}
 and leave it like this for now. The x-dependent equation is somewhat more complicated
 \begin{align*}
- \frac{1}{F(x)}\frac{\partial^2 F}{\partial x^2} = -k^2 \\
- F(x) = A\sin(kx) + B\cos(kx)
+ \frac{1}{F(x)}\frac{\partial^2 F}{\partial x^2} &= -k^2 \\
+ F(x) &= A\sin(kx) + B\cos(kx)\\
+ F(0) &= A\sin(0) + B\cos(0) = 0 \implies B= 0\\
+ F(d) &= A\sin(kd) = 0 \implies k = \frac{m\pi}{d} = \pi m, \;\; A = A_m
 \end{align*}
+we now combine all the equations to determine $u(x,t)$
 \begin{align*}
- F(0) = A\sin(0) + B\cos(0) = 0 \implies B= 0\\
- F(d) = A\sin(kd) = 0 \implies k = \frac{m\pi}{d} = \pi m, \;\; A = A_m
+ &u(x,t) = 1-x + \sum\limits_{m=1}^{\infty}B_me^{-(m\pi)^2t}\sin(m\pi x) \\
+ &u(x,0) = 1-x +\sum\limits_{m=1}^{\infty}B_m\sin(m\pi x)\\
+ &\implies \int\limits_0^1\sin(m\pi x)\sin(n\pi x)dx = \delta_{mn} = \int\limits_0^1(x-1)\sin(m\pi x)dx = -\frac{2}{m\pi} = B_m
 \end{align*}
-we now combine all the equations to determine $v(x,t)$
-\begin{align*}
- v(x,t) = 1-x + \sum\limits_{m=1}^{\infty}B_me^{-(m\pi)^2t}\sin(m\pi x) \\
- v(x,0) = 1-x +\sum\limits_{m=1}^{\infty}B_m\sin(m\pi x)\\
- \implies \int\limits_0^1\sin(m\pi x)\sin(n\pi x)dx = \delta_{mn} = \int\limits_0^1(x-1)\sin(m\pi x)dx = -\frac{2}{m\pi} = B_m
-\end{align*}
-This gives us the full analytical solution 
+This gives us the full analytic solution 
 \begin{equation}\label{solution}
- v(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
+ u(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
 \end{equation}
 which satisfies all initial and boundary conditions.
 \section{Results/Verification}\label{results}
 From section \ref{analytic} we have the analytic solution to our problem, and we can use this to verify our numerical schemes. Now we know from 
 section \ref{stability} that both the FE and the BE schemes have errors going like $\mathcal{O}(\Delta t)$, and that the FE scheme has a stability 
-criterion of $\Delta t\leq {\Delta x^2 \over 2}$. From experience I know that using exactily this criterion can be bad, so we will use half of this 
+criterion of $\Delta t\leq {\Delta x^2 \over 2}$. From experience I know that using exactily this criterion can give some oscillations in the solution, 
+so we will use half of this 
 and we will use the same for all the schemes so that we can easily compare results. In the analytic solution we have an infinite sum, which we of 
 course have to cut at some point. Looking at our solution (\ref{solution}) we see that $t=0$ will have the slowest convergence because there will be 
-no additional dampening term in the exponential term. From figure (\ref{convergence_analytic}) we see that there is very little change in afer 25 
-terms. It will then be very safe to terminate the sum after some 100-200 terms to make sure no ``invisible'' roundoffs are made.
+no additional dampening in the exponential factor. From figure \ref{convergence_analytic} we see that there is very little change in the solution 
+after 25 terms. It will then be very safe to terminate the sum after some 100-200 terms to make sure no ``invisible'' roundoffs are made. We also 
+notice that the analytic solution cannot reproduce the perfect delta function that is the initial condition. This is expected from Fourier series 
+since this is a rather nasty discontinuity.
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{series_convergence_t0.png}
@@ -278,7 +294,7 @@ should go like $\mathcal{O}(\Delta t)$.
  \caption{The absolute error for $\Delta x = ^1/_{100}$ and $\Delta t$ restricted by the stability criterion on the FE scheme.. }
  \label{errors_nx100}
 \end{figure}
-We notice that contrary to the results of the truncation error the BE scheme gives the best results. As another verification we could let the 
+We notice that contrary to the results of the truncation error the FE scheme gives the best results. As another verification we could let the 
 simulation run untill the steady state is reached. Since the steadu state is a first order polynomial, this should be represented to machine precision, 
 which means that the error should go to 0 as the number of time-steps gets large. However, as is also expected in a diffusion equation, the 
 convergence is very slow after the simulation has run for a while. we can see the results of this experiment in figures (\ref{errors_nx10_long}) and 
@@ -312,6 +328,8 @@ the schemes we have implemented. The results of the same verification as we did 
  \caption{The absolute error for $\Delta x = ^1/_{10}$ and $\Delta t$ restricted by the stability criterion on the FE scheme in two spatial dimensons }
  \label{errors_FE2D_nx10}
 \end{figure}
+The ``modified'' Euler Chromer scheme has also been implemented, and run through the same test as the FE scheme. The error has been measured for 
+the same time as for the FE scheme for a thorogh comparison. 
 \section{Stability and precision}\label{stability}
 To get a feeling of how good the numerical schemes are we will analyze their errors and stability criteria individually.
 \subsection{Forward Euler}
@@ -322,7 +340,7 @@ and $u(x,t+\Delta t)$, assuming $\Delta x,\Delta t \to 0$ we get the following
  +\mathcal{O}(\Delta x^3)\\
  u(x-\Delta x,t) = u(x,t) - \frac{\partial u(x,t)}{\partial x}\Delta x +\frac{\partial^2u(x,t)}{2\partial x^2}\Delta x^2 
  +\mathcal{O}(\Delta x^3) \\
-  u(x,t+\Delta t) = u(x,t) + \frac{\partial u(x,t)}{\partial x}\Delta t +\mathcal{O}(\Delta t^2)
+  u(x,t+\Delta t) = u(x,t) + \frac{\partial u(x,t)}{\partial t}\Delta t +\mathcal{O}(\Delta t^2)
  \end{align*}
 Theese are the local errors, meaning that our complete scheme gives the error of 
 \begin{align*}
@@ -330,7 +348,7 @@ Theese are the local errors, meaning that our complete scheme gives the error of
  \frac{u_{i+1}-2u_i +u_{i-1}}{\Delta x^2} \approx \frac{\partial^2 u(x,t)}{\partial x^2} +\mathcal{O}(\Delta x^2)
 \end{align*}
 Let us also look at the stability of the scheme, but by in slightly different way than what has been done in the rest of the 
-course. Let us assume that the slution of the diffusion equation takes the form
+course called Von Neumann analysis. Let us assume that the slution of the diffusion equation takes the form
 \begin{align}\label{general solution}
  u(x,t) = A^ne^{ikq\Delta x}
 \end{align}
@@ -339,7 +357,7 @@ Where $A^n$ is a damping factor which is time dependent. If we insert this expre
 \begin{align*}
  A^ne^{ikq\Delta x}(A-1) = CA^ne^{ikq\Delta x}(e^{i(q+1)k\Delta x}-2e^{iqk\Delta x} +e^{i(q-1)k \Delta x})\\
  A-1 = C(e^{ik\Delta x}-2+e^{-ik \Delta x})\\
- A = 1 - 4C(cos(k\Delta x)-1) = 1 -4C\sin^2(k\Delta x/2)
+ A = 1 - 2C(cos(k\Delta x)-1) = 1 -4C\sin^2(k\Delta x/2)
 \end{align*}
 Note that $x_i$ has been replaced by $x_q$. This means that the final solution is on the form
 \begin{equation*}
@@ -351,7 +369,7 @@ if we insert for
  -1 \leq A \implies 1 -4C\sin^2(k\Delta x/2) \geq -1 \\
  C \leq \frac{1}{2\sin^2(k\Delta x/2)}
 \end{align*}
-and $max(\sin^2(k\Delta x/2)) = 1$ we are left with
+and since $max(\sin^2(k\Delta x/2)) = 1$ we are left with
 \begin{equation}\label{stability criterion}
  C = \frac{\Delta t}{\Delta x^2} \leq \frac{1}{2}
 \end{equation}
@@ -459,27 +477,25 @@ For the leap frog method we get
 \end{align*}
 To avoid som unnececarily nasty expressions we will from here on look at the ``worst case'' where $\sin^2(k\Delta x/2) = 
 \sin^2(k\Delta y/2) = 1$
-\begin{align*}
- A^2 -16CA -1 = 0\\
- A = \frac{1}{2}\big(-16C \pm\sqrt{16^2C^2 +4}\big)  = -8C \pm\sqrt{64C^2+1}
-\end{align*}
+\begin{align}
+\nonumber A^2 -16CA -1 = 0\\
+ A = \frac{1}{2}\big(-16C \pm\sqrt{16^2C^2 +4}\big)  = -8C \pm\sqrt{64C^2+1}\label{LF_end}
+\end{align}
 That is A will be a linear combination of the two roots $A_1 = -8C -\sqrt{64C^2+1}$ and $A_2 = -8C +\sqrt{64C^2+1}$.
-We notice that $A_1$ is a negative root which will cause the solution to oscillate.
+We notice that $A_1$ is a negative root which will cause the solution to oscillate. From this we get that the scheme is (at least) stable for 
+$\Delta t \leq {1\over8}$, but for this scheme a very small $\Delta t$ is preferred (see appendix).\\
+
+When it comes to the truncation error for schemes in multiple dimensions, they are the same for the Forward Euler scheme (only adding a term of
+$\mathcal{O}(\Delta y^2)$). For the Leapfrog scheme however the error in time is a bit different
 \begin{align*}
- A^n = \alpha_1A_1^n + \alpha_2A_2^n
+ u(t+\Delta t,x,y) = u(t,x,y) + {\d u(t,x,y)\over \d t}\Delta t + {\d^2u(t,x,y)\over2\d t^2}\Delta t^2 +\mathcal{O}(\Delta t^3)\\
+ u(t-\Delta t,x,y) = u(t,x,y) - {\d u(t,x,y)\over \d t}\Delta t + {\d^2u(t,x,y)\over2\d t^2}\Delta t^2 +\mathcal{O}(\Delta t^3)
 \end{align*}
-we can determine the coeficcients $\alpha_1$ and $\alpha_2$ from the initial condition $u(x,y,0) = I$
-\begin{align*}
- A^0 = \alpha_1 + \alpha_2 = I \implies \alpha_1 = I-\alpha_2
-\end{align*}
-HER TROR JEG DET ER NOE FEIL..
-% \begin{figure}[H]
-%  \centering
-%  \includegraphics[scale = 0.45]{accepted_flips_temp2dot4.png}
-%  \includegraphics[scale = 0.45]{accepted_flips_temp1.png}
-%  \caption{Number of accepted spin flips. T = 2.4 to the left, and T = 1 on the right.}
-%  \label{both_accepted_flpis}
-% \end{figure}
+which we recognize as the same error we got from the second order spatial derivatives. Thus the truncation error in time of the Leapfrog scheme is of 
+second order. There is of course a problem, and that is the oscillating solutions. The oscillations are (in general) small in the beginning of the 
+simulation, but blows up towards the end, causing the solution to diverge completely. There are methods to stabilize the leapfrog scheme, and 
+the scheme is therefore widely used in meteorology, but I do not have the time to implement theese methods as of now. 
+
 \section{Solving by Finite Element Methods}
 The normal approach to solving partial differential equations (especially in more than one dimension) in industry is to discretize using a finite 
 difference 
@@ -514,11 +530,34 @@ with 0, so we try integrating it by parts
  \phi_j'\phi_i'u^nd\Omega\big)
 \end{align*}
 which is a boundary term and a new integral. This is actually sufficient for FEniCS to work with. The rest of the computation is simply assembly of a 
-linear system from the integrals, and solving the linear system.
-
-\section{Final comments}
+linear system from the integrals, and solving the linear system. \\
+We can easily implement the BE scheme in time using the FEniCS software, and solve by iterating in the same way we have been doing throughout 
+the project. In figures \ref{fenics_n10} and \ref{fenics_n100} we see the results of the same error analysis we did for the FE scheme in 2D.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.5]{fenics_BE2D_error_nx10.png}
+ \caption{The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis 
+ functions. $\Delta x = 0.1$ and $\Delta t = 0.2\Delta x^2$}
+ \label{fenics_n10}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.5]{fenics_BE2D_error_nx100.png}
+ \caption{The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis 
+ functions. $\Delta x = 0.01$ and $\Delta t = 0.2\Delta x^2$}
+ \label{fenics_n100}
+\end{figure}
+Notice that the error is basically the same as for the FE scheme underlining the fact that finite elements are best suited for the more 
+complex problems.
+\section{Final comments}\label{summary}
 The results from section \ref{stability} tells us that the Crank Nicolson scheme should give an error going as $\mathcal{O}(\Delta t^2)$, which is 
-better than both the Forward and Backward Euler schemes. Notice however that the Crank Nicolson is known to be somewhat difficult to implement in 
+better than both the Forward and Backward Euler schemes. Notice however that the Crank Nicolson is known to be somewhat difficul\begin{align*}
+ A^n = \alpha_1A_1^n + \alpha_2A_2^n
+\end{align*}
+we can determine the coeficcients $\alpha_1$ and $\alpha_2$ from the initial condition $u(x,y,0) = I$
+\begin{align*}
+ A^0 = \alpha_1 + \alpha_2 = I \implies \alpha_1 = I-\alpha_2
+\end{align*}t to implement in 
 such a way that the error actually has a second order convergence. We will therefore assume that this scheme also has a first order convergence. 
 Looking at the results form section \ref{results} however, we see a different story. 
 Surprisingly the Forward Euler scheme seems to give the best approximation to the exact solution. Notice also that all off the schemes have errors of 
@@ -537,13 +576,60 @@ system where the matrices are block matrices.\\
 The section on finite element methods is ment only as a short glance onward from this project into more complex problems which are still on the same 
 form as this one. \\
 Source code can be found in the appendix.
+
 \section{Appendices}
 \appendix
 \section{Source code}
-\subsection*{C++ files}
+\subsection{C++ files}
 \lstinputlisting{diffusion.cpp}
-\lstinputlisting{diffusion.h}
-\subsection*{Python scripts for plotting}
+\lstinputlisting{diffusion.h}8C 
+\subsection{Python scripts for plotting}
 \lstinputlisting{run_diffusion.py}
 \lstinputlisting{diffusion_test_error.py}
+\appendix
+\section{Other resources}
+\subsection{The $\theta$-rule}
+As mentioned in section \ref{numerical} the Crank Nicoloson scheme is a special case of the $\theta$-rule. The theta rule is to calculate the new 
+solution at some time between $t_n$ and $t_{n+1}$. We call this time $\theta\in[0,1]$, and get
+$$
+t_{n+\theta} = \theta t_{n+1} + (1-\theta)t_n
+$$
+inserting this in our function gives us the same thing
+\begin{equation*}
+ u(\tilde{t}) \simeq \theta u^{n+1} + (1-\theta)u^n
+\end{equation*}
+We now force the equation to hold at $\tilde{t}\in[t_{n},t_{n+1}]$ and approximate the right hand side by an average leaving
+\begin{equation*}
+ {u^{n+1}- u^{n}\over t_{n+1} -t_{n}} = \theta u^{n+1} + (1-\theta)u^n
+\end{equation*}
+which is the general $\theta$-rule. Inserting $\theta = 0$ gives the Forward Euler scheme, $\theta = 1$ gives the Backward Euler scheme, and 
+$\theta = {1\over2}$ is the Crank Nicolson scheme.
+\subsection{Closer analysis of the Leapfrog scheme in 1 dimension}
+Picking up at (\ref{LF_end}) where we left off we can write A as (from now on we are in one dimenson, but all calculations done in section 
+\ref{stability} are pricipally the same.
+\begin{align*}
+ A^n = \alpha_1A_1^n + \alpha_2A_2^n
+\end{align*}
+we can determine the coeficcients $\alpha_1$ and $\alpha_2$ from the initial condition $u(x,0) = I$ setting $8C = x$
+\begin{align*}
+ A^0 = \alpha_1 + \alpha_2 = I \implies \alpha_1 = I-\alpha_2 \\
+ A^1 = \alpha_1(-x- \sqrt{x^2 + 1}) +\alpha_2 (-x + \sqrt{x^2 + 1}) = I(1 - x)
+\end{align*}
+And from this we can run some tests on just how these roots affect the solution.\\
+A friend on mine has allready done this exact analysis for the leapfrog scheme in one dimension on a simple ordinary differential equation, and 
+generously let me use some of the results to illustrate the problem with this scheme. Figures \ref{LF_error1} and \ref{LF_error2} show the nummeric 
+and the analytic solution to the equation $u'(t) = -au(t)$ in the same plot.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.3]{LF_dt_exp.png}
+ \caption{Leapfrog scheme for increasingly better dt}
+ \label{LF_error1}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.3]{LF_T_exp.png}
+ \caption{Leapfrog scheme with best dt for longer simulation times}
+ \label{LF_error2}
+\end{figure}
+We notice that the scheme seems to be doing very well for a long time when $\Delta t$ is small, but eventually breaks down, just as expected.
 \end{document}

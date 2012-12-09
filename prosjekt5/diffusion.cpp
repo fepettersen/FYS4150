@@ -104,7 +104,7 @@ int main(int argc, char** argv){
     //---------------2D solvers-------------##
     //--------------Forward Euler-----------##
     //########################################
-    if(FE2D){
+    if(0){
         double C = dtdx2;
         if(C >= 0.25)
         {//Insert for stability criterion!
@@ -154,7 +154,7 @@ int main(int argc, char** argv){
             for(int i=1; i<(nx-1); i++){
                 for(int j=1; j<(nx-1); j++){
                     U(i,j) = 2*C*(U_p(i+1,j)-2*U_p(i,j)+U_p(i-1,j)) \
-                    + 2*C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1))+U_pp(i,j-1);
+                    + 2*C*(U_p(i,j+1)-2*U_p(i,j)+U_p(i,j-1))+U_pp(i,j);
                 }
             }
             update_boundarys(U,t*dt,dx,nx);
@@ -165,7 +165,7 @@ int main(int argc, char** argv){
     }
     cout<<"Leap Frog scheme finished"<<endl;
     }
-    if(0){
+    if(FE2D){
     //################################################
     //----------Euler Chromer scheme----------------##
     //################################################
@@ -176,8 +176,10 @@ int main(int argc, char** argv){
         }
         dx = 1.0/nx;
         dt = C*dx*dx;
+
+        cout<<"dt = "<<dt<<" C = "<<C<<endl;
         initial_condition(U_p,dx,nx);
-        for(int t=0; t<n_t; t++){
+        for(int t=1; t<=n_t; t++){
             for(int i=1; i<nx; i++){
                 for(int j=1; j<nx; j++){
                     U(i,j) = U_p(i,j) + C*(U_p(i+1,j)-2*U_p(i,j)+U(i-1,j)) \
