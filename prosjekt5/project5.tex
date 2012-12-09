@@ -551,30 +551,35 @@ Notice that the error is basically the same as for the FE scheme underlining the
 complex problems.
 \section{Final comments}\label{summary}
 The results from section \ref{stability} tells us that the Crank Nicolson scheme should give an error going as $\mathcal{O}(\Delta t^2)$, which is 
-better than both the Forward and Backward Euler schemes. Notice however that the Crank Nicolson is known to be somewhat difficul\begin{align*}
- A^n = \alpha_1A_1^n + \alpha_2A_2^n
-\end{align*}
-we can determine the coeficcients $\alpha_1$ and $\alpha_2$ from the initial condition $u(x,y,0) = I$
-\begin{align*}
- A^0 = \alpha_1 + \alpha_2 = I \implies \alpha_1 = I-\alpha_2
-\end{align*}t to implement in 
+better than both the Forward and Backward Euler schemes. Notice however that the Crank Nicolson is known to be somewhat difficult to implement in 
 such a way that the error actually has a second order convergence. We will therefore assume that this scheme also has a first order convergence. 
 Looking at the results form section \ref{results} however, we see a different story. 
 Surprisingly the Forward Euler scheme seems to give the best approximation to the exact solution. Notice also that all off the schemes have errors of 
 roughly $\mathcal{O}(\Delta t)$, suggesting that at least all the larger bugs in my program have been eradicated. I find theese results strange, but 
-not impossible. It could be that for some reason the Forward Euler scheme is simply better on this perticular problem than the two others. 
+not impossible. It could be that for some reason the Forward Euler scheme is simply better on this particular problem than the two others. 
 Concidering simplicity of implementation (and in this case the error) the Forward Euler scheme would be my choise, but it comes with the drawback 
 of a strict stability criterion. For a more fool-proof (and brute force) approach which is allways stable and can therefore jump over the boring 
 part where the solution has a slow convergence, I would say that the Backward Euler scheme is definately the best one. I say this despite the fact that 
-it shows the worst error of the schemes because it generally has a better error and I suspect that there is still a small bug somewhere.\\
+it shows the worst error of the schemes because it generally has a better error and I suspect that there is still a small bug somewhere. 
+The Backward Euler scheme also has a somewhat slower convergence towards the steady state solution because it uses values from the new timestep 
+to calculate the new timestep. A newer timestep has come slightly further in the convergence, and thus has slightly smaller derivatives giving 
+a slower convergence.\\
 When it comes to the two dimesional solver we see in the verification of the error (figure \ref{errors_FE2D_nx100} and \ref{errors_FE2D_nx10}) that 
 the error is of the expected order which is $\mathcal{O}(\Delta t)$ for both gridsizes chosen.  The shape of the error is the same as in the 
 one dimesional case (a parabola). This is also expected seeing as we force the numerical solution to be exact at the boundarys, and so the error 
 will approach zero towards the boundarys. As mentioned in section \ref{numerical} there is no need for an iterative scheeme when we know the 
-values at perious times. We could however use such a scheme combined with an implicit solver such as the BE scheme, or we could solve a linear 
-system where the matrices are block matrices.\\
+values at perious times. We could however use such a scheme combined with an implicit solver such as the BE scheme. This would be set up in such 
+a way that for each timestep we iterate over the grid to approximate the solution at the new timestep. This gives us an explicit scheme from an 
+implicit one such as the BE scheme. Or we could solve a linear system where the solution is a matrix and we would have to invert a  block matrix 
+at each timestep (This is the approach of the FEniCS software pack). I know that I promised an implenmentations of the Leap frog scheme in two 
+spatial dimensions, and I have tried to make this work, but to no use. The scheme seems to be unstable even for rather small $\Delta t$ and 
+simulation times. The code is enclosed in appendix A, should it be of interest.\\
+It also seems like my idea of an Euler Chromer solver did not quite work out as planned. I did at some point get the same error as with the FE 
+scheme, but I suspect that I was a bit sleep deprived at the moment and that I had actually plotted the results of the FE solver twice. Anyways, 
+theese results are gone, and I am unable to replicate them, so they do not hold. The final word on this scheme is that we improve the error by at 
+least two orders of magnitude when using the FE scheme.\\
 The section on finite element methods is ment only as a short glance onward from this project into more complex problems which are still on the same 
-form as this one. \\
+form as this one. Examples are nonlinear diffusion equations, diffusion equations in three spatial dimensions etc. \\
 Source code can be found in the appendix.
 
 \section{Appendices}
