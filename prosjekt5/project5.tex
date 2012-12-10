@@ -265,7 +265,21 @@ This gives us the full analytic solution
 \begin{equation}\label{solution}
  u(x,t) = 1-x-\frac{2}{\pi}\sum\limits_{m = 1}^{\infty}\frac{1}{m}e^{-(m\pi)^2t}\sin(m\pi x) 
 \end{equation}
-which satisfies all initial and boundary conditions.
+which satisfies all initial and boundary conditions.\\
+In two spatial dimensions given the initial and boundary conditions from section \ref{intro} we state the solution to the diffusion equation 
+without deriving it. The way to actually solve the 2d diffusion equation with ``ugly'' boundary conditions is through laplace transform.
+\begin{equation*}
+ u(x,y,t) = (1-y)e^{t+x}
+\end{equation*}
+Notice that both the boundary and initial conditions are simply the solution evaluated at the boundarys and at $t=0$. We can check by insertion 
+that this solution holds
+\begin{align*}
+ {\d^2 u\over\d x^2} = (1-y)e^{t+x} \\
+ {\d^2 u\over\d y^2} = 0\\
+ {\d u\over\d t} = (1-y)e^{t+x}
+ \end{align*}
+ which means the solution fits. We notice that the solution does not converge which is a bit unusual.
+
 \section{Results/Verification}\label{results}
 From section \ref{analytic} we have the analytic solution to our problem, and we can use this to verify our numerical schemes. Now we know from 
 section \ref{stability} that both the FE and the BE schemes have errors going like $\mathcal{O}(\Delta t)$, and that the FE scheme has a stability 
