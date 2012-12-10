@@ -39,38 +39,44 @@
 \newlabel{errors_FE2D_nx100}{{7}{11}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The absolute error for $\Delta x = ^1/_{10}$ and $\Delta t$ restricted by the stability criterion on the FE scheme in two spatial dimensons }}{11}}
 \newlabel{errors_FE2D_nx10}{{8}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Stability and precision}{11}}
-\newlabel{stability}{{5}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Forward Euler}{12}}
-\newlabel{general solution}{{9}{12}}
-\newlabel{stability criterion}{{10}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Backward Euler}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Crank Nicolson}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Schemes for diffusion in multiple dimensions}{14}}
-\newlabel{LF_end}{{11}{14}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Solving by Finite Element Methods}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis functions. $\Delta x = 0.1$ and $\Delta t = 0.2\Delta x^2$}}{15}}
-\newlabel{fenics_n10}{{9}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis functions. $\Delta x = 0.01$ and $\Delta t = 0.2\Delta x^2$}}{16}}
-\newlabel{fenics_n100}{{10}{16}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Final comments}{16}}
-\newlabel{summary}{{7}{16}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Appendices}{17}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Source code}{17}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}C++ files}{17}}
-\@writefile{lol}{\contentsline {lstlisting}{diffusion.cpp}{17}}
-\@writefile{lol}{\contentsline {lstlisting}{diffusion.h}{20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Python scripts for plotting}{22}}
-\@writefile{lol}{\contentsline {lstlisting}{run\textunderscore diffusion.py}{22}}
-\@writefile{lol}{\contentsline {lstlisting}{diffusion\textunderscore test\textunderscore error.py}{24}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}FEniCS program/wrapper in Python}{26}}
-\@writefile{lol}{\contentsline {lstlisting}{project5\textunderscore fem.py}{26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Leapfrog test program}{26}}
-\@writefile{lol}{\contentsline {lstlisting}{test\textunderscore leapfrog.py}{26}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Other resources}{28}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}The $\theta $-rule}{28}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Closer analysis of the Leapfrog scheme in 1 dimension}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Leapfrog scheme for increasingly better dt}}{29}}
-\newlabel{LF_error1}{{11}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Leapfrog scheme with best dt for longer simulation times}}{30}}
-\newlabel{LF_error2}{{12}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The absolute error for the Euler Chormer scheme in two dimensions. $\Delta x = ^1/_{100}$ and $\Delta t = 0.2\Delta x^2$ is restricted by the stability criterion on the FE scheme in two spatial dimensons pluss a safety factor. }}{12}}
+\newlabel{errors_FE2D_nx10}{{9}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Results of simulations in one spatial dimension using all schemes. $\Delta x = 0.01$ and $\Delta t = 0.25\Delta x^2$. }}{12}}
+\newlabel{solution_1d}{{10}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Results of simulation in two spatial dimensions using the Forward Euler scheme. $\Delta x = \Delta y = 0.01$ and $\Delta t = 0.2\Delta x^2$. }}{13}}
+\newlabel{solution_2d}{{11}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Stability and precision}{14}}
+\newlabel{stability}{{5}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Forward Euler}{14}}
+\newlabel{general solution}{{9}{14}}
+\newlabel{stability criterion}{{10}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Backward Euler}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Crank Nicolson}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Schemes for diffusion in multiple dimensions}{16}}
+\newlabel{LF_end}{{11}{16}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Solving by Finite Element Methods}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis functions. $\Delta x = 0.1$ and $\Delta t = 0.2\Delta x^2$}}{18}}
+\newlabel{fenics_n10}{{12}{18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces The absolute error for the Backward Euler scheme solved by the Finite element method using first order Lagrange ploynomials as basis functions. $\Delta x = 0.01$ and $\Delta t = 0.2\Delta x^2$}}{18}}
+\newlabel{fenics_n100}{{13}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Final comments}{18}}
+\newlabel{summary}{{7}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Appendices}{19}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Source code}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}C++ files}{19}}
+\@writefile{lol}{\contentsline {lstlisting}{diffusion.cpp}{19}}
+\@writefile{lol}{\contentsline {lstlisting}{diffusion.h}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Python scripts for plotting}{25}}
+\@writefile{lol}{\contentsline {lstlisting}{run\textunderscore diffusion.py}{25}}
+\@writefile{lol}{\contentsline {lstlisting}{diffusion\textunderscore test\textunderscore error.py}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}FEniCS program/wrapper in Python}{28}}
+\@writefile{lol}{\contentsline {lstlisting}{project5\textunderscore fem.py}{28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Leapfrog test program}{29}}
+\@writefile{lol}{\contentsline {lstlisting}{test\textunderscore leapfrog.py}{29}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Other resources}{30}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}The $\theta $-rule}{30}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Closer analysis of the Leapfrog scheme in 1 dimension}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Leapfrog scheme for increasingly better dt}}{31}}
+\newlabel{LF_error1}{{14}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Leapfrog scheme with best dt for longer simulation times}}{32}}
+\newlabel{LF_error2}{{15}{32}}

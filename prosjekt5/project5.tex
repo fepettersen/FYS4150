@@ -329,7 +329,29 @@ the schemes we have implemented. The results of the same verification as we did 
  \label{errors_FE2D_nx10}
 \end{figure}
 The ``modified'' Euler Chromer scheme has also been implemented, and run through the same test as the FE scheme. The error has been measured for 
-the same time as for the FE scheme for a thorogh comparison. 
+the same time as for the FE scheme for a thorogh comparison. The results are dissappointing, as we can see from figure \ref{chromer}. This could 
+be caused by a bug, but I highly doubt it seeing as the scheme is just a modified version of the FE scheme which claerly works quite well.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{error_chromer_nx100.png}
+ \caption{The absolute error for the Euler Chormer scheme in two dimensions. $\Delta x = ^1/_{100}$ and $\Delta t = 0.2\Delta x^2$ is restricted 
+ by the stability criterion on the FE scheme in two spatial dimensons pluss a safety factor. }
+ \label{errors_FE2D_nx10}
+\end{figure}
+Finally to get a feeling of what we have been working on, we can see the actual results of the simulations in figures \ref{solution_1d} and 
+\ref{solution_2d}.
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{normal_plot_x10.png}
+ \caption{Results of simulations in one spatial dimension using all schemes. $\Delta x = 0.01$ and $\Delta t = 0.25\Delta x^2$. }
+ \label{solution_1d}
+\end{figure}
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale = 0.7]{normal_plot_2d_nx100.png}
+ \caption{Results of simulation in two spatial dimensions using the Forward Euler scheme. $\Delta x = \Delta y = 0.01$ and $\Delta t = 0.2\Delta x^2$. }
+ \label{solution_2d}
+\end{figure}
 \section{Stability and precision}\label{stability}
 To get a feeling of how good the numerical schemes are we will analyze their errors and stability criteria individually.
 \subsection{Forward Euler}
