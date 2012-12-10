@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.10.21)  10 DEC 2012 09:46
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.10.21)  10 DEC 2012 10:01
 entering extended mode
  %&-line parsing enabled.
 **project5.tex
@@ -521,29 +521,26 @@ Package amsmath Warning: Foreign command \over;
 File: Chemical_synapse_schema.jpg Graphic file (type jpg)
 
 <use Chemical_synapse_schema.jpg> [3 <./Chemical_synapse_schema.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 103--105
+Underfull \hbox (badness 10000) in paragraph at lines 107--109
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 108.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 112.
 
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 108.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 112.
  [4]
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
+Underfull \hbox (badness 10000) in paragraph at lines 141--148
 
  []
 
 [5] [6] <series_convergence_t0.png, id=40, 586.8324pt x 442.2924pt>
 File: series_convergence_t0.png Graphic file (type png)
 
-<use series_convergence_t0.png>
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [7]
+<use series_convergence_t0.png> [7]
 <error_plot_x10.png, id=46, 586.8324pt x 442.2924pt>
 File: error_plot_x10.png Graphic file (type png)
  <use error_plot_x10.png>
@@ -573,7 +570,7 @@ File: error_FE2D_x10.png Graphic file (type png)
 
 <use error_FE2D_x10.png>
 
-LaTeX Warning: Reference `chromer' on page 11 undefined on input line 332.
+LaTeX Warning: Reference `chromer' on page 11 undefined on input line 336.
 
 <error_chromer_nx100.png, id=66, 449.68pt x 337.26pt>
 File: error_chromer_nx100.png Graphic file (type png)
@@ -590,18 +587,15 @@ File: normal_plot_x10.png Graphic file (type png)
 File: normal_plot_2d_nx100.png Graphic file (type png)
 
 <use normal_plot_2d_nx100.png>
-Overfull \hbox (415.65701pt too wide) in paragraph at lines 351--352
- [][] 
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12 <./error_chromer_nx100.png (PNG copy)> <./normal_plot_x10.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [12 <./error_chromer_nx100.png (PNG copy)> <./normal_plot_x10.png>] [13 <./nor
+mal_plot_2d_nx100.png (PNG copy)>]
+Underfull \vbox (badness 6380) has occurred while \output is active []
 
- [13 <./normal_plot_2d_nx100.png (PNG copy)>] [14] [15]
-Underfull \hbox (badness 10000) in paragraph at lines 505--509
+ [14]
+[15]
+Underfull \hbox (badness 10000) in paragraph at lines 511--515
 
  []
 
@@ -615,9 +609,8 @@ File: fenics_BE2D_error_nx100.png Graphic file (type png)
 <use fenics_BE2D_error_nx100.png>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17]
-[18 <./fenics_BE2D_error_nx10.png (PNG copy)> <./fenics_BE2D_error_nx100.png (P
-NG copy)>] (./diffusion.cpp [19]
+ [17 <./fenics_BE2D_error_nx10.png (PNG copy)>] [18 <./fenics_BE2D_error_nx100.
+png (PNG copy)>] (./diffusion.cpp
 Overfull \hbox (20.18393pt too wide) in paragraph at lines 38--39
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
@@ -632,7 +625,7 @@ Overfull \hbox (38.17967pt too wide) in paragraph at lines 48--50
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
+[19]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [20]
@@ -642,11 +635,8 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 (./diffusion.h [22]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [24])
-(./run_diffusion.py
+ [23])
+(./run_diffusion.py [24]
 Overfull \hbox (80.16974pt too wide) in paragraph at lines 8--9
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
@@ -720,7 +710,11 @@ Overfull \hbox (368.10162pt too wide) in paragraph at lines 35--37
 [][][][][][][][][][][][][] 
  []
 
-[25]) (./diffusion_test_error.py [26]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [25])
+(./diffusion_test_error.py
 Overfull \hbox (122.1598pt too wide) in paragraph at lines 24--25
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][] 
@@ -731,7 +725,7 @@ Overfull \hbox (308.11581pt too wide) in paragraph at lines 25--27
 [][][][][][][][][] 
  []
 
-
+[26]
 Overfull \hbox (80.16974pt too wide) in paragraph at lines 37--38
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][] 
@@ -744,29 +738,36 @@ Overfull \hbox (8.18677pt too wide) in paragraph at lines 62--63
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [27]
 Overfull \hbox (44.17825pt too wide) in paragraph at lines 88--89
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) (./project5_fem.py [28]) (./test_leapfrog.py [29]) [30]
-<LF_dt_exp.png, id=136, 1630.09pt x 1842.885pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [27])
+(./project5_fem.py) (./test_leapfrog.py [28]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [29])
+<LF_dt_exp.png, id=132, 1630.09pt x 1842.885pt>
 File: LF_dt_exp.png Graphic file (type png)
  <use LF_dt_exp.png>
-Overfull \hbox (5.33391pt too wide) in paragraph at lines 655--656
- [][] 
- []
-
-<LF_T_exp.png, id=137, 1630.09pt x 1228.59pt>
-File: LF_T_exp.png Graphic file (type png)
- <use LF_T_exp.png>
 Overfull \hbox (5.33391pt too wide) in paragraph at lines 661--662
  [][] 
  []
 
+<LF_T_exp.png, id=133, 1630.09pt x 1228.59pt>
+File: LF_T_exp.png Graphic file (type png)
+ <use LF_T_exp.png>
+Overfull \hbox (5.33391pt too wide) in paragraph at lines 667--668
+ [][] 
+ []
 
+
+Underfull \vbox (badness 7451) has occurred while \output is active []
+
+ [30]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [31 <./LF_dt_exp.png>] [32 <./LF_T_exp.png>] (./project5.aux)
@@ -784,7 +785,7 @@ Here is how much of TeX's memory you used:
  7931 multiletter control sequences out of 15000+50000
  19527 words of font info for 56 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 32i,18n,32p,341b,1522s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 32i,18n,32p,394b,1520s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-
 texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fon
 ts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texmf-texlive/fonts/type1/pub
@@ -802,7 +803,7 @@ m0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/shar
 e/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/
 public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm
 1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb>
-Output written on project5.pdf (32 pages, 1041900 bytes).
+Output written on project5.pdf (32 pages, 1042908 bytes).
 PDF statistics:
  208 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -90,6 +90,10 @@ matrix B to simplify writing. B is defined to be
          0& \dots & & &0&-1 & 2 
        \end{array}\right)
 \end{align*}
+\subsection{Collaborators}
+Although I have developed the code, and done the calculations by myself, I would not have finished on time without help from candidates 
+23 and 54 who spotted quite a few bugs in my programs and in my calculations. Not to mention typos (of which there are probably still some). 
+Because of this, our results might look a bit similar.
 \section{The algorithm}\label{numerical}
 We will solve the 1+1 dimensional difusion equation by three different finite differnce schemes in this project. Using the 
 standard approximation of the second derivative in space, we use successively more elaborate approximations to the time derivative. 
@@ -343,13 +347,15 @@ Finally to get a feeling of what we have been working on, we can see the actual 
 \begin{figure}[H]
  \centering
  \includegraphics[scale = 0.7]{normal_plot_x10.png}
- \caption{Results of simulations in one spatial dimension using all schemes. $\Delta x = 0.01$ and $\Delta t = 0.25\Delta x^2$. }
+ \caption{Results of simulations in one spatial dimension using all schemes. $\Delta x = 0.01$ and $\Delta t = 0.25\Delta x^2$. We can see that all
+  of the schemes are having trouble following the solution around the middle of the graph explaining the parabolic shape of the absolute error.}
  \label{solution_1d}
 \end{figure}
 \begin{figure}[H]
  \centering
- \includegraphics[scale = 0.7]{normal_plot_2d_nx100.png}
- \caption{Results of simulation in two spatial dimensions using the Forward Euler scheme. $\Delta x = \Delta y = 0.01$ and $\Delta t = 0.2\Delta x^2$. }
+ \includegraphics[scale = 0.3]{normal_plot_2d_nx100.png}
+ \caption{Results of simulation in two spatial dimensions using the Forward Euler scheme. $\Delta x = \Delta y = 0.01$ and $\Delta t = 0.2\Delta x^2$.
+ (Plotted by Mayavi which is why the axes are bad)}
  \label{solution_2d}
 \end{figure}
 \section{Stability and precision}\label{stability}
